@@ -17,12 +17,9 @@ export default {
   components: {
     HelloWorld
   },
-  mounted() {
-    axios.post('http://localhost:5000/api/data')
-    .then(response => {
-        this.message = response.data.message;
-    })
-    .catch(error => console.error(error));
+  async mounted() {
+    const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
+    alert(response.data.message)
   }
 }
 </script>
