@@ -23,8 +23,8 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
         Star8ptTile
     },
     props: {
-        color: String, // change type
-        shape: String // change type
+        color: String,
+        shape: String 
     }, 
     methods: {
         getTileComponent() {
@@ -46,7 +46,3 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
     }
  }
 </script>
-
-<style scoped>
-
-</style>
