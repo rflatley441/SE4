@@ -39,6 +39,7 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
                     return 'SquareTile';
                 case ("star4pt"): 
                     return 'Star4ptTile';
+                case("star8pt"):
                 default:
                     return 'Star8ptTile';
             }
