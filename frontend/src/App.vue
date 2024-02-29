@@ -1,11 +1,10 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld :msg="message"/>
+  <BoardTile shape="square" color="#f00"/>
 </template>
 
 <script>
 import axios from 'axios';
-import HelloWorld from './components/HelloWorld.vue'
+import BoardTile from './components/BoardTile.vue';
 
 export default {
   name: 'App',
@@ -15,7 +14,7 @@ export default {
     }
   },
   components: {
-    HelloWorld
+    BoardTile
   },
   async mounted() {
     const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
