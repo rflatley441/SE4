@@ -1,10 +1,6 @@
 from enum import Enum
 from random import shuffle
-
-
-class Tile:
-    def __init__(self, value):
-        self.value = value
+from tile import Tile
 
 
 class TileColor(Enum):
@@ -31,11 +27,6 @@ class Player:
         self.score = 0
 
 
-class GameBoard:
-    def __init__(self):
-        self.tiles = []
-
-
 class Gameplay:
     def __init__(self, player1, player2, game_board):
         self.player1 = player1
@@ -58,7 +49,7 @@ class Gameplay:
 
         shuffle(tiles)
 
-        self.game_board.setTiles(tiles)
+        self.game_board.setTiles(tiles[:108])
 
     def dealTiles(self, tiles):
         # Implementation for dealing tiles goes here
