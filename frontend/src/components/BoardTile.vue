@@ -1,6 +1,8 @@
 <template>
-    <div>
-        <component :is="getTileComponent()" :fillColor="this.color"/>
+    <div class="tile" @click="handleTileClick">
+        <div class="tile-shown is-hidden" v-if="this.hidden"></div>
+        <!-- <div class="tile-shown is-highlighted" v-else-if="this.highlighted">hello</div> -->
+        <component v-else :is="getTileComponent()" :fillColor="this.color" :width="50" :height="50"/>
     </div>
 </template>
 
@@ -24,8 +26,35 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
     },
     props: {
         color: String,
-        shape: String 
+        shape: String,
+        position: {
+            type: Number,
+            required: true
+        },
+        value: {
+            type: Number, 
+            required: true 
+        },
+        hidden: {
+            type: Boolean,
+            default: true,
+        },
+        // highlighted: {
+        //     type: Boolean,
+        //     default: false
+        // }
+
     }, 
+    setup(props, context) {
+        const handleTileClick = () => {
+            context.emit('select-tile', {
+                position: props.position,
+            })
+        }
+        return {
+            handleTileClick,
+        };
+    },
     methods: {
         getTileComponent() {
             switch(this.shape) {
@@ -43,7 +72,30 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
                 default:
                     return 'Star8ptTile';
             }
-        }
+        },
+        // handleTileClick(){
+        //     if (this.highlighted) {
+        //         this.$emit("tileClicked", this.value);
+        //     }
+        // }
     }
  }
 </script>
+
+<style scoped>
+.tile {
+    position: relative;
+    border: solid;
+}
+
+.tile-shown {
+    width: 100%;
+    height: 100%;
+}
+/* .tile-shown.is-highlighted {
+    background-color: gray;
+    position: absolute
+} */
+
+</style>
+
