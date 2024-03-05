@@ -1,4 +1,7 @@
 from backend import Stats, GameBoard 
+import firebase_admin
+
+# why is it not allowing me to pip install firebase-admin
 
 class User:
     def __init__(self, username, email_address, password):
@@ -18,6 +21,8 @@ class User:
 
     def changePassword(self, new_password):
         # Implement logic to change the password
+        # if firebase has its own password requirements, do we have to verify new passwords ourselves in this function
+        # or will firebase handle it 
         self.password = new_password
         return "Password changed successfully."
 
