@@ -73,11 +73,6 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
                     return 'Star8ptTile';
             }
         },
-        // handleTileClick(){
-        //     if (this.highlighted) {
-        //         this.$emit("tileClicked", this.value);
-        //     }
-        // }
     }
  }
 </script>

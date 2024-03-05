@@ -1,5 +1,4 @@
 <template>
-    <!-- will need to check the width and height -->
     <section class="game-board">
         <BoardTile 
         v-for="(tile, index) in tileList" 
@@ -23,7 +22,7 @@ export default {
     setup() {
         const tileList = ref([])
 
-        for (let i = 0; i < 108; i++) {
+        for (let i = 0; i < 144; i++) {
             tileList.value.push({
                 value: i,
                 hidden: true,
@@ -47,6 +46,7 @@ export default {
 
 <style scoped>
 .game-board {
+    margin: auto;
     display: grid;
     grid-template-columns: repeat(12, 50px);
     grid-template-rows: repeat(12, 50px);
