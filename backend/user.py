@@ -1,4 +1,4 @@
-from backend import Stats, GameBoard 
+import Stats, GameBoard 
 import firebase_admin
 
 # why is it not allowing me to pip install firebase-admin
