@@ -1,10 +1,11 @@
 <template>
-  <BoardTile shape="square" color="#f00"/>
+  <GameBoard></GameBoard>
 </template>
 
 <script>
 import axios from 'axios';
-import BoardTile from './components/BoardTile.vue';
+// import BoardTile from './components/BoardTile.vue';
+import GameBoard from './components/GameBoard.vue';
 
 export default {
   name: 'App',
@@ -14,7 +15,8 @@ export default {
     }
   },
   components: {
-    BoardTile
+    // BoardTile,
+    GameBoard
   },
   async mounted() {
     const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
@@ -31,5 +33,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  margin-left: 60px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <!-- Created with Inkscape (http://www.inkscape.org/) -->
-    <svg width="200" height="200" version="1.1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <svg :width="this.width" :height="this.height" version="1.1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <metadata>
     <rdf:RDF>
     <cc:Work rdf:about="">
@@ -26,6 +26,14 @@ export default {
         fillColor: {
             type: String,
             default: "#fff"
+        },
+        height: {
+            type: Number,
+            default: 200
+        },
+        width: {
+            type: Number,
+            default: 200
         }
     }
 }

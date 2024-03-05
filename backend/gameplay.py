@@ -1,15 +1,31 @@
-class Tile:
-    def __init__(self, value):
-        self.value = value
+from enum import Enum
+from random import shuffle
+from tile import Tile
+
+
+class TileColor(Enum):
+    RED = 1
+    ORANGE = 2
+    YELLOW = 3
+    GREEN = 4
+    BLUE = 5
+    PURPLE = 6
+
+
+class TileShape(Enum):
+    CIRCLE = 1
+    CLOVER = 2
+    DIAMOND = 3
+    SQUARE = 4
+    STAR_4PT = 5
+    STAR_8PT = 6
+
 
 class Player:
     def __init__(self, name):
         self.name = name
         self.score = 0
 
-class GameBoard:
-    def __init__(self):
-        self.tiles = []
 
 class Gameplay:
     def __init__(self, player1, player2, game_board):
@@ -17,8 +33,23 @@ class Gameplay:
         self.player2 = player2
         self.game_board = game_board
 
-    def createTiles(self, tiles):
-        self.game_board.tiles = tiles
+    def createTiles(self):
+        tiles = []
+        colors = list(TileColor)
+        shapes = list(TileShape)
+
+        tiles_per_combination = 108 // (len(colors) * len(shapes))
+
+        tiles = []
+
+        for i in range(tiles_per_combination):
+            for color in colors:
+                for shape in shapes:
+                    tiles.append(Tile(shape, color))
+
+        shuffle(tiles)
+
+        self.game_board.setTiles(tiles[:108])
 
     def dealTiles(self, tiles):
         # Implementation for dealing tiles goes here

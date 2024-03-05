@@ -1,2 +1,6 @@
 class GameBoard:
-    pass 
+    def __init__(self):
+        self.tiles = []
+
+    def setTiles(self, tiles):
+        self.tiles = tiles
