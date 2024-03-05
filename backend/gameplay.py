@@ -1,30 +1,5 @@
-from enum import Enum
 from random import shuffle
-from tile import Tile
-
-
-class TileColor(Enum):
-    RED = 1
-    ORANGE = 2
-    YELLOW = 3
-    GREEN = 4
-    BLUE = 5
-    PURPLE = 6
-
-
-class TileShape(Enum):
-    CIRCLE = 1
-    CLOVER = 2
-    DIAMOND = 3
-    SQUARE = 4
-    STAR_4PT = 5
-    STAR_8PT = 6
-
-
-class Player:
-    def __init__(self, name):
-        self.name = name
-        self.score = 0
+from tile import Tile, TileColor, TileShape
 
 
 class Gameplay:
@@ -51,9 +26,13 @@ class Gameplay:
 
         self.game_board.setTiles(tiles[:108])
 
-    def dealTiles(self, tiles):
+    def dealTiles(self):
         # Implementation for dealing tiles goes here
-        pass
+        while len(self.player1.hand) < 6 and len(self.game_board.tiles) != 0:
+            self.player1.addTileToHand(self.game_board.tiles.pop())
+
+        while len(self.player2.hand) < 6 and len(self.game_board.tiles) != 0:
+            self.player2.addTileToHand(self.game_board.tiles.pop())
 
     def playTile(self, tile, position, player):
         # Implementation for playing a tile on the board goes here
