@@ -20,6 +20,8 @@
                 <div class="footText">Don't have an account?</div>
                 <div class="footText">Forgot password?</div>
             </div>
+            <Star8ptTile id="starTile" fillColor="red" />
+            <CircleTile id="circleTile" fillColor="purple" />
         </div>
     </div>
 </template>
@@ -30,6 +32,17 @@
     justify-content: center;
     align-items: center;
     width: 100vw;
+}
+
+#starTile {
+    position: absolute;
+    left: -70px;
+    top: 450px;
+}
+#circleTile {
+    position: absolute;
+    right: -70px;
+    top: 200px;
 }
 
 img {
@@ -84,8 +97,13 @@ img {
 
 
 <script>
+import Star8ptTile from '@/assets/Star8ptTile.vue';
+import CircleTile from '@/assets/CircleTile.vue';
 
  export default {
     name: "LoginView",
+    components: {
+        Star8ptTile, CircleTile
+    }
  }
 </script>
