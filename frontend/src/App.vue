@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+//import axios from 'axios';
 import LoginView from './components/LoginView.vue';
 
 export default {
@@ -17,8 +17,8 @@ export default {
     LoginView
   },
   async mounted() {
-    const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
-    alert(response.data.message)
+    //const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
+    //alert(response.data.message)
   }
 }
 </script>
