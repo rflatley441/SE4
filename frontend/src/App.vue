@@ -1,10 +1,10 @@
 <template>
-  <BoardTile shape="square" color="#f00"/>
+  <LoginView />
 </template>
 
 <script>
 import axios from 'axios';
-import BoardTile from './components/BoardTile.vue';
+import LoginView from './components/LoginView.vue';
 
 export default {
   name: 'App',
@@ -14,7 +14,7 @@ export default {
     }
   },
   components: {
-    BoardTile
+    LoginView
   },
   async mounted() {
     const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
@@ -32,4 +32,4 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-</style>
+</style>./components/LoginView.vue
