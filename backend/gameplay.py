@@ -1,6 +1,7 @@
 from enum import Enum
 from random import shuffle
 from tile import Tile
+from player import Player
 
 
 class TileColor(Enum):
@@ -20,11 +21,6 @@ class TileShape(Enum):
     STAR_4PT = 5
     STAR_8PT = 6
 
-
-class Player:
-    def __init__(self, name):
-        self.name = name
-        self.score = 0
 
 
 class Gameplay:
