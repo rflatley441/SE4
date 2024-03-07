@@ -21,8 +21,6 @@ class TileShape(Enum):
     STAR_4PT = 5
     STAR_8PT = 6
 
-
-
 class Gameplay:
     def __init__(self, player1, player2, game_board):
         self.player1 = player1
