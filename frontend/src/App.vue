@@ -1,10 +1,10 @@
 <template>
-  <LoginView />
+  <PasswordView />
 </template>
 
 <script>
 //import axios from 'axios';
-import LoginView from './components/LoginView.vue';
+import PasswordView from './components/PasswordView.vue';
 
 export default {
   name: 'App',
@@ -14,7 +14,7 @@ export default {
     }
   },
   components: {
-    LoginView
+    PasswordView
   },
   async mounted() {
     //const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
@@ -32,4 +32,4 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-</style>./components/LoginView.vue
+</style>./components/PasswordView.vue
