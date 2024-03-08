@@ -3,6 +3,7 @@
 </template>
 
 <script>
+
 import axios from 'axios';
 import GameBoard from './components/GameBoard.vue';
 
@@ -17,8 +18,8 @@ export default {
     GameBoard,
   },
   async mounted() {
-    const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
-    alert(response.data.message)
+    //const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
+    //alert(response.data.message)
   }
 }
 </script>
@@ -33,4 +34,4 @@ export default {
   margin-top: 60px;
   margin-left: 60px;
 }
-</style>
+</style>./components/PasswordView.vue

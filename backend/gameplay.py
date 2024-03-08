@@ -1,7 +1,6 @@
 from random import shuffle
 from tile import Tile, TileColor, TileShape
 
-
 class Gameplay:
     def __init__(self, player1, player2, game_board):
         self.player1 = player1
