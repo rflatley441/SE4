@@ -36,6 +36,7 @@
     justify-content: center;
     align-items: center;
     width: 100vw;
+    transform: scale(0.9);
 }
 
 #starTile {
