@@ -20,7 +20,7 @@
 
             </div>
             <div id="footer">
-                <div class="footText">RETURN TO LOGIN</div>
+                <router-link to="/" class="footText">Return to Login</router-link>
             </div>
             <DiamondTile id="diamondTile" fillColor="green" />
             <CircleTile id="circleTile" fillColor="red" />

@@ -16,10 +16,12 @@
                     <input type="text" class="inputBox" />
                 </div>
             </div>
+
             <div id="footer">
-                <div class="footText">Don't have an account?</div>
-                <div class="footText">Forgot password?</div>
+                <router-link to="/signup" class="footText">Don't have an account?</router-link>
+                <router-link to="/password" class="footText">Forgot password?</router-link>
             </div>
+
             <Star8ptTile id="starTile" fillColor="red" />
             <CircleTile id="circleTile" fillColor="purple" />
         </div>

@@ -1,11 +1,11 @@
 <template>
-  <GameBoard></GameBoard>
+  <router-view/>
 </template>
 
 <script>
 
 // import axios from 'axios';
-import GameBoard from './components/GameBoard.vue';
+// import GameBoard from './components/GameBoard.vue';
 
 export default {
   name: 'App',
@@ -15,7 +15,7 @@ export default {
     }
   },
   components: {
-    GameBoard,
+    // GameBoard,
   },
   async mounted() {
     //const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
@@ -34,4 +34,4 @@ export default {
   margin-top: 60px;
   margin-left: 60px;
 }
-</style>./components/PasswordView.vue
+</style> 
