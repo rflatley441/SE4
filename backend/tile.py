@@ -2,21 +2,27 @@ from enum import Enum
 
 
 class TileColor(Enum):
-    RED = 1
-    ORANGE = 2
-    YELLOW = 3
-    GREEN = 4
-    BLUE = 5
-    PURPLE = 6
+    def __str__(self):
+        return str(self.value)
+
+    RED = "#f00"
+    ORANGE = "#f80"
+    YELLOW = "#ff0"
+    GREEN = "#0a0"
+    BLUE = "#00f"
+    PURPLE = "#a0a"
 
 
 class TileShape(Enum):
-    CIRCLE = 1
-    CLOVER = 2
-    DIAMOND = 3
-    SQUARE = 4
-    STAR_4PT = 5
-    STAR_8PT = 6
+    def __str__(self):
+        return str(self.value)
+
+    CIRCLE = "circle"
+    CLOVER = "clover"
+    DIAMOND = "diamond"
+    SQUARE = "square"
+    STAR_4PT = "star4pt"
+    STAR_8PT = "star8pt"
 
 
 class Tile:

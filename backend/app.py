@@ -10,28 +10,25 @@ CORS(app)
 
 @app.route('/api', methods=['GET', 'POST'])
 def get_data():
-    player1 = Player("1", 0)
-    player2 = Player("2", 0)
-    gameboard = GameBoard()
-    gameplay = Gameplay(player1, player2, gameboard)
-    gameplay.createTiles()
-    print(gameboard.tiles)
-    gameplay.dealTiles()
-    print("Player hand: ", gameplay.player1.hand)
     data = {"message": "Hello from Flask!"}
     return jsonify(data)
 
 
+@app.route('/playerhand', methods=['GET'])
 def get_player_hand():
     player1 = Player("1", 0)
     player2 = Player("2", 0)
     gameboard = GameBoard()
     gameplay = Gameplay(player1, player2, gameboard)
     gameplay.createTiles()
-    print(gameboard.tiles)
     gameplay.dealTiles()
-    print("Player hand: ", gameplay.player1.hand)
-    return jsonify(gameplay.player1.hand)
+
+    hand = []
+
+    for tile in gameplay.player1.hand:
+        hand.append([str(tile.shape), str(tile.color)])
+
+    return jsonify(hand)
 
 
 if __name__ == '__main__':

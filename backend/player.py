@@ -13,6 +13,3 @@ class Player:
 
     def addTileToHand(self, tile):
         self.hand.append(tile)
-
-    def forfeit(self):  # Function stub
-        pass
