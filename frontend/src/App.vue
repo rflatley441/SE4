@@ -4,7 +4,7 @@
 
 <script>
 
-import axios from 'axios';
+// import axios from 'axios';
 import GameBoard from './components/GameBoard.vue';
 
 export default {
