@@ -5,7 +5,7 @@
 <script>
 // import axios from 'axios';
 // import BoardTile from './components/BoardTile.vue';
-import GameBoard from './components/GameBoard.vue';
+import GameBoard from './components/LoginView.vue';
 
 export default {
   name: 'App',

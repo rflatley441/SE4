@@ -26,6 +26,7 @@
 
             <div id="footer">
                 <div class="footText">Don't have an account?</div>
+                <div class="footText">Forgot Password?</div>
             </div>
 
 
