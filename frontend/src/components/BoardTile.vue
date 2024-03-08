@@ -84,7 +84,6 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
 <style scoped>
 .tile {
     position: relative;
-    /* border: solid; */
 }
 
 .tile-shown {
