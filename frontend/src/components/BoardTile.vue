@@ -2,7 +2,7 @@
     <div class="tile" @click="handleTileClick">
         <div class="tile-shown is-hidden" v-if="this.hidden"></div>
         <!-- <div class="tile-shown is-highlighted" v-else-if="this.highlighted">hello</div> -->
-        <component v-else :is="getTileComponent()" :fillColor="this.color" :width="50" :height="50"/>
+        <component v-else :is="getTileComponent()" :fillColor="this.color" :width="width" :height="height"/>
     </div>
 </template>
 
@@ -29,16 +29,20 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
         shape: String,
         position: {
             type: Number,
-            required: true
         },
         value: {
             type: Number, 
-            required: true 
         },
         hidden: {
             type: Boolean,
             default: true,
         },
+        height: {
+            type: Number
+        },
+        width: {
+            type: Number
+        }
         // highlighted: {
         //     type: Boolean,
         //     default: false
@@ -80,12 +84,12 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
 <style scoped>
 .tile {
     position: relative;
-    border: solid;
 }
 
 .tile-shown {
     width: 100%;
     height: 100%;
+    border: solid;
 }
 /* .tile-shown.is-highlighted {
     background-color: gray;

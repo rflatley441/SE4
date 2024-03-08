@@ -3,8 +3,8 @@
 </template>
 
 <script>
-// import axios from 'axios';
-// import BoardTile from './components/BoardTile.vue';
+
+import axios from 'axios';
 import GameBoard from './components/GameBoard.vue';
 
 export default {
@@ -15,8 +15,7 @@ export default {
     }
   },
   components: {
-    // BoardTile,
-    GameBoard
+    GameBoard,
   },
   async mounted() {
     //const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
