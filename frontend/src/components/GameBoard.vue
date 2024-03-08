@@ -6,6 +6,8 @@
         :value="index" 
         :hidden="tile.hidden" 
         :position="tile.position"
+        :width="50"
+        :height="50"
         @select-tile="selectTile"/>
     </section>
 </template>

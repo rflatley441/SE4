@@ -1,12 +1,10 @@
 <template>
-  <BoardTile shape="square" color="#f00"/>
-  <PlayerHand></PlayerHand>
+  <GameBoard></GameBoard>
 </template>
 
 <script>
 import axios from 'axios';
-import BoardTile from './components/BoardTile.vue';
-import PlayerHand from './components/PlayerHand.vue';
+import GameBoard from './components/GameBoard.vue';
 
 export default {
   name: 'App',
@@ -16,8 +14,7 @@ export default {
     }
   },
   components: {
-    BoardTile,
-    PlayerHand
+    GameBoard,
   },
   async mounted() {
     const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
