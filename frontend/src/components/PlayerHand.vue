@@ -34,19 +34,14 @@ import BoardTile from './BoardTile.vue';
 </script>
 
 <style scoped>
+
 .player-hand {
-    background-color: #2490F3;
-    width: 800px;
-    height: 200px;
-    position: absolute;
+    width: auto;
 }
 
 .player-hand-grid {
     display: grid;
     grid-template-columns: repeat(6, 100px);
     grid-column-gap: 30px;
-    margin-top: 50px;
-    position: relative;
-    justify-content: center;
 }
 </style>

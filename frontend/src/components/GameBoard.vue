@@ -1,15 +1,17 @@
 <template>
-    <section class="game-board">
-        <BoardTile 
-        v-for="(tile, index) in tileList" 
-        :key="`tile-${index}`" 
-        :value="index" 
-        :hidden="tile.hidden" 
-        :position="tile.position"
-        :width="50"
-        :height="50"
-        @select-tile="selectTile"/>
-    </section>
+    <div class="game-board-container">
+        <section class="game-board">
+            <BoardTile 
+            v-for="(tile, index) in tileList" 
+            :key="`tile-${index}`" 
+            :value="index" 
+            :hidden="tile.hidden" 
+            :position="tile.position"
+            :width="50"
+            :height="50"
+            @select-tile="selectTile"/>
+        </section>
+    </div>
 </template>
 
 <script>
@@ -47,11 +49,15 @@ export default {
 </script>
 
 <style scoped>
+.game-board-container {
+    width: 600px;
+}
+
 .game-board {
-    margin: auto;
+    /* width: auto; */
     display: grid;
     grid-template-columns: repeat(12, 50px);
     grid-template-rows: repeat(12, 50px);
-    position: absolute;
+    /* position: absolute; */
 }
 </style>
