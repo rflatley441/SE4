@@ -1,35 +1,29 @@
 <template>
     <div class="player-hand">
         <div class="player-hand-grid">
-            <BoardTile v-for="(tile, index) in tiles" :key="index" :color="tile[1]" :shape="tile[0]" :hidden="false" :width="100" :height="100" />
+            <BoardTile v-for="(tile, index) in playerHand(0)" :key="index" :color="tile.color" :shape="tile.shape" :hidden="false" :width="100" :height="100"/>
         </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
 import BoardTile from './BoardTile.vue';
+import { mapGetters, mapActions } from 'vuex';
 
     export default {
         name: "PlayerHand",
         components: {
             BoardTile,
         },
-        data() {
-            return{
-                tiles: {},
-            }
+        computed: {
+            ...mapGetters(['playerHand'])
         },
         methods: {
-            async getTiles(){
-                const { data } = await axios.get("http://127.0.0.1:5000/playerhand").catch(function(error) {console.log(error.response.data)});
-                console.log(data)
-                this.tiles = data;
-            }
-        }, 
-        async beforeMount() {
-            this.getTiles();
-        }
+            ...mapActions(['fetchHand'])
+        },
+        async mounted() {
+            await this.fetchHand()
+        },
     }
 </script>
 
