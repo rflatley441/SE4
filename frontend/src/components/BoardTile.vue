@@ -42,7 +42,11 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
         },
         width: {
             type: Number
-        }
+        },
+        selected: {
+            type: Boolean,
+            default: false,
+        },
         // highlighted: {
         //     type: Boolean,
         //     default: false
@@ -77,7 +81,7 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
                     return 'Star8ptTile';
             }
         },
-    }
+    },
  }
 </script>
 
