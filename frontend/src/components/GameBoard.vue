@@ -19,10 +19,15 @@
 <script>
 import BoardTile from "./BoardTile.vue"
 import { ref } from "vue"
-import { mapGetters, mapActions } from "vuex"
 
 export default {
     name: "GameBoard",
+    props: {
+        playerHand: {
+            type: Array,
+            required: true,
+        }
+    },
     components: {
         BoardTile,
     },
@@ -44,12 +49,7 @@ export default {
            tileList,
         };
     }, 
-    computed: {
-        ...mapGetters(['playerHand'])
-    },
     methods: {
-        ...mapActions(['fetchHand']),
-
         selectTile(payload) {
             let tileSelected = null;
 
@@ -68,9 +68,6 @@ export default {
             }
         }
 
-    },
-    async mounted() {
-        await this.fetchHand()
     },
 }
 </script>

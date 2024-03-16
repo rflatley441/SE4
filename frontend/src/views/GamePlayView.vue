@@ -2,11 +2,11 @@
     <div id="app">
         <div class="content">
             <div class="game-board"> 
-                <GameBoard/>
+                <GameBoard :playerHand="this.playerHand"/>
             </div>
             <div class="player-hand-background">
                 <div class="player-hand">
-                    <PlayerHand/>
+                    <PlayerHand :playerHand="this.playerHand"/>
                 </div>
             </div>
         </div>
@@ -16,12 +16,22 @@
 <script>
 import GameBoard from '@/components/GameBoard.vue';
 import PlayerHand from '@/components/PlayerHand.vue';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: "GamePlayView",
     components: {
         GameBoard,
         PlayerHand,
+    },
+    computed: {
+        ...mapGetters(['playerHand'])
+    },
+    methods: {
+        ...mapActions(['fetchHand'])
+    },
+    async mounted() {
+        await this.fetchHand();
     }
 }
 

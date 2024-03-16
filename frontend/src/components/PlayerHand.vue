@@ -18,19 +18,19 @@
 
 <script>
 import BoardTile from './BoardTile.vue';
-import { mapGetters, mapActions } from 'vuex';
 
     export default {
         name: "PlayerHand",
+        props: {
+            playerHand: {
+                type: Array,
+                required: true
+            }
+        },
         components: {
             BoardTile,
         },
-        computed: {
-            ...mapGetters(['playerHand'])
-        },
         methods: {
-            ...mapActions(['fetchHand']),
-
             selectTile(payload) {
                 for (let i = 0; i < this.playerHand(0).length; i++) {
                     this.playerHand(0)[i].selected = false;
@@ -38,9 +38,6 @@ import { mapGetters, mapActions } from 'vuex';
 
                 this.playerHand(0)[payload.position].selected = true;
             }
-        },
-        async mounted() {
-            await this.fetchHand()
         },
     }
 </script>
