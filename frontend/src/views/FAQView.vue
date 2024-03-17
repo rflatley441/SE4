@@ -1,10 +1,12 @@
 <template>
-  <!-- html -->
+  <div>hello</div>
 </template>
 
 <script>
+import { createApp } from 'vue';
+
 // javascript
-const app = Vue.createApp({
+const app = createApp({
   data() {
     return {
       faqItems: [

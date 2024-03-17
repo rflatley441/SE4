@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import LoginPage from '../views/LoginView.vue'
+// change the top line eventually
+import LoginPage from '../views/FAQView.vue'
 import SignupPage from '../views/SignupView.vue'
 import PasswordPage from '../views/PasswordView.vue'
 
