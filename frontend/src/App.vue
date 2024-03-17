@@ -34,4 +34,4 @@ export default {
   margin-top: 60px;
   margin-left: 60px;
 }
-</style> 
+</style> ./views/FAQ.vue
