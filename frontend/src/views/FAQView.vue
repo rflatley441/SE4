@@ -1,18 +1,51 @@
 <template>
-  <!-- html -->
-  <div>hello</div>
+  <div id="app">
+      <div id="content">
+          <div id="faq-title">Frequently Asked Questions</div>
+          <div class="faq-item">
+              <div class="question">What is Qwirkle?</div>
+              <div class="answer">
+                  Qwirkle combines the game play of Dominoes and Scrabble and is the perfect combination of skill and chance!
+              </div>
+          </div>
+          <div class="faq-item">
+              <div class="question">How do I play?</div>
+              <div class="answer">
+                  On your turn you can do one of three things: 
+                  <ol>
+                      <li>Add one tile to the grid, then draw a tile to bring your hand up to six.</li>
+                      <li>Add two or more tiles to the grid. All touching tiles must share color or shape.</li>
+                      <li>Trade some or all tiles in for different tiles.</li>
+                  </ol>
+              </div>
+          </div>
+          <div class="faq-item">
+              <div class="question">When does someone win?</div>
+              <div class="answer">
+                  The first player to use all their tiles receives a 6 point bonus and then score is calculated!
+              </div>
+          </div>
+          <button class="back-to-top-button">
+              BACK TO TOP
+          </button>
+          <DiamondTile id="diamondTile" fillColor="green" />
+          <CircleTile id="circleTile" fillColor="red" />
+          <CloverTile id="cloverTile" fillColor="orange" />
+      </div>
+  </div>
 </template>
+
 
 <script>
 import { createApp } from "vue";
-// javascript
+
 const app = createApp({
   data() {
     return {
       faqItems: [
         {
           q: "What is Qwirkle?",
-          a: "Qwirkle combines the game play of Dominoes and Scarbble and is the perfect combination of skill and chance!",
+          a: "Qwirkle combines the game play of Dominoes and Scrabble and is the perfect combination of skill and chance!",
         },
         {
           q: "How do I play?",
@@ -20,7 +53,7 @@ const app = createApp({
         },
         {
           q: "When does someone win?",
-          a: "The first player to use all their tiles recieves a 6 point bonus and then score is calculated!",
+          a: "The first player to use all their tiles receives a 6 point bonus and then score is calculated!",
         },
       ],
     };
@@ -29,19 +62,18 @@ const app = createApp({
 
 app.component("faq-question", {
   template: `
-  <div class="faq">
-    <p class="question" @click="toggleAnswer">
-      {{ faq.q }}
-       <span class="toggleIcon">
-         {{ this.isOpen ? "—" : "＋" }}
-       </span>
-    </p>
-    <p class="answer" ref="answer">
-      {{ faq.a }}
-    </p>
-  </div>
+    <div class="faq">
+      <p class="question" @click="toggleAnswer">
+        {{ faq.q }}
+        <span class="toggleIcon">
+          {{ isOpen ? "—" : "＋" }}
+        </span>
+      </p>
+      <p class="answer" :style="{ height: isOpen ? 'auto' : 0px }">
+        {{ faq.a }}
+      </p>
+    </div>
   `,
-  // faq prop is passed down from app in each iteration
   props: ["faq"],
   data() {
     return {
@@ -50,28 +82,11 @@ app.component("faq-question", {
   },
   methods: {
     toggleAnswer() {
-      // collapse if open, expand if not.
-      if (this.isOpen) {
-        this.collapse();
-      } else {
-        this.expand();
-      }
       this.isOpen = !this.isOpen;
     },
-    collapse() {
-      // select the answer element
-      const answer = this.$refs.answer;
-      answer.style.height = 0; // set its height to 0
-    },
-    expand() {
-      // select answer element
-      const answer = this.$refs.answer;
-
-      // set its height to its normal scroll height to expand it fully
-      answer.style.height = answer.scrollHeight + "px";
-    },
-  },
+  }
 });
+
 app.mount("#app");
 </script>
 
@@ -130,7 +145,6 @@ body {
 
 .answer {
   transition: 0.25s; /* smooth slide-in */
-  height: 0; /* starts collapsed */
   overflow: hidden;
   line-height: 1.5;
 }
