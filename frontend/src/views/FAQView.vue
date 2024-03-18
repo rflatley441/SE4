@@ -1,94 +1,55 @@
 <template>
-  <div id="app">
-      <div id="content">
-          <div id="faq-title">Frequently Asked Questions</div>
-          <div class="faq-item">
-              <div class="question">What is Qwirkle?</div>
-              <div class="answer">
-                  Qwirkle combines the game play of Dominoes and Scrabble and is the perfect combination of skill and chance!
-              </div>
-          </div>
-          <div class="faq-item">
-              <div class="question">How do I play?</div>
-              <div class="answer">
-                  On your turn you can do one of three things: 
-                  <ol>
-                      <li>Add one tile to the grid, then draw a tile to bring your hand up to six.</li>
-                      <li>Add two or more tiles to the grid. All touching tiles must share color or shape.</li>
-                      <li>Trade some or all tiles in for different tiles.</li>
-                  </ol>
-              </div>
-          </div>
-          <div class="faq-item">
-              <div class="question">When does someone win?</div>
-              <div class="answer">
-                  The first player to use all their tiles receives a 6 point bonus and then score is calculated!
-              </div>
-          </div>
-          <button class="back-to-top-button">
-              BACK TO TOP
-          </button>
-          <DiamondTile id="diamondTile" fillColor="green" />
-          <CircleTile id="circleTile" fillColor="red" />
-          <CloverTile id="cloverTile" fillColor="orange" />
-      </div>
-  </div>
-</template>
-
-
-<script>
-import { createApp } from "vue";
-
-const app = createApp({
-  data() {
-    return {
-      faqItems: [
-        {
-          q: "What is Qwirkle?",
-          a: "Qwirkle combines the game play of Dominoes and Scrabble and is the perfect combination of skill and chance!",
-        },
-        {
-          q: "How do I play?",
-          a: "On your turn you can do one of three things: 1) Add one tile to the grid, then draw a tile to bring your hand up to six. 2) Add two or more tiles to the grid. All touching tiles must share color or shape. 3) Trade some or all tiles in for different tiles.",
-        },
-        {
-          q: "When does someone win?",
-          a: "The first player to use all their tiles receives a 6 point bonus and then score is calculated!",
-        },
-      ],
-    };
-  },
-});
-
-app.component("faq-question", {
-  template: `
-    <div class="faq">
-      <p class="question" @click="toggleAnswer">
+  <div class="faq">
+    <div v-for="(faq, index) in faqItems" :key="index">
+      <p class="question" @click="toggleAnswer(index)">
         {{ faq.q }}
         <span class="toggleIcon">
-          {{ isOpen ? "—" : "＋" }}
+          {{ isOpen[index] ? "—" : "＋" }}
         </span>
       </p>
-      <p class="answer" :style="{ height: isOpen ? 'auto' : 0px }">
+      <p class="answer" :style="{ height: isOpen[index] ? 'auto' : 0 }">
         {{ faq.a }}
       </p>
     </div>
-  `,
-  props: ["faq"],
-  data() {
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue';
+
+export default {
+  name: "FAQView",
+  setup() {
+    const faqItems = [
+      {
+        q: "What is Qwirkle?",
+        a: "Qwirkle combines the game play of Dominoes and Scrabble and is the perfect combination of skill and chance!",
+      },
+      {
+        q: "How do I play?",
+        a: "On your turn you can do one of three things: 1) Add one tile to the grid, then draw a tile to bring your hand up to six. 2) Add two or more tiles to the grid. All touching tiles must share color or shape. 3) Trade some or all tiles in for different tiles.",
+      },
+      {
+        q: "When does someone win?",
+        a: "The first player to use all their tiles receives a 6 point bonus and then score is calculated!",
+      },
+    ];
+    
+    const isOpen = ref(Array.from({ length: faqItems.length }, () => false));
+
+    const toggleAnswer = (index) => {
+      isOpen.value[index] = !isOpen.value[index];
+    };
+
     return {
-      isOpen: false,
+      faqItems,
+      isOpen,
+      toggleAnswer
     };
   },
-  methods: {
-    toggleAnswer() {
-      this.isOpen = !this.isOpen;
-    },
-  }
-});
-
-app.mount("#app");
+};
 </script>
+
 
 <style scoped>
 /* css */ /* basic styles  */
