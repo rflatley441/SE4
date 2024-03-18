@@ -1,8 +1,8 @@
 <template>
-    <div class="tile" @click="handleTileClick" :class="{ 'selected': isSelected }">
-        <div class="tile-shown is-hidden" v-if="this.hidden"></div>
+    <div class="tile" @click="handleTileClick">
+        <div class="tile-shown is-hidden" v-if="this.hidden"/>
         <!-- <div class="tile-shown is-highlighted" v-else-if="this.highlighted">hello</div> -->
-        <component v-else :is="getTileComponent()" :fillColor="this.color" :width="width" :height="height"/>
+        <component v-else :is="getTileComponent()" :fillColor="this.color" :width="width" :height="height" :class="{ 'selected': isSelected }"/>
     </div>
 </template>
 
@@ -93,6 +93,7 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
 <style scoped>
 .tile {
     position: relative;
+    /* box-sizing: border-box; */
 }
 
 .tile-shown {
@@ -103,8 +104,9 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
 
 .selected {
     border: solid;
-    border-width: 10px;
-    border-color: gray;
+    border-width: 5px;
+    border-color: #99cccc;
+    box-sizing: border-box;
 }
 /* .tile-shown.is-highlighted {
     background-color: gray;
