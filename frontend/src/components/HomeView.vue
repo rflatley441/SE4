@@ -1,9 +1,10 @@
 <template>
     <div id="app">
         <div id="content">
-            <img src="../assets/qwirkle.webp" />
+            <img src="../assets/welcomeuser.png" />
             <div id="inputsContainer">
-                <div class="inputLabel">
+                <button class="btn success">Success</button>
+                <!-- <div class="inputLabel">
                     Username
                 </div>
                 <div class="inputHolder">
@@ -13,8 +14,8 @@
                     Password
                 </div>
                 <div class="inputHolder" style="padding-bottom: 20px;">
-                    <input type="text" class="inputBox" />
-                </div>
+                    <input type="button" class="inputBox" />
+                </div> -->
             </div>
             <div id="footer">
                 <div class="footText">Don't have an account?</div>
@@ -31,6 +32,9 @@
 </template>
 
 <style scoped>
+
+
+
 #app {
     display: flex;
     justify-content: center;
@@ -41,35 +45,40 @@
 
 #starTile {
     position: absolute;
-    left: -70px;
+    left: 100px;
     top: 450px;
 }
 #circleTile {
     position: absolute;
-    right: -70px;
-    top: 200px;
+    right: -140px;
+    top: 0px;
 }
 #diamondTile {
     position: absolute;
-    right: 70px;
-    top: 200px;
-}
-#star4ptTile {
-    position: absolute;
-    right: -70px;
-    top: 200px;
-}
-#squareTile {
-    position: absolute;
-    right: -600px;
+    right: -100px;
     bottom: -200px;
     width: 300;
     height: 300;
 }
+#star4ptTile {
+    position: absolute;
+    left: -50px;
+    bottom: 500px;
+    width: 125;
+    height: 125;
+}
+#squareTile {
+    position: absolute;
+    left: -100px;
+    bottom: -200px;
+    width: 250;
+    height: 250;
+}
 #cloverTile {
     position: absolute;
-    right: -70px;
-    top: 200px;
+    right: -50px;
+    bottom: 200px;
+
 }
 
 img {
@@ -78,8 +87,7 @@ img {
 }
 
 #inputsContainer {
-    background: #b3daff;
-    width: 900px;
+    width: 600px;
     padding-left: 60px;
     padding-right: 60px;
     padding-top: 40px;
@@ -92,6 +100,7 @@ img {
     align-items: center;
 }
 .inputBox {
+    background: #b3daff;
     width: 900px;
     border: none;
     font-size: 30px;
@@ -107,6 +116,20 @@ img {
     font-family: Arial, Helvetica, sans-serif;
     text-align: left;
 }
+
+.btn {
+  border: none;
+  background-color: #b3daff;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* On mouse-over */
+.btn:hover {background: #eee;}
+
+.success {color: green;}
 
 #footer {
     display: flex;
