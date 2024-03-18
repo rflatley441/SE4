@@ -1,9 +1,9 @@
 <template>
     <div id="app">
         <div id="content">
-            <img src="../assets/qwirkle.webp" />
             <div id="inputsContainer">
-                <div class="inputLabel">
+                <button class="btn success">Success</button>
+                <!-- <div class="inputLabel">
                     Username
                 </div>
                 <div class="inputHolder">
@@ -13,27 +13,27 @@
                     Password
                 </div>
                 <div class="inputHolder" style="padding-bottom: 20px;">
-                    <input type="text" class="inputBox" />
-                </div>
-
-                <button class="login-button">
-                    <router-link to="/home">LOGIN</router-link>
-                </button>
-
+                    <input type="button" class="inputBox" />
+                </div> -->
             </div>
-
             <div id="footer">
-                <router-link to="/signup" class="footText">Don't have an account?</router-link>
-                <router-link to="/password" class="footText">Forgot password?</router-link>
+                <div class="footText">Don't have an account?</div>
+                <div class="footText">Forgot password?</div>
             </div>
-
             <Star8ptTile id="starTile" fillColor="red" />
             <CircleTile id="circleTile" fillColor="purple" />
+            <Star4ptTile id="star4ptTile" fillColor="blue" />
+            <DiamondTile id="diamondTile" fillColor="orange" />
+            <SquareTile id="squareTile" fillColor="yellow" />
+            <CloverTile id="cloverTile" fillColor="green" />
         </div>
     </div>
 </template>
 
 <style scoped>
+
+
+
 #app {
     display: flex;
     min-height: calc(100vh - 16px);
@@ -44,13 +44,40 @@
 
 #starTile {
     position: absolute;
-    left: -70px;
+    left: 100px;
     top: 450px;
 }
 #circleTile {
     position: absolute;
-    right: -70px;
-    top: 200px;
+    right: -140px;
+    top: 0px;
+}
+#diamondTile {
+    position: absolute;
+    right: -100px;
+    bottom: -200px;
+    width: 300;
+    height: 300;
+}
+#star4ptTile {
+    position: absolute;
+    left: -50px;
+    bottom: 500px;
+    width: 125;
+    height: 125;
+}
+#squareTile {
+    position: absolute;
+    left: -100px;
+    bottom: -200px;
+    width: 250;
+    height: 250;
+}
+#cloverTile {
+    position: absolute;
+    right: -50px;
+    bottom: 200px;
+
 }
 
 img {
@@ -59,8 +86,7 @@ img {
 }
 
 #inputsContainer {
-    background: #b3daff;
-    width: 900px;
+    width: 600px;
     padding-left: 60px;
     padding-right: 60px;
     padding-top: 40px;
@@ -73,6 +99,7 @@ img {
     align-items: center;
 }
 .inputBox {
+    background: #b3daff;
     width: 900px;
     border: none;
     font-size: 30px;
@@ -89,6 +116,20 @@ img {
     text-align: left;
 }
 
+.btn {
+  border: none;
+  background-color: #b3daff;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* On mouse-over */
+.btn:hover {background: #eee;}
+
+.success {color: green;}
+
 #footer {
     display: flex;
     justify-content: space-evenly;
@@ -101,35 +142,21 @@ img {
     color: #2490F3;
     cursor: pointer;
 }
-
-.login-button {
-  background-color: #2490F3;
-  border: 1px solid black;
-  color: white;
-  padding: 20px 40px; /* Adjust the padding to match the button's height and width */
-  text-align: center;
-  display: inline-block;
-  font-size: 40px; /* Adjust the font size as needed */
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px; /* Optional: if the button has rounded corners */
-}
-
-.login-button:hover {
-  background-color: #0056b3; /* Darker blue on hover, adjust as needed */ 
-  transform: translateY(2px); /* Optional: if the button moves slightly on hover */
-}
 </style>
 
 
 <script>
 import Star8ptTile from '@/assets/Star8ptTile.vue';
 import CircleTile from '@/assets/CircleTile.vue';
+import CloverTile from '@/assets/CloverTile.vue';
+import DiamondTile from '@/assets/DiamondTile.vue';
+import Star4ptTile from '@/assets/Star4ptTile.vue';
+import SquareTile from '@/assets/SquareTile.vue';
 
  export default {
-    name: "LoginView",
+    name: "HomeView",
     components: {
-        Star8ptTile, CircleTile
+        Star8ptTile, CircleTile, CloverTile, DiamondTile, Star4ptTile, SquareTile
     }
  }
 </script>

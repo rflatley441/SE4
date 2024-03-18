@@ -51,6 +51,7 @@
 <style scoped>
 #app {
     display: flex;
+    min-height: calc(100vh - 16px);
     justify-content: center;
     align-items: center;
     width: 100vw;
