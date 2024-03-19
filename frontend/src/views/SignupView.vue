@@ -1,5 +1,9 @@
 <template>
     <div id="app">
+        <div class="navbar">
+        <img src="../assets/qwirkle.webp" class="navbar-logo" />
+        <!-- Add navigation links or buttons here -->
+        </div>
         <div id="content">
             <div id = signuptitle>Sign Up</div>
             <div id="inputsContainer">
@@ -51,9 +55,35 @@
 <style scoped>
 #app {
     display: flex;
+    position: relative;
     justify-content: center;
     align-items: center;
     width: 100vw;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 0 20px;
+    background-color: #ffffff;
+    height: 80px;
+    z-index: 1000; 
+}
+
+.navbar-logo {
+    height: 80px; 
+    width: auto;
+}
+
+#logo { 
+    position: absolute; 
+    top: 0; 
+    left: 0;
 }
 
 #diamondTile {
