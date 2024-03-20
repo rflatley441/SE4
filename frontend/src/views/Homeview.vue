@@ -1,5 +1,14 @@
 <template>
     <div id="app">
+
+        <div id="navBar">
+            <div class="navItems">
+                <router-link to="/" class="navItem">Home</router-link>
+                <router-link to="/game" class="navItem">Play Game</router-link>
+            </div>
+                
+        </div>
+
         <div id="content">
             <h1 style="font-size:80px"> Welcome, User!</h1>
             <h2 style="font-size:20px">What would you like to do today?<br></h2>
@@ -21,6 +30,9 @@
 </template>
 
 <style scoped>
+
+
+
 
 #menu{
     position: absolute;
@@ -137,6 +149,42 @@ h1 {
     color: #2490F3;
     cursor: pointer;
 }
+
+#navBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fbfafa;
+    z-index: 1000;
+    padding: 10px 20px;
+}
+
+.navItem {
+    color: #333;
+    text-decoration: none;
+    margin-right: 20px;
+    font-size: 18px;
+}
+
+.profile-picture {
+    position: relative; /* Adjusted for positioning inside the nav bar */
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile-picture img, .profile-picture .tile {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+
 </style>
 
 
