@@ -5,6 +5,7 @@
             <div class="navItems">
                 <router-link to="/" class="navItem">Home</router-link>
                 <router-link to="/game" class="navItem">Play Game</router-link>
+                <router-link to="/faq" class="navItem">How to Play</router-link>
             </div>
                 
         </div>

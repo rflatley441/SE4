@@ -43,11 +43,13 @@
 
 #starTile {
     position: absolute;
+    display: flex;
     left: -70px;
     top: 450px;
 }
 #circleTile {
     position: absolute;
+    display: flex;
     right: -70px;
     top: 200px;
 }
