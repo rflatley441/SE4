@@ -32,6 +32,7 @@ export default {
     },
     async mounted() {
         await this.fetchHand();
+        // comment
     }
 }
 
