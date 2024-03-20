@@ -57,13 +57,14 @@ export default {
     transform: translateX(-50%); 
 }    
 
-.player-hand-background {
+ .player-hand-background {
     background-color: #2490F3;
     width: 850px;
     height: 150px;
     position: absolute;
     bottom: 0; 
     right: 0; 
+    scale: 0.8 
 }
 
 .player-hand {
@@ -72,6 +73,26 @@ export default {
     padding-right: 50px;
     bottom: 0; 
     right: 0; 
+} 
+
+ .player-2-hand-background {
+    background-color: #f32e24;
+    width: 850px;
+    height: 150px;
+    position: absolute;
+    bottom: 0; 
+    left: 0;
+    scale: 0.8 
 }
+
+.player-2-hand {
+    position: absolute;
+    padding: 20px;
+    padding-right: 50px;
+    bottom: 0; 
+    left: 0; 
+    
+} 
+
 
 </style>
