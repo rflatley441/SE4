@@ -1,9 +1,9 @@
 <template>
-    <div id="menu">
+    <!-- <div id="menu">
         <img src="../assets/newuser.png" alt="Profile Picture" height="100px"/>
         <button class="btn top">LOG OUT</button>
         <img src="../assets/settings.png" alt="Profile Picture" height="100px"/>
-    </div>
+    </div> -->
     <div id="app">
         <div id="content">
             <h1 style="font-size:80px"> Welcome, User!</h1>

@@ -38,7 +38,7 @@
                 </div>
 
                 <button class="create-account-button">
-                    CREATE ACCOUNT
+                    <router-link to="/home">CREATE ACCOUNT</router-link>
                 </button>
 
             </div>

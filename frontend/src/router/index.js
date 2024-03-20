@@ -4,7 +4,7 @@ import SignupPage from '../views/SignupView.vue'
 import PasswordPage from '../views/PasswordView.vue'
 import GamePlayView from '@/views/GamePlayView.vue'
 import LoginView from '@/views/LoginView.vue'
-import Homeview from '@/views/Homeview.vue'
+import HomeView from '@/views/HomeView.vue'
 
 
 const router = createRouter({
@@ -28,7 +28,7 @@ const router = createRouter({
     },
     {
       path: "/home",
-      component: Homeview,
+      component: HomeView,
     }
   ]
 })
