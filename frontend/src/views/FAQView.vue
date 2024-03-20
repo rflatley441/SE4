@@ -24,7 +24,6 @@
       <Star8ptTile id="starTile" fillColor="yellow" />
       <CircleTile id="circleTile" fillColor="blue" />
       <CloverTile id="cloverTile" fillColor="green" />
-      <DiamondTile id="diamondTile" fillColor="red" />
     </div>
 </template>
 
@@ -34,7 +33,6 @@ import { ref } from 'vue';
 import Star8ptTile from '@/assets/Star8ptTile.vue';
 import CircleTile from '@/assets/CircleTile.vue';
 import CloverTile from '@/assets/CloverTile.vue';
-import DiamondTile from '@/assets/DiamondTile.vue';
 
 export default {
   name: "FAQView",
@@ -71,7 +69,7 @@ export default {
     };
   },
   components: {
-        Star8ptTile, CircleTile, CloverTile, DiamondTile
+        Star8ptTile, CircleTile, CloverTile
   }
 };
 </script>
