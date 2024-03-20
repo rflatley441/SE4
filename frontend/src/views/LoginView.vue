@@ -17,7 +17,7 @@
                 </div>
 
                 <button class="login-button">
-                    LOGIN
+                    <router-link to="/home" class="footText">LOGIN</router-link>
                 </button>
 
             </div>
