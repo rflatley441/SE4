@@ -1,9 +1,15 @@
 <template>
     <div id="app">
         <div id="content">
-            <img src="../assets/welcomeuser.png" />
+            <h1 style="font-size:80px"> Welcome, User!</h1>
+            <h2 style="font-size:20px">What would you like to do today?<br></h2>
             <div id="inputsContainer">
-                <button class="btn success">Success</button>
+                <button class="btn success" style="margin-top: 30px;">PLAY GAME</button>
+                <br>
+                <button class="btn success" style="margin-top: 30px;">VIEW PLAYER STATISTICS</button>
+                <br>
+                <button class="btn success" style="margin-top: 30px;">VIEW FRIENDS LIST</button>
+
                 <!-- <div class="inputLabel">
                     Username
                 </div>
@@ -16,10 +22,6 @@
                 <div class="inputHolder" style="padding-bottom: 20px;">
                     <input type="button" class="inputBox" />
                 </div> -->
-            </div>
-            <div id="footer">
-                <div class="footText">Don't have an account?</div>
-                <div class="footText">Forgot password?</div>
             </div>
             <Star8ptTile id="starTile" fillColor="red" />
             <CircleTile id="circleTile" fillColor="purple" />
@@ -87,7 +89,6 @@ img {
 }
 
 #inputsContainer {
-    width: 600px;
     padding-left: 60px;
     padding-right: 60px;
     padding-top: 40px;
@@ -120,16 +121,25 @@ img {
 .btn {
   border: none;
   background-color: #b3daff;
-  padding: 14px 28px;
-  font-size: 16px;
+  width: 800px;
+  height: 70px;
+  font-size: 30px;
+  white-space: nowrap;
   cursor: pointer;
   display: inline-block;
+  margin: auto;
+  text-align: center;
+
+}
+
+h1 {
+  color: blue;
 }
 
 /* On mouse-over */
 .btn:hover {background: #eee;}
 
-.success {color: green;}
+.success {color: black;}
 
 #footer {
     display: flex;
