@@ -9,6 +9,13 @@
                     <PlayerHand :playerHand="this.playerHand"/>
                 </div>
             </div>
+
+            <div class="player-2-hand-background">
+                <div class="player-hand-2">
+                    <PlayerHand :playerHand="this.playerHand" :player="this.players[1]"/>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -25,7 +32,7 @@ export default {
         PlayerHand,
     },
     computed: {
-        ...mapGetters(['playerHand'])
+        ...mapGetters(['playerHand', 'players'])
     },
     methods: {
         ...mapActions(['fetchHand'])
@@ -64,7 +71,6 @@ export default {
     position: absolute;
     bottom: 0; 
     right: 0; 
-    scale: 0.8 
 }
 
 .player-hand {
@@ -82,7 +88,6 @@ export default {
     position: absolute;
     bottom: 0; 
     left: 0;
-    scale: 0.8 
 }
 
 .player-2-hand {
