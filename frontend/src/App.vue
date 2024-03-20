@@ -6,7 +6,6 @@
 
 // import axios from 'axios';
 // import GameBoard from './components/GameBoard.vue';
-import FAQView from './views/FAQView.vue';
 
 export default {
   name: 'App',
@@ -17,7 +16,6 @@ export default {
   },
   components: {
     // GameBoard,
-    FAQView
   },
   async mounted() {
     //const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
