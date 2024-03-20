@@ -1,13 +1,20 @@
 <template>
   <div class="profile-picture">
+    <!-- The component tag is used to dynamically render a component -->
+    <!-- If randomTile is truthy, it renders the component specified by randomTile.component -->
+    <!-- The fill-color, width, and height props are passed to the component -->
+    <!-- The click event listener calls the openImagePicker method when the component is clicked -->
     <component 
       v-if="randomTile" 
       :is="randomTile.component" 
-      :color="randomTile.color" 
+      :fill-color="randomTile.color" 
       :width="100" 
       :height="100"
       @click="openImagePicker"
     />
+    <!-- If randomTile is falsy and profilePictureUrl is truthy, it renders an img tag -->
+    <!-- The src attribute is set to profilePictureUrl, and the alt attribute is set to "Profile Picture" -->
+    <!-- The click event listener calls the openImagePicker method when the img is clicked -->
     <img v-else-if="profilePictureUrl" :src="profilePictureUrl" alt="Profile Picture" @click="openImagePicker" class="profile-picture-img" />
   </div>
 </template>
@@ -24,12 +31,12 @@ export default {
   data() {
     return {
       tiles: [
-        { component: CircleTile, colors: ['red', 'blue', 'green', 'yellow'] },
-        { component: CloverTile, colors: ['red', 'blue', 'green', 'yellow'] },
-        { component: DiamondTile, colors: ['red', 'blue', 'green', 'yellow'] },
-        { component: SquareTile, colors: ['red', 'blue', 'green', 'yellow'] },
-        { component: Star4ptTile, colors: ['red', 'blue', 'green', 'yellow'] },
-        { component: Star8ptTile, colors: ['red', 'blue', 'green', 'yellow'] },
+        { component: CircleTile, colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple'] },
+        { component: CloverTile, colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple'] },
+        { component: DiamondTile, colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple'] },
+        { component: SquareTile, colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple'] },
+        { component: Star4ptTile, colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple'] },
+        { component: Star8ptTile, colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple'] },
       ],
       profilePictureUrl: null,
     };
