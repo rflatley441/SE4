@@ -1,4 +1,9 @@
 <template>
+    <div id="menu">
+        <img src="../assets/newuser.png" alt="Profile Picture" height="100px"/>
+        <button class="btn top">LOG OUT</button>
+        <img src="../assets/settings.png" alt="Profile Picture" height="100px"/>
+    </div>
     <div id="app">
         <div id="content">
             <h1 style="font-size:80px"> Welcome, User!</h1>
@@ -9,22 +14,9 @@
                 <button class="btn success" style="margin-top: 30px;">VIEW PLAYER STATISTICS</button>
                 <br>
                 <button class="btn success" style="margin-top: 30px;">VIEW FRIENDS LIST</button>
-
-                <!-- <div class="inputLabel">
-                    Username
-                </div>
-                <div class="inputHolder">
-                    <input type="text" class="inputBox" />
-                </div>
-                <div class="inputLabel" style="margin-top: 30px;">
-                    Password
-                </div>
-                <div class="inputHolder" style="padding-bottom: 20px;">
-                    <input type="button" class="inputBox" />
-                </div> -->
             </div>
             <Star8ptTile id="starTile" fillColor="red" />
-            <CircleTile id="circleTile" fillColor="purple" />
+            <!-- <CircleTile id="circleTile" fillColor="purple" /> -->
             <Star4ptTile id="star4ptTile" fillColor="blue" />
             <DiamondTile id="diamondTile" fillColor="orange" />
             <SquareTile id="squareTile" fillColor="yellow" />
@@ -35,7 +27,12 @@
 
 <style scoped>
 
-
+#menu{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 100px;
+}
 
 #app {
     display: flex;
@@ -95,41 +92,8 @@ img {
     padding-bottom: 40px;
 }
 
-.inputHolder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.inputBox {
-    background: #b3daff;
-    width: 900px;
-    border: none;
-    font-size: 30px;
-    height: 60px;
-    margin-top: 5px;
-    padding-left: 10px;
-}
-
-.inputLabel {
-    font-size: 35px;
-    font-weight: 600;
-    color: black;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: left;
-}
-
 .btn {
-  border: none;
-  background-color: #b3daff;
-  width: 800px;
-  height: 70px;
-  font-size: 30px;
-  white-space: nowrap;
-  cursor: pointer;
-  display: inline-block;
-  margin: auto;
-  text-align: center;
-
+    border: none;
 }
 
 h1 {
@@ -137,9 +101,34 @@ h1 {
 }
 
 /* On mouse-over */
-.btn:hover {background: #eee;}
+.btn:hover {background: #a8a5a5;}
 
-.success {color: black;}
+.success {
+    background-color: #b3daff;
+    width: 800px;
+    height: 70px;
+    font-size: 30px;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    color: black;
+}
+
+.top{
+    background-color: white;
+    width: 200px;
+    height: 100px;
+    font-size: 30px;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    color: black;
+}
+
 
 #footer {
     display: flex;
@@ -158,7 +147,7 @@ h1 {
 
 <script>
 import Star8ptTile from '@/assets/Star8ptTile.vue';
-import CircleTile from '@/assets/CircleTile.vue';
+// import CircleTile from '@/assets/CircleTile.vue';
 import CloverTile from '@/assets/CloverTile.vue';
 import DiamondTile from '@/assets/DiamondTile.vue';
 import Star4ptTile from '@/assets/Star4ptTile.vue';
@@ -167,7 +156,8 @@ import SquareTile from '@/assets/SquareTile.vue';
  export default {
     name: "HomeView",
     components: {
-        Star8ptTile, CircleTile, CloverTile, DiamondTile, Star4ptTile, SquareTile
+        Star8ptTile, CloverTile, DiamondTile, Star4ptTile, SquareTile
+        // ,CircleTile
     }
  }
 </script>
