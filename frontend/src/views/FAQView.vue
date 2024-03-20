@@ -3,6 +3,7 @@
     <header class = "header">
       <h1>Frequently Asked Questions</h1>
     </header>
+  
     <div v-for="(faq, index) in faqItems" :key="index">
       <p class="question" @click="toggleAnswer(index)">
         {{ faq.q }}
