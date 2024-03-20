@@ -36,7 +36,7 @@ import CloverTile from '@/assets/CloverTile.vue';
 
 export default {
   name: "FAQView",
-  setup() {
+  setup() {     
     const faqItems = [
       {
         q: "What is Qwirkle?",
