@@ -64,7 +64,7 @@ export default {
     transform: translateX(-50%); 
 }    
 
- .player-hand-background {
+/*  .player-hand-background {
     background-color: #2490F3;
     width: 850px;
     height: 150px;
@@ -97,7 +97,38 @@ export default {
     bottom: 0; 
     left: 0; 
     
-} 
+}  */
+
+.player-hand-background, .player-2-hand-background {
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    overflow-x: auto; 
+    overflow-y: hidden; 
+    white-space: nowrap; 
+    position: absolute;
+    bottom: 0;
+    height: 150px;
+    width: 400px; 
+}
+
+.player-hand, .player-2-hand {
+    display: flex;
+    flex-wrap: nowrap; 
+    gap: 20px; 
+    padding: 25px 0; 
+}
+
+.player-hand-background {
+    right: 0;
+    background-color: #2490F3; 
+}
+
+.player-2-hand-background {
+    left: 0;
+    background-color: #f32e24; 
+}
+
 
 
 </style>
