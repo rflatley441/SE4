@@ -4,7 +4,7 @@ import SignupPage from '../views/SignupView.vue'
 import PasswordPage from '../views/PasswordView.vue'
 import GamePlayView from '@/views/GamePlayView.vue'
 import LoginView from '@/views/LoginView.vue'
-import HomeView from '@/views/HomeView.vue'
+import HomeView from '@/views/Homeview.vue'
 
 
 const router = createRouter({
