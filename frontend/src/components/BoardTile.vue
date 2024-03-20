@@ -1,8 +1,8 @@
 <template>
     <div class="tile" @click="handleTileClick">
-        <div class="tile-shown is-hidden" v-if="this.hidden"/>
+        <div class="tile-shown is-hidden" v-if="this.hidden"></div>
         <!-- <div class="tile-shown is-highlighted" v-else-if="this.highlighted">hello</div> -->
-        <component v-else :is="getTileComponent()" :fillColor="this.color" :width="width" :height="height" :class="{ 'selected': isSelected }"/>
+        <component v-else :is="getTileComponent()" :fillColor="this.color" :width="width" :height="height"/>
     </div>
 </template>
 
@@ -42,11 +42,7 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
         },
         width: {
             type: Number
-        },
-        selected: {
-            type: Boolean,
-            default: false,
-        },
+        }
         // highlighted: {
         //     type: Boolean,
         //     default: false
@@ -62,11 +58,6 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
         return {
             handleTileClick,
         };
-    },
-    computed: {
-        isSelected() {
-            return this.selected;
-        }
     },
     methods: {
         getTileComponent() {
@@ -86,27 +77,19 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
                     return 'Star8ptTile';
             }
         },
-    },
+    }
  }
 </script>
 
 <style scoped>
 .tile {
     position: relative;
-    /* box-sizing: border-box; */
 }
 
 .tile-shown {
     width: 100%;
     height: 100%;
     border: solid;
-}
-
-.selected {
-    border: solid;
-    border-width: 5px;
-    border-color: #99cccc;
-    box-sizing: border-box;
 }
 /* .tile-shown.is-highlighted {
     background-color: gray;

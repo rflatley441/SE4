@@ -1,9 +1,5 @@
 <template>
     <div id="app">
-        <div class="navbar">
-        <img src="../assets/qwirkle.webp" class="navbar-logo" />
-        <!-- Add navigation links or buttons here -->
-        </div>
         <div id="content">
             <div id = signuptitle>Sign Up</div>
             <div id="inputsContainer">
@@ -38,7 +34,7 @@
                 </div>
 
                 <button class="create-account-button">
-                    <router-link to="/home">CREATE ACCOUNT</router-link>
+                    CREATE ACCOUNT
                 </button>
 
             </div>
@@ -55,35 +51,9 @@
 <style scoped>
 #app {
     display: flex;
-    position: relative;
     justify-content: center;
     align-items: center;
     width: 100vw;
-}
-
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    padding: 0 20px;
-    background-color: #ffffff;
-    height: 80px;
-    z-index: 1000; 
-}
-
-.navbar-logo {
-    height: 80px; 
-    width: auto;
-}
-
-#logo { 
-    position: absolute; 
-    top: 0; 
-    left: 0;
 }
 
 #diamondTile {
@@ -170,18 +140,18 @@
   background-color: #2490F3;
   border: 1px solid black;
   color: white;
-  padding: 20px 40px; /* Adjust the padding to match the button's height and width */
+  padding: 20px 40px; 
   text-align: center;
   display: inline-block;
-  font-size: 40px; /* Adjust the font size as needed */
+  font-size: 40px; 
   margin: 4px 2px;
   cursor: pointer;
-  border-radius: 4px; /* Optional: if the button has rounded corners */
+  border-radius: 4px; 
 }
 
 .create-account-button:hover {
-  background-color: #0056b3; /* Darker blue on hover, adjust as needed */ 
-  transform: translateY(2px); /* Optional: if the button moves slightly on hover */
+  background-color: #0056b3; 
+  transform: translateY(2px); 
 }
 </style>
 
