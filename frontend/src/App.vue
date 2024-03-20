@@ -1,6 +1,5 @@
 <template>
-  <!-- <router-view/> -->
-  <FAQView></FAQView>
+  <router-view/>
 </template>
 
 <script>
@@ -37,4 +36,4 @@ export default {
   margin-top: 60px;
   margin-left: 60px;
 }
-</style> ./views/FAQ.vue
+</style> 
