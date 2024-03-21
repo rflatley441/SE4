@@ -43,7 +43,7 @@ export default {
         PlayerHand,
     },
     computed: {
-        ...mapGetters(['playerHand', 'players'])
+        ...mapGetters(['playerHand'])
     },
     methods: {
         ...mapActions(['fetchHand']),
@@ -114,13 +114,11 @@ export default {
     display: flex;
     align-items: center; 
     justify-content: center; 
-    overflow-x: auto; 
-    overflow-y: hidden; 
     white-space: nowrap; 
     position: absolute;
     bottom: 0;
     height: 150px;
-    width: 400px; 
+    width: 850px; 
 }
 
 .player-hand, .player-2-hand {
