@@ -2,13 +2,23 @@
     <div id="app">
         <div class="content">
             <div class="game-board"> 
-                <GameBoard :playerHand="this.playerHand"/>
+                <!-- right now i am just setting the user ids to 0 when implementing dual players they will need to be changed based off round -->
+                <GameBoard :playerHand="this.playerHand" :userId="0"/>
             </div>
             <div class="player-hand-background">
                 <div class="player-hand">
-                    <PlayerHand :playerHand="this.playerHand"/>
+                    <PlayerHand :playerHand="this.playerHand" :userId="0"/>
                 </div>
             </div>
+
+            <div class="player-2-hand-background">
+                <div class="player-2-hand">
+                    <PlayerHand :playerHand="this.playerHand" :userId="1"/>
+                </div>
+            </div>
+
+            
+
         </div>
     </div>
 </template>
@@ -28,11 +38,11 @@ export default {
         ...mapGetters(['playerHand'])
     },
     methods: {
-        ...mapActions(['fetchHand'])
+        ...mapActions(['fetchHand']),
     },
     async mounted() {
         await this.fetchHand();
-    }
+    },
 }
 
 </script>
@@ -57,7 +67,7 @@ export default {
     transform: translateX(-50%); 
 }    
 
-.player-hand-background {
+/*  .player-hand-background {
     background-color: #2490F3;
     width: 850px;
     height: 150px;
@@ -72,6 +82,52 @@ export default {
     padding-right: 50px;
     bottom: 0; 
     right: 0; 
+} 
+
+ .player-2-hand-background {
+    background-color: #f32e24;
+    width: 850px;
+    height: 150px;
+    position: absolute;
+    bottom: 0; 
+    left: 0;
+}
+
+.player-2-hand {
+    position: absolute;
+    padding: 20px;
+    padding-right: 50px;
+    bottom: 0; 
+    left: 0; 
+    
+}  */
+
+.player-hand-background, .player-2-hand-background {
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    white-space: nowrap; 
+    position: absolute;
+    bottom: 0;
+    height: 150px;
+    width: 850px; 
+}
+
+.player-hand, .player-2-hand {
+    display: flex;
+    flex-wrap: nowrap; 
+    gap: 20px; 
+    padding: 25px 0; 
+}
+
+.player-hand-background {
+    right: 0;
+    background-color: #2490F3; 
+}
+
+.player-2-hand-background {
+    left: 0;
+    background-color: #f32e24; 
 }
 
 </style>
