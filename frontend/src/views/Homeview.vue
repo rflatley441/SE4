@@ -3,7 +3,7 @@
 
         <div id="navBar">
             <div class="navItems">
-                <router-link to="/" class="navItem">Home</router-link>
+                <router-link to="/" class="navItem">Logout</router-link>
                 <router-link to="/game" class="navItem">Play Game</router-link>
                 <router-link to="/faq" class="navItem">How to Play</router-link>
             </div>
@@ -12,9 +12,9 @@
 
         <div id="content">
             <h1 style="font-size:80px"> Welcome, User!</h1>
-            <h2 style="font-size:20px">What would you like to do today?<br></h2>
+            <h2 style="font-size:40px">What would you like to do today?<br></h2>
             <div id="inputsContainer">
-                <button class="btn success" style="margin-top: 30px;"><router-link to="/game" class="footText">PLAY GAME</router-link></button>
+                <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">PLAY GAME</router-link></button>
                 <br>
                 <button class="btn success" style="margin-top: 30px;">VIEW PLAYER STATISTICS</button>
                 <br>
@@ -70,7 +70,7 @@
 #star4ptTile {
     position: absolute;
     left: -50px;
-    bottom: 500px;
+    bottom: 300px;
     width: 125;
     height: 125;
 }
@@ -159,7 +159,7 @@ h1 {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #fbfafa;
+    background-color: #ffffff;
     z-index: 1000;
     padding: 10px 20px;
 }
@@ -168,7 +168,7 @@ h1 {
     color: #333;
     text-decoration: none;
     margin-right: 20px;
-    font-size: 18px;
+    font-size: 25px;
 }
 
 .profile-picture {

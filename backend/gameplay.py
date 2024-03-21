@@ -1,6 +1,7 @@
 from random import shuffle
 from tile import Tile, TileColor, TileShape
 
+
 class Gameplay:
     def __init__(self, player1, player2, game_board):
         self.player1 = player1
@@ -27,11 +28,22 @@ class Gameplay:
 
     def dealTiles(self):
         # Implementation for dealing tiles goes here
+        # print("before ", str(self.player1.hand), "/n", str(self.player2.hand))
         while len(self.player1.hand) < 6 and len(self.game_board.tiles) != 0:
-            self.player1.addTileToHand(self.game_board.tiles.pop())
+            tile = self.game_board.tiles.pop()
+            self.player1.addTileToHand(tile)
 
         while len(self.player2.hand) < 6 and len(self.game_board.tiles) != 0:
-            self.player2.addTileToHand(self.game_board.tiles.pop())
+            tile = self.game_board.tiles.pop()
+            self.player2.addTileToHand(tile)
+        # print("after ", str(self.player1.hand), "/n", str(self.player2.hand))
+
+    def getPlayerById(self, userId):
+        if self.player1.userId == str(userId):
+            return self.player1
+        else:
+            # TODO: will definitely need to update this
+            return self.player2
 
     def playTile(self, tile, position, player):
         # Implementation for playing a tile on the board goes here
