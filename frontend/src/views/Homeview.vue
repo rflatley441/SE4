@@ -159,7 +159,7 @@ h1 {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #fbfafa;
+    background-color: #ffffff;
     z-index: 1000;
     padding: 10px 20px;
 }

@@ -1,5 +1,13 @@
 <template>
     <div id="app">
+        <div id="navBar">
+            <div class="navItems">
+                <router-link to="/" class="navItem">Logout</router-link>
+                <router-link to="/home" class="navItem">Home</router-link>
+                <router-link to="/faq" class="navItem">How to Play</router-link>
+            </div>
+                
+        </div>
         <div class="content">
             <div class="game-board"> 
                 <GameBoard :playerHand="this.playerHand"/>
@@ -72,6 +80,26 @@ export default {
     padding-right: 50px;
     bottom: 0; 
     right: 0; 
+}
+
+#navBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fbfafa;
+    z-index: 1000;
+    padding: 10px 20px;
+}
+
+.navItem {
+    color: #333;
+    text-decoration: none;
+    margin-right: 20px;
+    font-size: 25px;
 }
 
 </style>
