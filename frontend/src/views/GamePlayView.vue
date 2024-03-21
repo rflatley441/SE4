@@ -1,13 +1,5 @@
 <template>
     <div id="app">
-        <div id="navBar">
-            <div class="navItems">
-                <router-link to="/" class="navItem">Logout</router-link>
-                <router-link to="/home" class="navItem">Home</router-link>
-                <router-link to="/faq" class="navItem">How to Play</router-link>
-            </div>
-                
-        </div>
         <div class="content">
             <div class="game-board"> 
                 <!-- right now i am just setting the user ids to 0 when implementing dual players they will need to be changed based off round -->
@@ -25,7 +17,13 @@
                 </div>
             </div>
 
-            
+            <div class="player-score">
+                <PlayerScore :userId="0"/>
+            </div>
+
+            <div class="player-score">
+                <PlayerScore :userId="1"/>
+            </div>
 
         </div>
     </div>
@@ -34,6 +32,7 @@
 <script>
 import GameBoard from '@/components/GameBoard.vue';
 import PlayerHand from '@/components/PlayerHand.vue';
+import PlayerScore from '@/components/PlayerScore.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
@@ -41,6 +40,7 @@ export default {
     components: {
         GameBoard,
         PlayerHand,
+        PlayerScore,
     },
     computed: {
         ...mapGetters(['playerHand'])
@@ -136,26 +136,6 @@ export default {
 .player-2-hand-background {
     left: 0;
     background-color: #f32e24; 
-}
-
-#navBar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #fbfafa;
-    z-index: 1000;
-    padding: 10px 20px;
-}
-
-.navItem {
-    color: #333;
-    text-decoration: none;
-    margin-right: 20px;
-    font-size: 25px;
 }
 
 </style>
