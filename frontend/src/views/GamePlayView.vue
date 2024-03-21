@@ -20,10 +20,12 @@
             </div>
 
             <div class="player-2-hand-background">
-                <div class="player-hand-2">
-                    <PlayerHand :playerHand="this.playerHand" :player="this.players[1]"/>
+                <div class="player-2-hand">
+                    <PlayerHand :playerHand="this.playerHand" :userId="1"/>
                 </div>
             </div>
+
+            
 
         </div>
     </div>
