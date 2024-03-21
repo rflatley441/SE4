@@ -50,23 +50,49 @@ const getters = {
 
 const actions = {
     async fetchDeck({commit}) {
-        const response = await axios.get("http://127.0.0.1:5000/deck");
-        commit('setDeck', response.data);
+        try {
+            const response = await axios.get("http://127.0.0.1:5000/deck");
+            commit('setDeck', response.data);
+        } catch(error) {
+            console.error(error.response.data)
+        }
     },
 
     async fetchHand({commit, dispatch}) {
-        const response = await axios.get("http://127.0.0.1:5000/playerhand");
-        console.log(response.data);
-        console.log(response.data[1]);
-        response.data.forEach(item => {
-            if (item.hand && item.userId) {
-                commit('setHand', {
-                    'playerId': item.userId,
-                    'hand': item.hand
-                });
-            }
-        })
-        dispatch('updateTilesAmount', response.data[0].remaining);
+        try {
+            const response = await axios.get("http://127.0.0.1:5000/playerhand");
+            response.data.forEach(item => {
+                if (item.hand && item.userId) {
+                    commit('setHand', {
+                        'playerId': item.userId,
+                        'hand': item.hand
+                    });
+                }
+            })
+            dispatch('updateTilesAmount', response.data[0].remaining);
+        } catch(error) {
+            console.error(error.response.data)
+        }
+    },
+
+    async updateHand({commit, state}, userId) {
+        try {
+            const response = await axios.post("http://127.0.0.1:5000/playerhand", {
+                userId: userId,
+                hand: state.players[userId].hand,
+            });
+            response.data.forEach(item => {
+                if (item.hand && item.userId) {
+                    commit('setHand', {
+                        'playerId': item.userId,
+                        'hand': item.hand
+                    });
+                }
+            })
+            console.log("update hand:", response)
+        } catch (error) {
+            console.error(error.response.data)
+        }
     },
 
     updateTilesAmount({commit}, amount) {
@@ -81,11 +107,6 @@ const actions = {
         let random = Math.round(Math.random());
         commit('setTurn', random);
     },
-
-    // throwTile({commit, state}, userId) {
-        
-    // },
-
     gameStart({commit, dispatch}) {
         commit('restartGame');
 
@@ -95,10 +116,6 @@ const actions = {
             dispatch('randomStart');
         });
         commit('setGameStart', true);
-    },
-
-    drawTiles({commit}, userId) {
-        commit('collectTiles', userId);
     },
 
     setGameOver({commit}, winner) {
@@ -127,8 +144,8 @@ const mutations = {
         state.deck.remaining = deck.remaining;
     },
     setHand: (state, payload) => {
-        console.log(payload);
         let userId = payload.playerId;
+        state.players[userId].hand = []
         payload.hand.forEach((tile) => {
             state.players[userId].hand.push({
                 'shape': tile[0],
@@ -137,9 +154,10 @@ const mutations = {
         });
         console.log(state.players[0].hand)
     },
-    // throwTile: (state, userId) => {
-        
-    // },
+    removeTileFromHand(state, { userId, tileIndex }) {
+        state.players[userId].hand.splice(tileIndex, 1);
+        console.log("hand:", state.players[userId].hand)
+    },
     updateTilesAmount: (state, amount) => (state.deck.remaining = amount)
 };
 

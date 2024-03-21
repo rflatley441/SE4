@@ -11,18 +11,23 @@
             :shape="tile.shape"
             :width="50"
             :height="50"
-            @select-tile="selectTile"/>
+            @select-tile="placeTile"/>
         </section>
     </div>
 </template>
 
 <script>
 import BoardTile from "./BoardTile.vue"
+import { mapActions } from "vuex"
 import { ref } from "vue"
 
 export default {
     name: "GameBoard",
     props: {
+        userId: {
+            type: Number,
+            required: true,
+        },
         playerHand: {
             type: Array,
             required: true,
@@ -50,21 +55,30 @@ export default {
         };
     }, 
     methods: {
-        selectTile(payload) {
+        ...mapActions(['updateHand', 'fetchHand']),
+
+        async placeTile(payload) {
             let tileSelected = null;
 
-            for (let i = 0; i < this.playerHand(0).length; i++) {
-                if (this.playerHand(0)[i].selected == true){
+            for (let i = 0; i < this.playerHand(this.userId).length; i++) {
+                if (this.playerHand(this.userId)[i].selected == true){
                     tileSelected = i;
                 }
             }
 
             if (tileSelected !== null) {
-                this.tileList[payload.position].color = this.playerHand(0)[tileSelected].color;
-                this.tileList[payload.position].shape = this.playerHand(0)[tileSelected].shape;
+                this.tileList[payload.position].color = this.playerHand(this.userId)[tileSelected].color;
+                this.tileList[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
 
                 this.tileList[payload.position].hidden = false;
                 // tileList.value[payload.position].highlighted = true;
+                this.$store.commit('removeTileFromHand', {
+                    userId: this.userId,
+                    tileIndex: tileSelected
+                });
+
+                await this.updateHand(this.userId)
+                await this.fetchHand()
             }
         }
 
