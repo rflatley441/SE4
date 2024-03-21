@@ -1,5 +1,13 @@
 <template>
   <div class="faq">
+    <div id="navBar">
+            <div class="navItems">
+                <router-link to="/" class="navItem">Home</router-link>
+                <router-link to="/game" class="navItem">Play Game</router-link>
+                <router-link to="/faq" class="navItem">How to Play</router-link>
+            </div>
+                
+        </div>
     <header class = "header">
       <h1>Frequently Asked Questions</h1>
     </header>
@@ -24,7 +32,6 @@
       <Star8ptTile id="starTile" fillColor="yellow" />
       <CircleTile id="circleTile" fillColor="blue" />
       <CloverTile id="cloverTile" fillColor="green" />
-      <DiamondTile id="diamondTile" fillColor="red" />
     </div>
 </template>
 
@@ -34,11 +41,10 @@ import { ref } from 'vue';
 import Star8ptTile from '@/assets/Star8ptTile.vue';
 import CircleTile from '@/assets/CircleTile.vue';
 import CloverTile from '@/assets/CloverTile.vue';
-import DiamondTile from '@/assets/DiamondTile.vue';
 
 export default {
   name: "FAQView",
-  setup() {
+  setup() {     
     const faqItems = [
       {
         q: "What is Qwirkle?",
@@ -71,7 +77,7 @@ export default {
     };
   },
   components: {
-        Star8ptTile, CircleTile, CloverTile, DiamondTile
+        Star8ptTile, CircleTile, CloverTile
   }
 };
 </script>
@@ -193,5 +199,25 @@ body {
   display: inline-block;
   line-height: 0.5;
   color: #666;
+}
+
+#navBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fbfafa;
+    z-index: 1000;
+    padding: 10px 20px;
+}
+
+.navItem {
+    color: #333;
+    text-decoration: none;
+    margin-right: 20px;
+    font-size: 18px;
 }
 </style>

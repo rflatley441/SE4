@@ -43,11 +43,13 @@
 
 #starTile {
     position: absolute;
+    display: flex;
     left: -70px;
     top: 450px;
 }
 #circleTile {
     position: absolute;
+    display: flex;
     right: -70px;
     top: 200px;
 }
@@ -102,9 +104,9 @@ img {
 }
 
 .login-button {
-  background-color: #2490F3;
+  background-color: #f6f1f1;
   border: 1px solid black;
-  color: white;
+  background-color: #f6f1f1;
   padding: 20px 40px; /* Adjust the padding to match the button's height and width */
   text-align: center;
   display: inline-block;

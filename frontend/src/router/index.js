@@ -5,6 +5,7 @@ import SignupPage from '../views/SignupView.vue'
 import PasswordPage from '../views/PasswordView.vue'
 import GamePlayView from '@/views/GamePlayView.vue'
 import HomeView from '@/views/Homeview.vue'
+import FAQView from '@/views/FAQView.vue'
 
 
 const router = createRouter({
@@ -29,7 +30,12 @@ const router = createRouter({
     {
       path: "/home",
       component: HomeView,
+    },
+    {
+      path: "/faq",
+      component: FAQView,
     }
+
   ]
 })
 
