@@ -70,7 +70,7 @@
 #star4ptTile {
     position: absolute;
     left: -50px;
-    bottom: 500px;
+    bottom: 300px;
     width: 125;
     height: 125;
 }
@@ -168,7 +168,7 @@ h1 {
     color: #333;
     text-decoration: none;
     margin-right: 20px;
-    font-size: 18px;
+    font-size: 25px;
 }
 
 .profile-picture {
