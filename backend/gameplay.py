@@ -1,5 +1,6 @@
 from random import shuffle
 from tile import Tile, TileColor, TileShape
+# from gameboard import GameBoard
 
 
 class Gameplay:
@@ -45,16 +46,18 @@ class Gameplay:
             # TODO: will definitely need to update this
             return self.player2
 
-    def playTile(self, tile, position, player):
-        # Implementation for playing a tile on the board goes here
-        pass
+    # def playTile(self, tile, position, player):
+    #     # Check if the move is valid
+    #     if self.game_board.isValidMove(tile, position):
+    #         # Add the tile to the board
+    #         self.game_board.addTile(tile, position)
+
+    #         # Update player's score each time they play a tile 
+    #         player.score += 1
 
     def updateBoard(self, tiles):
-        # Implementation for updating the board goes here
-        pass
-
-    def updatePoints(self, player):
-        player.score += 1
+        for tile, position in tiles:
+            self.game_board.addTile(tile, position)
 
     def determineWinner(self):
         if self.player1.score > self.player2.score:

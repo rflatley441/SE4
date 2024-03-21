@@ -72,6 +72,15 @@ def update_player_hand():
 
     return jsonify({'message': 'Player hand updated'}, request_data)
 
+@app.route('/playerscore', methods=['POST'])
+def update_player_score():
+    request_data = request.get_json()
+    userId = request_data.get('userId')
+    score = request_data.get('score')
+
+    game_state.getPlayerById(userId).score = score
+
+    return jsonify({'message': 'Player score updated'}, request_data)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
