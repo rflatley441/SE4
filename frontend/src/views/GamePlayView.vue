@@ -72,6 +72,7 @@ export default {
     position: absolute;
     padding: 30px;
     left: 50%; 
+    top: 10%;
     transform: translateX(-50%); 
 }    
 
