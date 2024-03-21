@@ -12,9 +12,9 @@
 
         <div id="content">
             <h1 style="font-size:80px"> Welcome, User!</h1>
-            <h2 style="font-size:20px">What would you like to do today?<br></h2>
+            <h2 style="font-size:40px">What would you like to do today?<br></h2>
             <div id="inputsContainer">
-                <button class="btn success" style="margin-top: 30px;"><router-link to="/game" class="footText">PLAY GAME</router-link></button>
+                <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">PLAY GAME</router-link></button>
                 <br>
                 <button class="btn success" style="margin-top: 30px;">VIEW PLAYER STATISTICS</button>
                 <br>
