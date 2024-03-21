@@ -17,7 +17,13 @@
                 </div>
             </div>
 
-            
+            <div class="player-score">
+                <PlayerScore :userId="0"/>
+            </div>
+
+            <div class="player-score">
+                <PlayerScore :userId="1"/>
+            </div>
 
         </div>
     </div>
@@ -26,6 +32,7 @@
 <script>
 import GameBoard from '@/components/GameBoard.vue';
 import PlayerHand from '@/components/PlayerHand.vue';
+import PlayerScore from '@/components/PlayerScore.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
@@ -33,6 +40,7 @@ export default {
     components: {
         GameBoard,
         PlayerHand,
+        PlayerScore,
     },
     computed: {
         ...mapGetters(['playerHand'])

@@ -1,13 +1,13 @@
 from random import shuffle
 from tile import Tile, TileColor, TileShape
-from gameboard import GameBoard
+# from gameboard import GameBoard
 
 
 class Gameplay:
-    def __init__(self, player1, player2, GameBoard):
+    def __init__(self, player1, player2, game_board):
         self.player1 = player1
         self.player2 = player2
-        #self.gameboard = gameboard
+        self.game_board = game_board
 
     def createTiles(self):
         tiles = []
