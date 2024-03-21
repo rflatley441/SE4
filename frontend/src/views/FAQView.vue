@@ -218,6 +218,6 @@ body {
     color: #333;
     text-decoration: none;
     margin-right: 20px;
-    font-size: 18px;
+    font-size: 25px;
 }
 </style>
