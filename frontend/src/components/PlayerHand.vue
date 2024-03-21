@@ -2,7 +2,7 @@
     <div class="player-hand">
         <div class="player-hand-grid">
             <BoardTile 
-            v-for="(tile, index) in playerHand(0)" 
+            v-for="(tile, index) in playerHand(this.userId)" 
             :key="index" 
             :position="index" 
             :color="tile.color" 
@@ -22,6 +22,10 @@ import BoardTile from './BoardTile.vue';
     export default {
         name: "PlayerHand",
         props: {
+            userId: {
+                type: Number,
+                required: true,
+            },
             playerHand: {
                 type: Array,
                 required: true
@@ -32,11 +36,11 @@ import BoardTile from './BoardTile.vue';
         },
         methods: {
             selectTile(payload) {
-                for (let i = 0; i < this.playerHand(0).length; i++) {
-                    this.playerHand(0)[i].selected = false;
+                for (let i = 0; i < this.playerHand(this.userId).length; i++) {
+                    this.playerHand(this.userId)[i].selected = false;
                 }
 
-                this.playerHand(0)[payload.position].selected = true;
+                this.playerHand(this.userId)[payload.position].selected = true;
             }
         },
     }

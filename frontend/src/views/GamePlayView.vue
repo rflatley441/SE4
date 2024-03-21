@@ -10,11 +10,12 @@
         </div>
         <div class="content">
             <div class="game-board"> 
-                <GameBoard :playerHand="this.playerHand"/>
+                <!-- right now i am just setting the user ids to 0 when implementing dual players they will need to be changed based off round -->
+                <GameBoard :playerHand="this.playerHand" :userId="0"/>
             </div>
             <div class="player-hand-background">
                 <div class="player-hand">
-                    <PlayerHand :playerHand="this.playerHand"/>
+                    <PlayerHand :playerHand="this.playerHand" :userId="0"/>
                 </div>
             </div>
         </div>
@@ -33,14 +34,14 @@ export default {
         PlayerHand,
     },
     computed: {
-        ...mapGetters(['playerHand'])
+        ...mapGetters(['playerHand', 'players'])
     },
     methods: {
-        ...mapActions(['fetchHand'])
+        ...mapActions(['fetchHand']),
     },
     async mounted() {
         await this.fetchHand();
-    }
+    },
 }
 
 </script>
