@@ -1,11 +1,12 @@
 <template>
-  <router-view/>
+  <PlayerScore :score="0" />
 </template>
 
 <script>
 
 // import axios from 'axios';
 // import GameBoard from './components/GameBoard.vue';
+import PlayerScore from './components/PlayerScore.vue';
 
 export default {
   name: 'App',
@@ -16,6 +17,7 @@ export default {
   },
   components: {
     // GameBoard,
+    PlayerScore
   },
   async mounted() {
     //const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
