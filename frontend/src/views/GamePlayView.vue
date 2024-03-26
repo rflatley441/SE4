@@ -9,7 +9,7 @@
                 
         </div>
         <div class="content">
-            <div class="player-turn">{{ this.gameState.turn }}</div>
+            <div class="player-turn">{{ this.gameState.turn == 0 ? 'Player 1\'s turn' : 'Player 2\'s turn' }}</div>
             <div class="game-board"> 
                 <!-- right now i am just setting the user ids to 0 when implementing dual players they will need to be changed based off round -->
                 <GameBoard :playerHand="this.playerHand" :userId="this.gameState.turn"/>
@@ -75,6 +75,9 @@ export default {
     position: relative;
     width: 100%;
     display: flex;
+    flex-direction: column;
+    padding-top: 60px;
+    box-sizing: border-box;
 }
 
 .game-board {
