@@ -112,8 +112,9 @@ const actions = {
         commit('updateTilesAmount', amount);
     },
 
-    incrementRound({commit}) {
+    incrementRound({commit}, userId) {
         commit('incrementRound');
+        commit('setTurn', userId);
     },
 
     randomStart({commit}) {
@@ -162,7 +163,8 @@ const mutations = {
         payload.hand.forEach((tile) => {
             state.players[userId].hand.push({
                 'shape': tile[0],
-                'color': tile[1]
+                'color': tile[1],
+                'selected': false,
             })
         });
         console.log(state.players[0].hand)
