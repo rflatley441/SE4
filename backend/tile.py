@@ -29,6 +29,7 @@ class Tile:
     def __init__(self, shape, color):
         self.shape = shape
         self.color = color
+        self.position = -1
 
     def __str__(self):
-        return f'shape: {self.shape} color: {self.color}'
+        return f'shape: {self.shape} color: {self.color} position: {self.position}'

@@ -5,6 +5,10 @@ class GameBoard:
     def setTiles(self, tiles):
         self.tiles = tiles
 
+    def addTiles(self, tiles):
+        for tile in tiles:
+            self.tiles.append(tile)
+
     # def isValidMove(self, tile, position):
     #     # Get all the touching tiles
     #     touching_tiles = self.getTouchingTiles(position)

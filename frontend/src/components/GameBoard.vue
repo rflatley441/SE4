@@ -55,7 +55,7 @@ export default {
         };
     }, 
     methods: {
-        ...mapActions(['updateHand', 'fetchHand']),
+        ...mapActions(['updateHand', 'fetchHand', 'updatePile']),
 
         async placeTile(payload) {
             let tileSelected = null;
@@ -79,6 +79,11 @@ export default {
 
                 await this.updateHand(this.userId)
                 await this.fetchHand()
+                await this.updatePile({
+                    shape: this.tileList[payload.position].shape,
+                    color: this.tileList[payload.position].color,
+                    position: payload.position
+                });
             }
         }
 

@@ -25,10 +25,7 @@ const state = {
         remaining: null,
     },
 
-    pile: [
-        {tile: null},
-        {tile: null},
-    ],
+    pile:[],
 };
 
 const getters = {
@@ -106,7 +103,34 @@ const actions = {
         } catch (error){ 
             console.error(error.response.data)
         }
-    },    
+    }, 
+    
+    async updatePlayerTurn(userId) {
+        try {
+            const response = await axios.post("http://127.0.0.1:5000/playerturn", {
+                userId: userId
+            })
+            console.log(response)
+        } catch (error) {
+            console.error(error.response.data)
+        }
+    },
+
+    async updateTilesPlayed({state}) {
+        try {
+            const response = await axios.post("http://127.0.0.1:5000/tilesplaced", {
+                pile: state.pile
+            })
+            console.log(response)
+        } catch (error) {
+            console.error(error.response.data)
+        }
+    },
+
+    updatePile({commit, dispatch}, tiles) {
+        commit('updatePile', tiles);
+        dispatch('updateTilesPlayed');
+    },
 
     updateTilesAmount({commit}, amount) {
         commit('updateTilesAmount', amount);
@@ -124,8 +148,7 @@ const actions = {
         commit('restartGame');
 
         dispatch('fetchDeck').then(() =>{
-            dispatch('fetchHand', 0);
-            dispatch('fetchHand', 1);
+            dispatch('fetchHand');
             dispatch('randomStart');
         });
         commit('setGameStart', true);
@@ -172,7 +195,14 @@ const mutations = {
         console.log("hand:", state.players[userId].hand)
     },
     updateTilesAmount: (state, amount) => (state.deck.remaining = amount),
-    updatePlayerScore: (state, {userId, amount}) => (state.players[userId].score += amount)
+    updatePlayerScore: (state, {userId, amount}) => (state.players[userId].score += amount),
+    updatePile: (state, tiles) => {
+        state.pile.push({
+            'shape': tiles.shape,
+            'color': tiles.color,
+            'position': tiles.position
+        })
+    }
 };
 
 export default {

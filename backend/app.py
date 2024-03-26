@@ -72,6 +72,7 @@ def update_player_hand():
 
     return jsonify({'message': 'Player hand updated'}, request_data)
 
+
 @app.route('/playerscore', methods=['POST'])
 def update_player_score():
     request_data = request.get_json()
@@ -81,6 +82,35 @@ def update_player_score():
     game_state.getPlayerById(userId).score = score
 
     return jsonify({'message': 'Player score updated'}, request_data)
+
+
+@app.route('/playerturn', methods=['POST'])
+def update_player_turn():
+    request_data = request.get_json()
+    userId = request_data.get('userId')
+
+    game_state.turn = userId
+
+    return jsonify({'message': 'Player turn updated'}, request_data)
+
+
+@app.route('/tilesplaced', methods=['POST'])
+def update_tiles_placed():
+    request_data = request.get_json()
+    pile = request_data.get('pile')
+    print("tiles", pile)
+
+    tile_objects = []
+
+    for tile_data in pile:
+        tile = Tile(tile_data.get('shape'), tile_data.get('color'))
+        tile.position = tile_data.get('position')
+        tile_objects.append(tile)
+
+    game_state.game_board.tiles = tile_objects
+
+    return jsonify({'message': 'Tiles placed on board updated'}, request_data)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

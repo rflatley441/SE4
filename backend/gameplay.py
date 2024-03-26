@@ -8,6 +8,7 @@ class Gameplay:
         self.player1 = player1
         self.player2 = player2
         self.game_board = game_board
+        self.turn = None
 
     def createTiles(self):
         tiles = []
@@ -52,7 +53,7 @@ class Gameplay:
     #         # Add the tile to the board
     #         self.game_board.addTile(tile, position)
 
-    #         # Update player's score each time they play a tile 
+    #         # Update player's score each time they play a tile
     #         player.score += 1
 
     def updateBoard(self, tiles):
