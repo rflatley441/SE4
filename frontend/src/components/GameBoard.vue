@@ -80,6 +80,70 @@ export default {
                 await this.updateHand(this.userId)
                 await this.fetchHand()
             }
+        },
+
+        async tilePlacementIsValid(payload){
+            let tileSelected = null;
+
+            for (let i = 0; i < this.playerHand(this.userId).length; i++) {
+                if (this.playerHand(this.userId)[i].selected == true){
+                    tileSelected = i;
+                }
+            }
+
+            if (tileSelected !== null) {
+                let tileColor = this.playerHand(this.userId)[tileSelected].color;
+                let tileShape = this.playerHand(this.userId)[tileSelected].shape;
+                let rowStart = payload.position - (payload.position % 12);
+                let rowEnd = rowStart + 11;
+                let verticalIncrement = 12;
+
+                // NOTE: If all tiles are hidden, returns true automatically
+
+                // checking vertical runs
+                var seenColors = new Set([tileColor]);
+                var seenShapes = new Set([tileShape]);
+                var currentIndex = payload.position - verticalIncrement;
+                while(!(currentIndex < 0 || this.tileList[currentIndex].hidden)){ // up
+                    seenColors.add(this.tileList[currentIndex].color);
+                    seenShapes.add(this.tileList[currentIndex].shape);
+                    currentIndex = currentIndex - verticalIncrement;
+                }
+                currentIndex = payload.position + verticalIncrement;
+                while(!(currentIndex > 143 || this.tileList[currentIndex].hidden)){ // down
+                    seenColors.add(this.tileList[currentIndex].color);
+                    seenShapes.add(this.tileList[currentIndex].shape);
+                    currentIndex = currentIndex + verticalIncrement;
+                }
+                // must all be same color OR same shape
+                if (seenColors.size > 1 && seenShapes.size > 1){
+                    return false;
+                }
+
+                // checking horizontal runs
+                seenColors = new Set([tileColor]);
+                seenShapes = new Set([tileShape]);
+                currentIndex = payload.position - 1;
+                while(!(currentIndex < rowStart || this.tileList[currentIndex].hidden)){ // left
+                    seenColors.add(this.tileList[currentIndex].color);
+                    seenShapes.add(this.tileList[currentIndex].shape);
+                    currentIndex = currentIndex - 1;
+                }
+                currentIndex = payload.position + 1;
+                while(!(currentIndex > rowEnd || this.tileList[currentIndex].hidden)){ // right
+                    seenColors.add(this.tileList[currentIndex].color);
+                    seenShapes.add(this.tileList[currentIndex].shape);
+                    currentIndex = currentIndex + 1;
+                }
+
+                // must all be same color OR same shape
+                if (seenColors.size > 1 && seenShapes.size > 1){
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
         }
 
     },
