@@ -64,7 +64,6 @@ export default {
             let tileSelected = null;
 
             for (let i = 0; i < this.playerHand(this.userId).length; i++) {
-                console.log(this.playerHand(this.userId)[i])
                 if (this.playerHand(this.userId)[i].selected == true){
                     tileSelected = i;
                 }
