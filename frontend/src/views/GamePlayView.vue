@@ -9,19 +9,20 @@
                 
         </div>
         <div class="content">
+            <div class="player-turn">{{ this.gameState.turn }}</div>
             <div class="game-board"> 
                 <!-- right now i am just setting the user ids to 0 when implementing dual players they will need to be changed based off round -->
-                <GameBoard :playerHand="this.playerHand" :userId="0"/>
+                <GameBoard :playerHand="this.playerHand" :userId="this.gameState.turn"/>
             </div>
             <div class="player-hand-background">
                 <div class="player-hand">
-                    <PlayerHand :playerHand="this.playerHand" :userId="0"/>
+                    <PlayerHand :playerHand="this.playerHand" :userId="1"/>
                 </div>
             </div>
 
             <div class="player-2-hand-background">
                 <div class="player-2-hand">
-                    <PlayerHand :playerHand="this.playerHand" :userId="1"/>
+                    <PlayerHand :playerHand="this.playerHand" :userId="0"/>
                 </div>
             </div>
 
@@ -51,13 +52,13 @@ export default {
         PlayerScore,
     },
     computed: {
-        ...mapGetters(['playerHand'])
+        ...mapGetters(['playerHand', 'gameState']),
     },
     methods: {
-        ...mapActions(['fetchHand']),
+        ...mapActions(['gameStart']),
     },
     async mounted() {
-        await this.fetchHand();
+        await this.gameStart();
     },
 }
 
@@ -118,6 +119,13 @@ export default {
     left: 0; 
     
 }  */
+
+.player-turn {
+    position: absolute;
+    right: 0;
+    bottom: 10;
+    font-size: x-large;
+}
 
 .player-hand-background, .player-2-hand-background {
     display: flex;
