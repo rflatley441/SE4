@@ -14,6 +14,8 @@
             @select-tile="placeTile"/>
         </section>
     </div>
+    <button @click="this.endTurn">End Turn</button> 
+
 </template>
 
 <script>
@@ -66,6 +68,7 @@ export default {
             for (let i = 0; i < this.playerHand(this.userId).length; i++) {
                 if (this.playerHand(this.userId)[i].selected == true){
                     tileSelected = i;
+                    
                 }
             }
 
@@ -79,14 +82,14 @@ export default {
                     userId: this.userId,
                     tileIndex: tileSelected
                 });
-
-                await this.updateHand(this.userId)
-                await this.fetchHand()
-
-                const nextPlayerId = (this.userId + 1) % this.players.length;
-                await this.incrementRound(nextPlayerId);
             }
-        }
+        },
+        async endTurn() {
+            const nextPlayerId = (this.userId + 1) % this.players.length;
+            await this.incrementRound(nextPlayerId);
+            await this.updateHand(this.userId);
+            await this.fetchHand();
+        } 
 
     },
 }
