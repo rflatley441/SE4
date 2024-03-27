@@ -14,6 +14,8 @@
             @select-tile="placeTile"/>
         </section>
     </div>
+    <button @click="endTurn">End Turn</button> 
+
 </template>
 
 <script>
@@ -50,15 +52,24 @@ export default {
             })
         }
 
+        const endTurn = async () => {
+        const nextPlayerId = (this.userId + 1) % this.players.length;
+        await this.incrementRound();
+        await this.setTurn(nextPlayerId);
+        await this.updateHand(this.userId);
+        await this.fetchHand();
+    }; 
+
         return {
            tileList,
+           endTurn,
         };
     }, 
     computed: {
         ...mapGetters(['players'])
     },
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setTurn']),
 
         async placeTile(payload) {
             let tileSelected = null;
@@ -66,6 +77,7 @@ export default {
             for (let i = 0; i < this.playerHand(this.userId).length; i++) {
                 if (this.playerHand(this.userId)[i].selected == true){
                     tileSelected = i;
+                    
                 }
             }
 
@@ -80,15 +92,24 @@ export default {
                     tileIndex: tileSelected
                 });
 
-                await this.updateHand(this.userId)
-                await this.fetchHand()
+                
+                // await this.fetchHand()
 
-                const nextPlayerId = (this.userId + 1) % this.players.length;
-                await this.incrementRound(nextPlayerId);
+                //const nextPlayerId = (this.userId + 1) % this.players.length;
+                //await this.incrementRound(nextPlayerId);
+        
             }
         }
 
     },
+    // async endTurn() {
+    //     const nextPlayerId = (this.userId + 1) % this.players.length;
+    //     await this.incrementRound(); 
+    //     await this.setTurn(nextPlayerId); 
+    //     await this.updateHand(this.userId)
+    //     await this.fetchHand()
+
+    // }
 }
 </script>
 
