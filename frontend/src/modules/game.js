@@ -135,9 +135,6 @@ const actions = {
     setGameOver({commit}, winner) {
         commit('gameOver', winner);
     }, 
-    setTurn({commit}, userId) {
-        commit('setTurn', userId);
-    },
 };
 
 const mutations = {
