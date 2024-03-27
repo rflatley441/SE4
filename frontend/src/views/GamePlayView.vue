@@ -9,8 +9,9 @@
                 
         </div>
         <div class="content">
-            <div class="player-turn">{{ this.gameState.turn == 0 ? 'Player 1\'s turn' : 'Player 2\'s turn' }}</div>
-            <div class="game-board"> 
+   <div :class="{ 'player-turn': true, 'player-1': this.gameState.turn === 0, 'player-2': this.gameState.turn === 1 }">
+            {{ this.gameState.turn === 0 ? 'Player 1\'s Turn' : 'Player 2\'s Turn' }}
+        </div>            <div class="game-board"> 
                 <!-- right now i am just setting the user ids to 0 when implementing dual players they will need to be changed based off round -->
                 <GameBoard :playerHand="this.playerHand" :userId="this.gameState.turn"/>
             </div>
@@ -124,10 +125,29 @@ export default {
 }  */
 
 .player-turn {
-    position: absolute;
-    right: 0;
-    bottom: 10;
+    position: center;
     font-size: x-large;
+    animation: turn-text-animation 0.6s ease-in-out;
+    font-weight: bold;
+}
+
+.player-1 {
+    color: #f32e24; /* Change this to the desired color for Player 1 */
+}
+
+.player-2 {
+    color: #2490F3; /* Change this to the desired color for Player 2 */
+}
+
+@keyframes turn-text-animation {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .player-hand-background, .player-2-hand-background {
