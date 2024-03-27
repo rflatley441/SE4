@@ -60,7 +60,7 @@ export default {
         ...mapGetters(['players'])
     },
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setTurn']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
 
         async placeTile(payload) {
             let tileSelected = null;
