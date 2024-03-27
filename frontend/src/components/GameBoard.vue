@@ -18,7 +18,7 @@
 
 <script>
 import BoardTile from "./BoardTile.vue"
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 import { ref } from "vue"
 
 export default {
@@ -31,7 +31,7 @@ export default {
         playerHand: {
             type: Array,
             required: true,
-        }
+        },
     },
     components: {
         BoardTile,
@@ -54,8 +54,11 @@ export default {
            tileList,
         };
     }, 
+    computed: {
+        ...mapGetters(['players'])
+    },
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'updatePile']),
+        ...mapActions(['updateHand', 'fetchHand', 'updatePile', 'incrementRound']),
 
         async placeTile(payload) {
             let tileSelected = null;
@@ -84,6 +87,9 @@ export default {
                     color: this.tileList[payload.position].color,
                     position: payload.position
                 });
+
+                const nextPlayerId = (this.userId + 1) % this.players.length;
+                await this.incrementRound(nextPlayerId);
             }
         }
 
