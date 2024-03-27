@@ -14,7 +14,7 @@
             @select-tile="placeTile"/>
         </section>
     </div>
-    <button @click="endTurn">End Turn</button> 
+    <button @click="this.endTurn">End Turn</button> 
 
 </template>
 
@@ -52,17 +52,8 @@ export default {
             })
         }
 
-        const endTurn = async () => {
-        const nextPlayerId = (this.userId + 1) % this.players.length;
-        await this.incrementRound();
-        await this.setTurn(nextPlayerId);
-        await this.updateHand(this.userId);
-        await this.fetchHand();
-    }; 
-
         return {
            tileList,
-           endTurn,
         };
     }, 
     computed: {
@@ -91,25 +82,17 @@ export default {
                     userId: this.userId,
                     tileIndex: tileSelected
                 });
-
-                
-                // await this.fetchHand()
-
-                //const nextPlayerId = (this.userId + 1) % this.players.length;
-                //await this.incrementRound(nextPlayerId);
-        
             }
-        }
+        },
+        async endTurn() {
+            const nextPlayerId = (this.userId + 1) % this.players.length;
+            await this.incrementRound();
+            await this.setTurn(nextPlayerId);
+            await this.updateHand(this.userId);
+            await this.fetchHand();
+        } 
 
     },
-    // async endTurn() {
-    //     const nextPlayerId = (this.userId + 1) % this.players.length;
-    //     await this.incrementRound(); 
-    //     await this.setTurn(nextPlayerId); 
-    //     await this.updateHand(this.userId)
-    //     await this.fetchHand()
-
-    // }
 }
 </script>
 
