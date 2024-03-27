@@ -14,7 +14,7 @@
             @select-tile="placeTile"/>
         </section>
     </div>
-    <button @click="this.endTurn">End Turn</button> 
+    <button class="end-turn-button" @click="this.endTurn">End Turn</button> 
 
 </template>
 
@@ -106,5 +106,24 @@ export default {
     grid-template-columns: repeat(12, 50px);
     grid-template-rows: repeat(12, 50px);
     /* position: absolute; */
+}
+
+.end-turn-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: black;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.end-turn-button:hover {
+    background-color: #45a049;
 }
 </style>
