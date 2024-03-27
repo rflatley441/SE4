@@ -14,6 +14,8 @@
             @select-tile="placeTile"/>
         </section>
     </div>
+    <button class="end-turn-button" @click="this.endTurn">End Turn</button> 
+
 </template>
 
 <script>
@@ -66,6 +68,7 @@ export default {
             for (let i = 0; i < this.playerHand(this.userId).length; i++) {
                 if (this.playerHand(this.userId)[i].selected == true){
                     tileSelected = i;
+                    
                 }
             }
 
@@ -79,19 +82,14 @@ export default {
                     userId: this.userId,
                     tileIndex: tileSelected
                 });
-
-                await this.updateHand(this.userId)
-                await this.fetchHand()
-                await this.updatePile({
-                    shape: this.tileList[payload.position].shape,
-                    color: this.tileList[payload.position].color,
-                    position: payload.position
-                });
-
-                const nextPlayerId = (this.userId + 1) % this.players.length;
-                await this.incrementRound(nextPlayerId);
             }
-        }
+        },
+        async endTurn() {
+            const nextPlayerId = (this.userId + 1) % this.players.length;
+            await this.incrementRound(nextPlayerId);
+            await this.updateHand(this.userId);
+            await this.fetchHand();
+        } 
 
     },
 }
@@ -108,5 +106,24 @@ export default {
     grid-template-columns: repeat(12, 50px);
     grid-template-rows: repeat(12, 50px);
     /* position: absolute; */
+}
+
+.end-turn-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: black;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.end-turn-button:hover {
+    background-color: #45a049;
 }
 </style>
