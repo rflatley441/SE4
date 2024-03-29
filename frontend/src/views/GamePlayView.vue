@@ -1,13 +1,6 @@
 <template>
     <div id="app">
-        <div id="navBar">
-            <div class="navItems">
-                <router-link to="/" class="navItem">Logout</router-link>
-                <router-link to="/home" class="navItem">Home</router-link>
-                <router-link to="/faq" class="navItem">How to Play</router-link>
-            </div>
-                
-        </div>
+        <NavBar/>
         <div class="content">
    <div :class="{ 'player-turn': true, 'player-1': this.gameState.turn === 0, 'player-2': this.gameState.turn === 1 }">
             {{ this.gameState.turn === 0 ? 'Player 1\'s Turn' : 'Player 2\'s Turn' }}
@@ -40,6 +33,7 @@
 </template>
 
 <script>
+import NavBar from '@/components/NavBar.vue';
 import GameBoard from '@/components/GameBoard.vue';
 import PlayerHand from '@/components/PlayerHand.vue';
 import PlayerScore from '@/components/PlayerScore.vue';
@@ -51,6 +45,7 @@ export default {
         GameBoard,
         PlayerHand,
         PlayerScore,
+        NavBar,
     },
     computed: {
         ...mapGetters(['playerHand', 'gameState']),
@@ -178,24 +173,5 @@ export default {
     background-color: #f32e24; 
 }
 
-#navBar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #fbfafa;
-    z-index: 1000;
-    padding: 10px 20px;
-}
-
-.navItem {
-    color: #333;
-    text-decoration: none;
-    margin-right: 20px;
-    font-size: 25px;
-}
 
 </style>
