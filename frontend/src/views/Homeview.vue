@@ -1,8 +1,6 @@
 <template>
     <div id="app">
-
         <NavBar/>
-
         <div id="content">
             <h1 style="font-size:80px"> Welcome, User!</h1>
             <h2 style="font-size:40px">What would you like to do today?<br></h2>
@@ -146,16 +144,17 @@ h1 {
 
 .profile-picture {
     position: relative; /* Adjusted for positioning inside the nav bar */
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     overflow: hidden;
 }
 
 .profile-picture img, .profile-picture .tile {
-    object-fit: contain;
-    width: 100%;
-    height: 100%;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    float: right;
 }
 
 
