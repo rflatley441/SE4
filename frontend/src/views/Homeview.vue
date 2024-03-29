@@ -1,14 +1,7 @@
 <template>
     <div id="app">
 
-        <div id="navBar">
-            <div class="navItems">
-                <router-link to="/" class="navItem">Logout</router-link>
-                <router-link to="/game" class="navItem">Play Game</router-link>
-                <router-link to="/faq" class="navItem">How to Play</router-link>
-            </div>
-                
-        </div>
+        <NavBar/>
 
         <div id="content">
             <h1 style="font-size:80px"> Welcome, User!</h1>
@@ -151,26 +144,6 @@ h1 {
     cursor: pointer;
 }
 
-#navBar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #ffffff;
-    z-index: 1000;
-    padding: 10px 20px;
-}
-
-.navItem {
-    color: #333;
-    text-decoration: none;
-    margin-right: 20px;
-    font-size: 25px;
-}
-
 .profile-picture {
     position: relative; /* Adjusted for positioning inside the nav bar */
     width: 100px;
@@ -190,6 +163,7 @@ h1 {
 
 
 <script>
+import NavBar from '@/components/NavBar.vue';
 import Star8ptTile from '@/assets/Star8ptTile.vue';
 // import CircleTile from '@/assets/CircleTile.vue';
 import CloverTile from '@/assets/CloverTile.vue';
@@ -200,7 +174,7 @@ import SquareTile from '@/assets/SquareTile.vue';
  export default {
     name: "HomeView",
     components: {
-        Star8ptTile, CloverTile, DiamondTile, Star4ptTile, SquareTile
+        Star8ptTile, CloverTile, DiamondTile, Star4ptTile, SquareTile, NavBar
         // ,CircleTile
     }
  }
