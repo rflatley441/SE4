@@ -3,40 +3,22 @@
         <div id="content">
             <div id = signuptitle>Sign Up</div>
             <div id="inputsContainer">
-                <div class="inputLabel">
-                    Username
-                </div>
-                <div class="inputHolder">
-                    <input type="text" class="inputBox" />
-                </div>
-                <div class="inputLabel" style="margin-top: 30px;">
-                    Email Address
-                </div>
-                <div class="inputHolder" style="padding-bottom: 10px;">
-                    <input type="text" class="inputBox" />
-                </div>
 
-                <div class="inputLabel" style="margin-top: 10px;">
-                    Password
-                </div>
-                <div id="passwordrequirments">
-                    Password must contain at least 8 characters in length
-                </div>
-                <div class="inputHolder" style="padding-bottom: 20px;">
-                    <input type="text" class="inputBox" />
-                </div>
+            <div class="inputHolder">
+                <input type="text" class="inputBox" v-model="username" placeholder="Username" />
+            </div>
 
-                <div class="inputLabel" style="margin-top: 10px;">
-                    Confirm Password
-                </div>
-                <div class="inputHolder" style="padding-bottom: 20px;">
-                    <input type="text" class="inputBox" />
-                </div>
+            <div class="inputHolder" style="padding-bottom: 10px;">
+                <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
+            </div>
 
-                <button class="create-account-button">
-                    <router-link to="/home" class="footText">CREATE ACCOUNT</router-link>
+            <div class="inputHolder" style="padding-bottom: 20px;">
+                <input type="password" class="inputBox" v-model="password" placeholder="Password" />
+            </div>
+
+                <button class="create-account-button" @click.prevent="signUp">
+                CREATE ACCOUNT
                 </button>
-
             </div>
             <div id="footer">
                 <router-link to="/" class="footText">Return to Login</router-link>
@@ -157,15 +139,38 @@
 
 
 <script>
+import { ref } from 'vue';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import DiamondTile from '@/assets/DiamondTile.vue';
 import CircleTile from '@/assets/CircleTile.vue';
 import CloverTile from '@/assets/CloverTile.vue';
-
 
  export default {
     name: "LoginView",
     components: {
         DiamondTile, CircleTile,CloverTile
+    },
+
+    setup() {
+        const email = ref("");
+        const password = ref("");
+        const errorMessage = ref("");
+     
+        const signUp = () => {
+    console.log("Sign Up clicked"); // Debugging line
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email.value, password.value)
+        .then((userCredential) => {
+            console.log("Success", userCredential.user);
+        })
+        .catch((error) => {
+            console.error("Signup failed", error);
+            errorMessage.value = error.message;
+        });
+};
+
+        return { email, password, errorMessage, signUp };
     }
+
  }
 </script>

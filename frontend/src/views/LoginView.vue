@@ -4,19 +4,19 @@
             <img src="../assets/qwirkle.webp" />
             <div id="inputsContainer">
                 <div class="inputLabel">
-                    Username
+                    Email
                 </div>
                 <div class="inputHolder">
-                    <input type="text" class="inputBox" />
+                    <input type="email" class="inputBox" v-model="email" placeholder="Email" />
                 </div>
                 <div class="inputLabel" style="margin-top: 30px;">
                     Password
                 </div>
                 <div class="inputHolder" style="padding-bottom: 20px;">
-                    <input type="text" class="inputBox" />
+                    <input type="password" class="inputBox" v-model="password" placeholder="Password" />
                 </div>
 
-                <button class="login-button">
+                <button class="login-button" @click.prevent="login">
                     <router-link to="/home" class="footText">LOGIN</router-link>
                 </button>
 
@@ -124,6 +124,8 @@ img {
 
 
 <script>
+import { ref } from 'vue';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Star8ptTile from '@/assets/Star8ptTile.vue';
 import CircleTile from '@/assets/CircleTile.vue';
 
@@ -131,6 +133,28 @@ import CircleTile from '@/assets/CircleTile.vue';
     name: "LoginView",
     components: {
         Star8ptTile, CircleTile
+    },
+
+    setup() {
+        const email = ref('');
+        const password = ref('');
+        const errorMessage = ref('');
+
+        const login = () => {
+            const auth = getAuth();
+            signInWithEmailAndPassword(auth, email.value, password.value)
+                .then((userCredential) => {
+                    console.log(userCredential)
+                    // User is logged in
+                    // Redirect to home page or show a success message
+                })
+                .catch((error) => {
+                    // Handle errors here, such as showing an error message to the user
+                    errorMessage.value = error.message;
+                });
+        };
+
+        return { email, password, errorMessage, login };
     }
  }
 </script>
