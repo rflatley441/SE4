@@ -2,20 +2,25 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store.js'
-import VueScoketIO from 'vue-3-socket.io'
+import { initializeApp } from 'firebase/app';
 
-const app = createApp(App)
+const firebaseConfig = {
+    apiKey: "AIzaSyD6DibvBg5rAkpC4vi_Rc0O3wF59EA36Lc",
+    authDomain: "qwirkle-dc485.firebaseapp.com",
+    projectId: "qwirkle-dc485",
+    storageBucket: "qwirkle-dc485.appspot.com",
+    messagingSenderId: "287908889039",
+    appId: "1:287908889039:web:00d9daec9adb93efcc92ba",
+    measurementId: "G-NYRGBR77J2"
+  };
 
-app.use(new VueScoketIO({
-    debug: true,
-    connection: 'http://localhost:8080', 
-    vuex: {
-        store,
-        actionPrefix: 'SOCKET_',
-        mutationPrefix: 'SOCKET_'
-    },
-})) 
+  initializeApp(firebaseConfig);
 
-app.use(router)
-app.use(store)
-app.mount('#app')
+  const app = createApp(App); // Notice we're passing App here
+  
+  // Use plugins
+  app.use(router);
+  app.use(store);
+  
+  // Mount the application
+  app.mount('#app');
