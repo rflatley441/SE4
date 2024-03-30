@@ -4,14 +4,23 @@
             <div id = signuptitle>Sign Up</div>
             <div id="inputsContainer">
 
+                <div class="inputLabel">
+                    Username
+                </div>
             <div class="inputHolder">
                 <input type="text" class="inputBox" v-model="username" placeholder="Username" />
             </div>
 
+            <div class="inputLabel" style = "padding-top: 10px;">
+                    Email
+                </div>
             <div class="inputHolder" style="padding-bottom: 10px;">
                 <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
             </div>
 
+            <div class="inputLabel" style = "padding-top: 10px;">
+                    Password
+                </div>
             <div class="inputHolder" style="padding-bottom: 20px;">
                 <input type="password" class="inputBox" v-model="password" placeholder="Password" />
             </div>
@@ -121,7 +130,7 @@
 .create-account-button {
   background-color: #f6f1f1;
   border: 1px solid black;
-  color: white;
+  background-color: #f6f1f1;
   padding: 20px 40px; /* Adjust the padding to match the button's height and width */
   text-align: center;
   display: inline-block;
@@ -157,9 +166,9 @@ import CloverTile from '@/assets/CloverTile.vue';
         const errorMessage = ref("");
      
         const signUp = () => {
-    console.log("Sign Up clicked"); // Debugging line
-    const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email.value, password.value)
+            console.log("Sign Up clicked"); // Debugging line
+            const auth = getAuth();
+            createUserWithEmailAndPassword(auth, email.value, password.value)
         .then((userCredential) => {
             console.log("Success", userCredential.user);
         })
