@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store.js'
 import { initializeApp } from 'firebase/app';
+import VueScoketIO from 'vue-3-socket.io'
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyD6DibvBg5rAkpC4vi_Rc0O3wF59EA36Lc",
@@ -16,8 +18,18 @@ const firebaseConfig = {
 
   initializeApp(firebaseConfig);
 
-  const app = createApp(App); // Notice we're passing App here
+
+  const app = createApp(App)
   
+  app.use(new VueScoketIO({
+      debug: true,
+      connection: 'http://localhost:8080', 
+      vuex: {
+          store,
+          actionPrefix: 'SOCKET_',
+          mutationPrefix: 'SOCKET_'
+      },
+  }))   
   // Use plugins
   app.use(router);
   app.use(store);
