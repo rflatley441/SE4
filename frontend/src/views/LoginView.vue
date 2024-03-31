@@ -148,8 +148,6 @@ import CircleTile from '@/assets/CircleTile.vue';
                 .then((userCredential) => {
                     console.log(userCredential, "success")
                     router.push('/home');
-                    // User is logged in
-                    // Redirect to home page or show a success message
                 })
                 .catch((error) => {
                     errorMessage.value = error.message;
