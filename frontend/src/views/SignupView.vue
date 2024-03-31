@@ -150,36 +150,48 @@
 <script>
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, ref as dbRef, set } from "firebase/database"; 
+import { useRouter } from 'vue-router'; 
 import DiamondTile from '@/assets/DiamondTile.vue';
 import CircleTile from '@/assets/CircleTile.vue';
 import CloverTile from '@/assets/CloverTile.vue';
 
- export default {
-    name: "LoginView",
-    components: {
-        DiamondTile, CircleTile,CloverTile
-    },
+export default {
+  name: "LoginView",
+  components: {
+    DiamondTile, CircleTile, CloverTile
+  },
 
-    setup() {
-        const email = ref("");
-        const password = ref("");
-        const errorMessage = ref("");
-     
-        const signUp = () => {
-            console.log("Sign Up clicked"); // Debugging line
-            const auth = getAuth();
-            createUserWithEmailAndPassword(auth, email.value, password.value)
+  setup() {
+    const router = useRouter(); 
+    const email = ref("");
+    const username = ref("");
+    const password = ref("");
+    const errorMessage = ref("");
+
+    const signUp = () => {
+      console.log("Sign Up clicked");
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email.value, password.value)
         .then((userCredential) => {
-            console.log("Success", userCredential.user);
+          console.log("Success", userCredential.user);
+          const db = getDatabase(); 
+          return set(dbRef(db, 'users/' + userCredential.user.uid), {
+            username: username.value,
+            email: email.value,
+          });
+        })
+        .then(() => {
+          console.log("User data stored in Realtime Database");
+          router.push('/Home');
         })
         .catch((error) => {
-            console.error("Signup failed", error);
-            errorMessage.value = error.message;
+          console.error("Signup failed", error);
+          errorMessage.value = error.message;
         });
-};
+    };
 
-        return { email, password, errorMessage, signUp };
-    }
-
- }
+    return { username, email, password, errorMessage, signUp };
+  }
+}
 </script>
