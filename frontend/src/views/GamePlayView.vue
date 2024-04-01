@@ -29,6 +29,9 @@
             </div>
 
         </div>
+        <div>
+            Score: {{ score }}
+        </div>
     </div>
 </template>
 
@@ -56,6 +59,7 @@ export default {
     async mounted() {
         await this.gameStart();
     },
+    
 }
 
 </script>

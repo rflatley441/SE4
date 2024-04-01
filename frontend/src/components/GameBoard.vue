@@ -59,8 +59,13 @@ export default {
     computed: {
         ...mapGetters(['players'])
     },
+    mutations: {
+        incrementScore(state, payload) {
+            state.players[payload.userId].score += payload.score;
+     },    
+    },
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'incrementScore']),
 
         async placeTile(payload) {
             let tileSelected = null;
@@ -89,6 +94,8 @@ export default {
             await this.incrementRound(nextPlayerId);
             await this.updateHand(this.userId);
             await this.fetchHand();
+            await this.incrementScore({userId: this.userId, score: 1});
+            console.log("Hello", this.players[this.userId].score)
         } 
 
     },
