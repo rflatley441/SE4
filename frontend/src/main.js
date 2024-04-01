@@ -19,6 +19,12 @@ const firebaseConfig = {
   initializeApp(firebaseConfig);
 
   const app = createApp(App)
+
+  const io = new Server({
+    cors: {
+      origin: "http://localhost:8080"
+    }
+  });
   
   app.use(new VueScoketIO({
       debug: true,
