@@ -16,9 +16,11 @@ const firebaseConfig = {
 
   initializeApp(firebaseConfig);
 
-  const app = createApp(App); 
+  const app = createApp(App); // Notice we're passing App here
   
+  // Use plugins
   app.use(router);
   app.use(store);
   
+  // Mount the application
   app.mount('#app');

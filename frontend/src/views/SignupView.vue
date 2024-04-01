@@ -4,23 +4,14 @@
             <div id = signuptitle>Sign Up</div>
             <div id="inputsContainer">
 
-                <div class="inputLabel">
-                    Username
-                </div>
             <div class="inputHolder">
                 <input type="text" class="inputBox" v-model="username" placeholder="Username" />
             </div>
 
-            <div class="inputLabel" style = "padding-top: 10px;">
-                    Email
-                </div>
             <div class="inputHolder" style="padding-bottom: 10px;">
                 <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
             </div>
 
-            <div class="inputLabel" style = "padding-top: 10px;">
-                    Password
-                </div>
             <div class="inputHolder" style="padding-bottom: 20px;">
                 <input type="password" class="inputBox" v-model="password" placeholder="Password" />
             </div>
@@ -130,7 +121,7 @@
 .create-account-button {
   background-color: #f6f1f1;
   border: 1px solid black;
-  background-color: #f6f1f1;
+  color: white;
   padding: 20px 40px; /* Adjust the padding to match the button's height and width */
   text-align: center;
   display: inline-block;
@@ -150,48 +141,36 @@
 <script>
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref as dbRef, set } from "firebase/database"; 
-import { useRouter } from 'vue-router'; 
 import DiamondTile from '@/assets/DiamondTile.vue';
 import CircleTile from '@/assets/CircleTile.vue';
 import CloverTile from '@/assets/CloverTile.vue';
 
-export default {
-  name: "LoginView",
-  components: {
-    DiamondTile, CircleTile, CloverTile
-  },
+ export default {
+    name: "LoginView",
+    components: {
+        DiamondTile, CircleTile,CloverTile
+    },
 
-  setup() {
-    const router = useRouter(); 
-    const email = ref("");
-    const username = ref("");
-    const password = ref("");
-    const errorMessage = ref("");
-
-    const signUp = () => {
-      console.log("Sign Up clicked");
-      const auth = getAuth();
-      createUserWithEmailAndPassword(auth, email.value, password.value)
+    setup() {
+        const email = ref("");
+        const password = ref("");
+        const errorMessage = ref("");
+     
+        const signUp = () => {
+    console.log("Sign Up clicked"); // Debugging line
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email.value, password.value)
         .then((userCredential) => {
-          console.log("Success", userCredential.user);
-          const db = getDatabase(); 
-          return set(dbRef(db, 'users/' + userCredential.user.uid), {
-            username: username.value,
-            email: email.value,
-          });
-        })
-        .then(() => {
-          console.log("User data stored in Realtime Database");
-          router.push('/Home');
+            console.log("Success", userCredential.user);
         })
         .catch((error) => {
-          console.error("Signup failed", error);
-          errorMessage.value = error.message;
+            console.error("Signup failed", error);
+            errorMessage.value = error.message;
         });
-    };
+};
 
-    return { username, email, password, errorMessage, signUp };
-  }
-}
+        return { email, password, errorMessage, signUp };
+    }
+
+ }
 </script>
