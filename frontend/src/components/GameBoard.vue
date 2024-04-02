@@ -14,11 +14,13 @@
             @select-tile="placeTile"/>
         </section>
     </div>
+    <button class="end-turn-button" @click="this.endTurn">End Turn</button> 
+
 </template>
 
 <script>
 import BoardTile from "./BoardTile.vue"
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 import { ref } from "vue"
 
 export default {
@@ -31,7 +33,7 @@ export default {
         playerHand: {
             type: Array,
             required: true,
-        }
+        },
     },
     components: {
         BoardTile,
@@ -54,8 +56,11 @@ export default {
            tileList,
         };
     }, 
+    computed: {
+        ...mapGetters(['players'])
+    },
     methods: {
-        ...mapActions(['updateHand', 'fetchHand']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
 
         async placeTile(payload) {
             let tileSelected = null;
@@ -72,9 +77,6 @@ export default {
                     userId: this.userId,
                     tileIndex: tileSelected
                 });
-
-                await this.updateHand(this.userId)
-                await this.fetchHand()
             }
         },
 
@@ -163,5 +165,24 @@ export default {
     grid-template-columns: repeat(12, 50px);
     grid-template-rows: repeat(12, 50px);
     /* position: absolute; */
+}
+
+.end-turn-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: black;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.end-turn-button:hover {
+    background-color: #45a049;
 }
 </style>

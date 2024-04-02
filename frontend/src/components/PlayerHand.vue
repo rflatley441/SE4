@@ -18,6 +18,7 @@
 
 <script>
 import BoardTile from './BoardTile.vue';
+import { mapGetters } from 'vuex';
 
     export default {
         name: "PlayerHand",
@@ -34,13 +35,17 @@ import BoardTile from './BoardTile.vue';
         components: {
             BoardTile,
         },
+        computed: {
+            ...mapGetters(['gameState'])
+        },
         methods: {
             selectTile(payload) {
                 for (let i = 0; i < this.playerHand(this.userId).length; i++) {
                     this.playerHand(this.userId)[i].selected = false;
                 }
-
-                this.playerHand(this.userId)[payload.position].selected = true;
+                if (this.gameState.turn == this.userId) {
+                    this.playerHand(this.userId)[payload.position].selected = true;
+                }
             }
         },
     }

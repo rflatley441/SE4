@@ -1,27 +1,22 @@
 <template>
     <div id="app">
-        <div id="navBar">
-            <div class="navItems">
-                <router-link to="/" class="navItem">Logout</router-link>
-                <router-link to="/home" class="navItem">Home</router-link>
-                <router-link to="/faq" class="navItem">How to Play</router-link>
-            </div>
-                
-        </div>
+        <NavBar/>
         <div class="content">
-            <div class="game-board"> 
+   <div :class="{ 'player-turn': true, 'player-1': this.gameState.turn === 0, 'player-2': this.gameState.turn === 1 }">
+            {{ this.gameState.turn === 0 ? 'Player 1\'s Turn' : 'Player 2\'s Turn' }}
+        </div>            <div class="game-board"> 
                 <!-- right now i am just setting the user ids to 0 when implementing dual players they will need to be changed based off round -->
-                <GameBoard :playerHand="this.playerHand" :userId="0"/>
+                <GameBoard :playerHand="this.playerHand" :userId="this.gameState.turn"/>
             </div>
             <div class="player-hand-background">
                 <div class="player-hand">
-                    <PlayerHand :playerHand="this.playerHand" :userId="0"/>
+                    <PlayerHand :playerHand="this.playerHand" :userId="1"/>
                 </div>
             </div>
 
             <div class="player-2-hand-background">
                 <div class="player-2-hand">
-                    <PlayerHand :playerHand="this.playerHand" :userId="1"/>
+                    <PlayerHand :playerHand="this.playerHand" :userId="0"/>
                 </div>
             </div>
 
@@ -38,6 +33,7 @@
 </template>
 
 <script>
+import NavBar from '@/components/NavBar.vue';
 import GameBoard from '@/components/GameBoard.vue';
 import PlayerHand from '@/components/PlayerHand.vue';
 import PlayerScore from '@/components/PlayerScore.vue';
@@ -49,15 +45,16 @@ export default {
         GameBoard,
         PlayerHand,
         PlayerScore,
+        NavBar,
     },
     computed: {
-        ...mapGetters(['playerHand'])
+        ...mapGetters(['playerHand', 'gameState']),
     },
     methods: {
-        ...mapActions(['fetchHand']),
+        ...mapActions(['gameStart']),
     },
     async mounted() {
-        await this.fetchHand();
+        await this.gameStart();
     },
 }
 
@@ -74,6 +71,9 @@ export default {
     position: relative;
     width: 100%;
     display: flex;
+    flex-direction: column;
+    padding-top: 60px;
+    box-sizing: border-box;
 }
 
 .game-board {
@@ -119,6 +119,32 @@ export default {
     
 }  */
 
+.player-turn {
+    position: center;
+    font-size: x-large;
+    animation: turn-text-animation 0.6s ease-in-out;
+    font-weight: bold;
+}
+
+.player-1 {
+    color: #f32e24; /* Change this to the desired color for Player 1 */
+}
+
+.player-2 {
+    color: #2490F3; /* Change this to the desired color for Player 2 */
+}
+
+@keyframes turn-text-animation {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .player-hand-background, .player-2-hand-background {
     display: flex;
     align-items: center; 
@@ -147,24 +173,5 @@ export default {
     background-color: #f32e24; 
 }
 
-#navBar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #fbfafa;
-    z-index: 1000;
-    padding: 10px 20px;
-}
-
-.navItem {
-    color: #333;
-    text-decoration: none;
-    margin-right: 20px;
-    font-size: 25px;
-}
 
 </style>
