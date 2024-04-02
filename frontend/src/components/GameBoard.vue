@@ -60,13 +60,9 @@ export default {
         async placeTile(payload) {
             let tileSelected = null;
 
-            for (let i = 0; i < this.playerHand(this.userId).length; i++) {
-                if (this.playerHand(this.userId)[i].selected == true){
-                    tileSelected = i;
-                }
-            }
+            tileSelected = getSelectedTileInHandIndex();
 
-            if (tileSelected !== null) {
+            if (tileSelected !== null && tilePlacementIsValid(payload)) {
                 this.tileList[payload.position].color = this.playerHand(this.userId)[tileSelected].color;
                 this.tileList[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
 
@@ -82,14 +78,20 @@ export default {
             }
         },
 
-        async tilePlacementIsValid(payload){
-            let tileSelected = null;
-
+        getSelectedTileInHandIndex(){
+            let selectedTile = null
             for (let i = 0; i < this.playerHand(this.userId).length; i++) {
                 if (this.playerHand(this.userId)[i].selected == true){
-                    tileSelected = i;
+                    selectedTile = i;
                 }
             }
+            return selectedTile;
+        },
+
+        tilePlacementIsValid(payload){
+            let tileSelected = null;
+
+            tileSelected = getSelectedTileInHandIndex();
 
             if (tileSelected !== null) {
                 let tileColor = this.playerHand(this.userId)[tileSelected].color;
