@@ -4,10 +4,11 @@ from gameplay import Gameplay
 from player import Player
 from gameboard import GameBoard
 from tile import Tile
-
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 game_state = None
 
@@ -82,5 +83,11 @@ def update_player_score():
 
     return jsonify({'message': 'Player score updated'}, request_data)
 
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+    emit('message', 'Connected to server')
+
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    socketio.run(app,debug=True, port=5000)

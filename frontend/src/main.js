@@ -20,15 +20,9 @@ const firebaseConfig = {
 
   const app = createApp(App)
 
-  const io = new Server({
-    cors: {
-      origin: "http://localhost:8080"
-    }
-  });
-  
   app.use(new VueScoketIO({
       debug: true,
-      connection: 'http://localhost:8080', 
+      connection: 'http://127.0.0.1:5000', 
       vuex: {
           store,
           actionPrefix: 'SOCKET_',
