@@ -41,6 +41,7 @@ export default {
     setup() {
         const tileList = ref([])
         var tilesPlayed = new Set()
+        var tilesThisTurn = new Set()
 
         for (let i = 0; i < 144; i++) {
             tileList.value.push({
@@ -55,6 +56,8 @@ export default {
 
         return {
            tileList,
+           tilesPlayed,
+           tilesThisTurn,
         };
     }, 
     computed: {
@@ -62,6 +65,8 @@ export default {
     },
     methods: {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
+
+        
 
         async placeTile(payload) {
             let tileSelected = null;
@@ -73,6 +78,8 @@ export default {
                 this.tileList[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
 
                 this.tileList[payload.position].hidden = false;
+                this.tilesPlayed.add(payload.position);
+                this.tilesThisTurn.add(payload.position);
                 // tileList.value[payload.position].highlighted = true;
                 this.$store.commit('removeTileFromHand', {
                     userId: this.userId,
@@ -90,13 +97,34 @@ export default {
             }
             return selectedTile;
         },
-
         tilePlacementIsValid(payload){
             let tileSelected = null;
 
             tileSelected = this.getSelectedTileInHandIndex();
 
-            if (tileSelected !== null) {
+            if (this.tilesPlayed.size == 0){
+                switch(payload.position){
+                    case 65:
+                        return true;
+                    case 66:
+                        return true;
+                    case 77:
+                        return true;
+                    case 78:
+                        return true;
+                    default:
+                        console.log("Not valid as first tile placement!");
+                        return false;
+                }
+            }
+
+            if (!this.isValidInContextOfTurn(payload, this.tilesThisTurn)){
+                console.log("Not valid in context of turn!");
+                return false;
+            }
+
+            // checking tile is selected and position is not already taken
+            if (tileSelected !== null && !this.tilesPlayed.has(payload.position)) {
                 let tileColor = this.playerHand(this.userId)[tileSelected].color;
                 let tileShape = this.playerHand(this.userId)[tileSelected].shape;
                 let rowStart = payload.position - (payload.position % 12);
@@ -106,8 +134,8 @@ export default {
                 // NOTE: If all tiles are hidden, returns true automatically
 
                 // checking vertical runs
-                var seenColors = new Set([tileColor]);
-                var seenShapes = new Set([tileShape]);
+                var seenColors = new Set();
+                var seenShapes = new Set();
                 var currentIndex = payload.position - verticalIncrement;
                 while(!(currentIndex < 0 || this.tileList[currentIndex].hidden)){ // up
                     seenColors.add(this.tileList[currentIndex].color);
@@ -120,14 +148,15 @@ export default {
                     seenShapes.add(this.tileList[currentIndex].shape);
                     currentIndex = currentIndex + verticalIncrement;
                 }
-                // must all be same color OR same shape
-                if (seenColors.size > 1 && seenShapes.size > 1){
+                // must all be same color XOR same shape
+                if (!this.isValidInIndividualRun(seenColors, seenShapes, tileColor, tileShape)){
+                    console.log("Not valid as vertical run!");
                     return false;
                 }
 
                 // checking horizontal runs
-                seenColors = new Set([tileColor]);
-                seenShapes = new Set([tileShape]);
+                seenColors = new Set();
+                seenShapes = new Set();
                 currentIndex = payload.position - 1;
                 while(!(currentIndex < rowStart || this.tileList[currentIndex].hidden)){ // left
                     seenColors.add(this.tileList[currentIndex].color);
@@ -141,15 +170,74 @@ export default {
                     currentIndex = currentIndex + 1;
                 }
 
-                // must all be same color OR same shape
-                if (seenColors.size > 1 && seenShapes.size > 1){
+                // must all be same color XOR same shape
+                if (!this.isValidInIndividualRun(seenColors, seenShapes, tileColor, tileShape)){
+                    console.log("Not valid as horizontal run!");
                     return false;
                 }
 
                 return true;
             }
             return false;
-        }
+        },
+        isValidInIndividualRun(seenColors, seenShapes, tileColor, tileShape){
+            if (seenColors.has(tileColor) && seenShapes.has(tileShape)){
+                return false;
+            }
+            seenColors.add(tileColor);
+            seenShapes.add(tileShape);
+            if (seenColors.size > 1 && seenShapes.size > 1){
+                return false;
+            }
+            return true;
+        },
+        isValidInContextOfTurn(payload, tilesThisTurn){
+            if (tilesThisTurn.size == 0){
+                return true;
+            }
+
+            let isOnLeftBorder = payload.position % 12 == 0;
+            let isOnRightBorder = payload.position % 12 == 11;
+            let isOnTopBorder = payload.position < 12;
+            let isOnBottomBorder = payload.position > 131;
+            var maxTile = -1;
+            var minTile = 144;
+            var verticalCondition = false;
+            var horizontalCondition = false;
+
+            // determining vertical and horizontal condition
+            for (let tile of tilesThisTurn){
+                if (tile > maxTile){
+                    maxTile = tile;
+                }
+                if (tile < minTile){
+                    minTile = tile;
+                }
+                if ((!isOnLeftBorder && (payload.position == tile - 1)) || (!isOnRightBorder && (payload.position == tile + 1))){
+                    horizontalCondition = true;
+                }
+                if ((!isOnTopBorder && (payload.position == tile - 12)) || (!isOnBottomBorder && (payload.position == tile + 12))){
+                    verticalCondition = true;
+                }
+            }
+            if ((tilesThisTurn.size == 1) && (verticalCondition || horizontalCondition)){
+                return true;
+            }
+            if (((maxTile - minTile) < 12) && horizontalCondition){
+                return true;
+            } else if (((maxTile - minTile) >= 12) && verticalCondition) {
+                return true;
+            }
+            return false;
+        },
+        async endTurn() {
+            const nextPlayerId = (this.userId + 1) % this.players.length;
+            this.tilesThisTurn = new Set();
+            await this.incrementRound(nextPlayerId);
+            await this.updateHand(this.userId);
+            await this.fetchHand();
+            
+        } 
 
     },
 }
