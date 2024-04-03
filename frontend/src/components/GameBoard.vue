@@ -40,12 +40,13 @@ export default {
     },
     setup() {
         const tileList = ref([])
+        var tilesPlayed = new Set()
 
         for (let i = 0; i < 144; i++) {
             tileList.value.push({
                 value: i,
                 hidden: true,
-                // highlighted: false,
+                highlighted: true,
                 color: '#fff',
                 shape: '',
                 position: i,
@@ -65,9 +66,9 @@ export default {
         async placeTile(payload) {
             let tileSelected = null;
 
-            tileSelected = getSelectedTileInHandIndex();
+            tileSelected = this.getSelectedTileInHandIndex();
 
-            if (tileSelected !== null && tilePlacementIsValid(payload)) {
+            if (tileSelected !== null && this.tilePlacementIsValid(payload)) {
                 this.tileList[payload.position].color = this.playerHand(this.userId)[tileSelected].color;
                 this.tileList[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
 
@@ -93,7 +94,7 @@ export default {
         tilePlacementIsValid(payload){
             let tileSelected = null;
 
-            tileSelected = getSelectedTileInHandIndex();
+            tileSelected = this.getSelectedTileInHandIndex();
 
             if (tileSelected !== null) {
                 let tileColor = this.playerHand(this.userId)[tileSelected].color;

@@ -1,7 +1,7 @@
 <template>
     <div class="tile" @click="handleTileClick">
-        <div class="tile-shown is-hidden" v-if="this.hidden"/>
-        <!-- <div class="tile-shown is-highlighted" v-else-if="this.highlighted">hello</div> -->
+        <div class="tile-shown is-highlighted" v-if="this.highlighted"></div>
+        <div class="tile-shown is-hidden" v-else-if="this.hidden"></div>
         <component v-else :is="getTileComponent()" :fillColor="this.color" :width="width" :height="height" :class="{ 'selected': isSelected }"/>
     </div>
 </template>
