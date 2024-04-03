@@ -102,7 +102,8 @@ const actions = {
                 userId: userId,
                 score: state.players[userId].score,
             });
-            console.log("update hand:", response)
+            commit('updatePlayerScore', {userId: userId, score: score});
+            console.log("update score:", response)
         } catch (error){ 
             console.error(error.response.data)
         }

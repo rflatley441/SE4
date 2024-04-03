@@ -94,9 +94,36 @@ export default {
             await this.incrementRound(nextPlayerId);
             await this.updateHand(this.userId);
             await this.fetchHand();
+            await this.calculateScore();
             await this.incrementScore({userId: this.userId, score: 1});
             console.log("Hello", this.players[this.userId].score)
-        } 
+        },
+        calculateScore(gameState) {
+        let score = 0;
+        gameState.players.forEach(player => {
+            player.lines.forEach(line => {
+                score += line.length;
+                if (this.isQwirkle(line)) {
+                    score += 6;
+                }
+            });
+            if (player.tiles.length === 0) {
+                score += 6;
+            }
+        });
+        this.updatePlayerScore({userId: this.userId, score: score});
+        return score;
+    },
+    isQwirkle(line) {
+        if (line.length !== 6) return false;
+        const colors = new Set();
+        const shapes = new Set();
+        line.forEach(tile => {
+            colors.add(tile.color);
+            shapes.add(tile.shape);
+        });
+        return colors.size === 1 || shapes.size === 1;
+    },
 
     },
 }
