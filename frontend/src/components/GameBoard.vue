@@ -116,6 +116,9 @@ export default {
                         console.log("Not valid as first tile placement!");
                         return false;
                 }
+            } else if (!this.hasAdjacentTiles(payload)){
+                console.log("No adjacent tiles!")
+                return false;
             }
 
             if (!this.isValidInContextOfTurn(payload, this.tilesThisTurn)){
@@ -180,6 +183,27 @@ export default {
             }
             return false;
         },
+        hasAdjacentTiles(payload){
+            var adjacentTiles = new Set();
+            if (payload.position >= 12){
+                adjacentTiles.add(payload.position - 12);
+            }
+            if (payload.position <= 131){
+                adjacentTiles.add(payload.position + 12);
+            }
+            if (payload.position % 12 != 0){
+                adjacentTiles.add(payload.position - 1);
+            }
+            if (payload.position % 12 != 11){
+                adjacentTiles.add(payload.position + 1)
+            }
+            for (let tile of adjacentTiles){
+                if (!this.tileList[tile].hidden){
+                    return true;
+                }
+            }
+            return false;
+        },
         isValidInIndividualRun(seenColors, seenShapes, tileColor, tileShape){
             if (seenColors.has(tileColor) && seenShapes.has(tileShape)){
                 return false;
@@ -196,14 +220,8 @@ export default {
                 return true;
             }
 
-            let isOnLeftBorder = payload.position % 12 == 0;
-            let isOnRightBorder = payload.position % 12 == 11;
-            let isOnTopBorder = payload.position < 12;
-            let isOnBottomBorder = payload.position > 131;
             var maxTile = -1;
             var minTile = 144;
-            var verticalCondition = false;
-            var horizontalCondition = false;
 
             // determining vertical and horizontal condition
             for (let tile of tilesThisTurn){
@@ -213,20 +231,49 @@ export default {
                 if (tile < minTile){
                     minTile = tile;
                 }
-                if ((!isOnLeftBorder && (payload.position == tile - 1)) || (!isOnRightBorder && (payload.position == tile + 1))){
-                    horizontalCondition = true;
-                }
-                if ((!isOnTopBorder && (payload.position == tile - 12)) || (!isOnBottomBorder && (payload.position == tile + 12))){
-                    verticalCondition = true;
-                }
             }
-            if ((tilesThisTurn.size == 1) && (verticalCondition || horizontalCondition)){
-                return true;
-            }
-            if (((maxTile - minTile) < 12) && horizontalCondition){
-                return true;
-            } else if (((maxTile - minTile) >= 12) && verticalCondition) {
-                return true;
+            
+            if ((maxTile - minTile) < 12 || (tilesThisTurn.size == 1)){
+                let currentIndex = minTile;
+                let leftBorder = minTile - (minTile % 12);
+                do {
+                    currentIndex = currentIndex - 1;
+                    if (payload.position == currentIndex && currentIndex >= leftBorder){
+                        return true;
+                    }
+                } while(!(currentIndex < leftBorder || this.tileList[currentIndex].hidden));
+
+                currentIndex = maxTile;
+                let rightBorder = maxTile + (11 - (maxTile % 12));
+                do {
+                    currentIndex = currentIndex + 1;
+                    if (payload.position == currentIndex && currentIndex <= rightBorder){
+                        return true;
+                    }
+                } while(!(currentIndex > rightBorder || this.tileList[currentIndex].hidden));
+
+                console.log("horizontal failure!");
+            } 
+            if ((maxTile - minTile) >= 12 || (tilesThisTurn.size == 1)) {
+                let currentIndex = minTile;
+                let topBorder = 0;
+                do {
+                    currentIndex = currentIndex - 12;
+                    if (payload.position == currentIndex && currentIndex >= topBorder){
+                        return true;
+                    }
+                } while(!(currentIndex < topBorder || this.tileList[currentIndex].hidden));
+                
+                currentIndex = minTile;
+                let bottomBorder = 143;
+                do {
+                    currentIndex = currentIndex + 12;
+                    if (payload.position == currentIndex && currentIndex <= bottomBorder){
+                        return true;
+                    }
+                } while(!(currentIndex > bottomBorder || this.tileList[currentIndex].hidden));
+
+                console.log("vertical failure!");
             }
             return false;
         },
