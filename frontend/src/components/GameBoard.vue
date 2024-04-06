@@ -62,6 +62,38 @@ export default {
     methods: {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
 
+
+       /*  calculateAndApplyScores() {
+            const players = this.players;
+            players.forEach((player, index) => {
+            let score = 0;
+            console.log(`Initial player hand length: ${player.hand.length}`); // Debug line length
+            score += player.hand.length;
+            
+                if (player.hand.length === 0) {
+            score += 6;
+        }
+            console.log(`Calculated score for player ${index}: ${score}`); // Debug calculated score
+        this.$store.commit('updatePlayerScore', { userId: index, score: score });
+    });
+}, */
+
+        calculateScore(gameState) {
+                let score = 0;
+                gameState.players.forEach(player => {
+                    player.hand.forEach(line => {
+                        score += line.length;
+                        if (this.isQwirkle(line)) {
+                            score += 6;
+                        }
+                    });
+                    if (player.tiles.length === 0) {
+                        score += 6;
+                    }
+                });
+                this.$store.commit('updatePlayerScore', {userId: this.userId, score: score});
+            },
+
         async placeTile(payload) {
             let tileSelected = null;
 
@@ -89,7 +121,10 @@ export default {
             await this.incrementRound(nextPlayerId);
             await this.updateHand(this.userId);
             await this.fetchHand();
-        } 
+            this.calculateScore();
+            
+        }, 
+         
 
     },
 }

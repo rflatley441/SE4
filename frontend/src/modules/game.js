@@ -96,11 +96,11 @@ const actions = {
         }
     },
 
-    async updatePlayerScore({state}, userId) {
+    async updatePlayerScore(userId, score) {
         try { 
             const response = await axios.post("http://127.0.0.1:5000/playerscore", {
                 userId: userId,
-                score: state.players[userId].score,
+                score: score,
             });
             console.log("update hand:", response)
         } catch (error){ 
