@@ -66,13 +66,15 @@ export default {
         
         const playerHand = this.playerHand(userId);
         let amount = 0;
+        let qwirkle = 0
         amount = 6 - playerHand.length;
+
         if (6 - playerHand.length === 0) {
-            amount += 6;
+            qwirkle = 6;
         }
-        console.log(typeof amount)
-        console.log(`Calculated score for player ${userId}: ${amount}`); 
-        this.$store.commit('updatePlayerScore', { userId: userId, score: amount });
+        let turn_score = qwirkle + amount
+       
+        this.$store.commit('updatePlayerScore', { userId: userId, amount: turn_score });
     },
 
         async placeTile(payload) {
