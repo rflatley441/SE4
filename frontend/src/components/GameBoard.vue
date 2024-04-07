@@ -80,8 +80,6 @@ export default {
         this.$store.commit('updatePlayerScore', { userId: userId, amount: turn_score });
     },
 
-    
-
         async placeTile(payload) {
             let tileSelected = null;
 
