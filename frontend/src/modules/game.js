@@ -96,16 +96,16 @@ const actions = {
         }
     },
 
-    async updatePlayerScore({commit, state}, userId) {
-         console.log(state.players[userId].score);
+    async updatePlayerScore({commit, state}, payload) {
+        let userId = payload.userId;
+        userId = parseInt(userId);
+
         try { 
             const response = await axios.post("http://127.0.0.1:5000/playerscore", {
                 userId: userId,
                 score: state.players[userId].score,
             });
-            console.log("text", response)
             commit('updatePlayerScore', {userId: response.data.userId, score: response.data.score});
-            console.log("update score:", response)
         } catch (error){ 
             console.error(error.response.data)
         }

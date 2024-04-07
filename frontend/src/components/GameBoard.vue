@@ -62,19 +62,17 @@ export default {
     methods: {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
 
-        calculateScore() {
-                const players = this.players;
-                players.forEach((player, index) => {
-                let score = 0;
-                console.log(`Initial player hand length: ${player.hand.length}`);
-                score += player.hand.length;
-                
-                    if (player.hand.length === 0) {
-                score += 6;
-            }
-                console.log(`Calculated score for player ${index}: ${score}`); 
-                this.$store.dispatch('updatePlayerScore', { userId: player.userId, score: score });
-        });
+        calculateScore(userId) {
+        
+        const playerHand = this.playerHand(userId);
+        let amount = 0;
+        amount = 6 - playerHand.length;
+        if (6 - playerHand.length === 0) {
+            amount += 6;
+        }
+        console.log(typeof amount)
+        console.log(`Calculated score for player ${userId}: ${amount}`); 
+        this.$store.commit('updatePlayerScore', { userId: userId, score: amount });
     },
 
         async placeTile(payload) {
@@ -93,6 +91,7 @@ export default {
 
                 this.tileList[payload.position].hidden = false;
                 // tileList.value[payload.position].highlighted = true;
+                console.log("identifierr", this.userId);
                 this.$store.commit('removeTileFromHand', {
                     userId: this.userId,
                     tileIndex: tileSelected
@@ -101,10 +100,11 @@ export default {
         },
         async endTurn() {
             const nextPlayerId = (this.userId + 1) % this.players.length;
+            this.calculateScore(this.userId);
             await this.incrementRound(nextPlayerId);
             await this.updateHand(this.userId);
             await this.fetchHand();
-            this.calculateScore();
+            
             
         }, 
          
