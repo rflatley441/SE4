@@ -69,30 +69,13 @@ export default {
                 console.log(`Initial player hand length: ${player.hand.length}`);
                 score += player.hand.length;
                 
-                
                     if (player.hand.length === 0) {
                 score += 6;
             }
                 console.log(`Calculated score for player ${index}: ${score}`); 
-            this.$store.commit('updatePlayerScore', { userId: index, score: 3 });
+                this.$store.dispatch('updatePlayerScore', { userId: player.userId, score: score });
         });
     },
-
-        /* calculateScore(gameState) {
-                let score = 0;
-                gameState.players.forEach(player => {
-                    player.hand.forEach(line => {
-                        score += line.length;
-                        if (this.isQwirkle(line)) {
-                            score += 6;
-                        }
-                    });
-                    if (player.tiles.length === 0) {
-                        score += 6;
-                    }
-                });
-                this.$store.commit('updatePlayerScore', {userId: this.userId, score: score});
-            }, */
 
         async placeTile(payload) {
             let tileSelected = null;
