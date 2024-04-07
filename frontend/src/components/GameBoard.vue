@@ -68,14 +68,19 @@ export default {
         let amount = 0;
         let qwirkle = 0
         amount = 6 - playerHand.length;
+        console.log("amount", amount)
 
-        if (6 - playerHand.length === 0) {
-            qwirkle = 6;
+        if (amount === 6){
+            qwirkle = 6
         }
+
         let turn_score = qwirkle + amount
+        console.log("qwirkle", qwirkle)
        
         this.$store.commit('updatePlayerScore', { userId: userId, amount: turn_score });
     },
+
+    
 
         async placeTile(payload) {
             let tileSelected = null;
