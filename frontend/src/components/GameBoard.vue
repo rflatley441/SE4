@@ -57,7 +57,7 @@ export default {
         };
     }, 
     computed: {
-        ...mapGetters(['players'])
+        ...mapGetters(['players', 'deck']),
     },
     methods: {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
@@ -75,9 +75,24 @@ export default {
         }
 
         let turn_score = qwirkle + amount
-        console.log("qwirkle", qwirkle)
        
         this.$store.commit('updatePlayerScore', { userId: userId, amount: turn_score });
+    },
+
+     determineWinner(state) {
+        let highestScore = -1;
+        let winner = ""
+
+        if (this.deck.remaining == 0) {
+            state.players.forEach((player, index) => {
+            if (player.score > highestScore) {
+                highestScore = player.score;
+                winner = `Player ${index + 1}`;
+            }
+        });
+        this.$store.commit('gameOver', { winner: winner});
+        }
+      
     },
 
         async placeTile(payload) {
@@ -106,10 +121,10 @@ export default {
         async endTurn() {
             const nextPlayerId = (this.userId + 1) % this.players.length;
             this.calculateScore(this.userId);
+            this.determineWinner();
             await this.incrementRound(nextPlayerId);
             await this.updateHand(this.userId);
             await this.fetchHand();
-            
             
         }, 
          
