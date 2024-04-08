@@ -82,6 +82,7 @@ export default {
      determineWinner(state) {
         let highestScore = -1;
         let winner = ""
+        console.log("winner function")
 
         if (this.deck.remaining == 0) {
             state.players.forEach((player, index) => {
