@@ -32,7 +32,7 @@
     background-color: #d0140b;
     color: white;
     padding: 20px;
-    width: 200px;
+    width: 250px;
     bottom: 150px;
     text-align: center;
     border-radius: 5px;
