@@ -21,7 +21,8 @@
 <script>
 import BoardTile from "./BoardTile.vue"
 import { mapActions, mapGetters } from "vuex"
-import { ref } from "vue"
+import { ref, computed } from "vue"
+import store from "@/store"
 
 export default {
     name: "GameBoard",
@@ -40,6 +41,7 @@ export default {
     },
     setup() {
         const tileList = ref([])
+        const deck = computed(() => store.getters.deck);
 
         for (let i = 0; i < 144; i++) {
             tileList.value.push({
@@ -53,7 +55,7 @@ export default {
         }
 
         return {
-           tileList,
+           tileList, deck
         };
     }, 
     computed: {
@@ -91,6 +93,7 @@ export default {
                 winner = `Player ${index + 1}`;
             }
         });
+        console.log("winner is", winner)
         this.$store.commit('gameOver', { winner: winner});
         }
       
@@ -125,8 +128,10 @@ export default {
             await this.updateHand(this.userId);
             await this.fetchHand();
             await this.incrementRound(nextPlayerId);
-            
-            
+                if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
+                    this.determineWinner();
+                }
+            console.log("tiles remaining" , this.deck.remaining)
 
         }, 
          
