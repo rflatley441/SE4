@@ -17,7 +17,7 @@
     <button class="end-turn-button" @click="this.endTurn">End Turn</button> 
 
     <!-- Winner Announcement Modal -->
-    <div v-if=winner class="modal">
+    <div v-if="winner" class="modal">
     <div class="modal-content">
       <h2 class="winner-announcement">{{winner.winner}}</h2>
       <div class="modal-buttons">
@@ -74,10 +74,10 @@ export default {
         };
     }, 
     computed: {
-        ...mapGetters(['players', 'deck']),
+        ...mapGetters(['players', 'deck', 'winner']),
     },
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'gameOver', 'winner']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'gameOver']),
 
         calculateScore(userId) {
         
@@ -108,8 +108,9 @@ export default {
                 winner = `Player ${index + 1} Wins!`;
             }
         });
-        console.log("winner is", winner)
+        //return winner
         this.$store.commit('gameOver', { winner: winner});
+     
         }
       
     },
@@ -144,7 +145,7 @@ export default {
             await this.fetchHand();
             await this.incrementRound(nextPlayerId);
                 if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
-                    this.determineWinner();
+                    this.winnerMessage = this.determineWinner();
                 }
             console.log("tiles remaining" , this.deck.remaining)
 
