@@ -150,7 +150,6 @@ export default {
             console.log("tiles remaining" , this.deck.remaining)
 
         }, 
-         
 
     },
 }
