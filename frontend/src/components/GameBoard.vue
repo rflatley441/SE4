@@ -17,9 +17,9 @@
     <button class="end-turn-button" @click="this.endTurn">End Turn</button> 
 
     <!-- Winner Announcement Modal -->
-    <div v-if=true class="modal">
+    <div v-if=winner class="modal">
     <div class="modal-content">
-      <h2 class="winner-announcement">{{ "Player 1 Wins" }}</h2>
+      <h2 class="winner-announcement">{{winner.winner}}</h2>
       <div class="modal-buttons">
         <router-link to="/home" class="modal-button">Home</router-link>    
         <router-link to="/game" class="modal-button">Play Again</router-link>
@@ -55,6 +55,8 @@ export default {
         const tileList = ref([])
         const deck = computed(() => store.getters.deck);
         const players = computed(() => store.getters.players);
+        const gameOver = computed(() => store.getters.gameOver);
+        const winner = computed(() => store.getters.winner);
 
         for (let i = 0; i < 144; i++) {
             tileList.value.push({
@@ -68,14 +70,14 @@ export default {
         }
 
         return {
-           tileList, deck, players
+           tileList, deck, players, gameOver, winner
         };
     }, 
     computed: {
         ...mapGetters(['players', 'deck']),
     },
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'gameOver', 'winner']),
 
         calculateScore(userId) {
         
@@ -103,7 +105,7 @@ export default {
             this.players.forEach((player, index) => {
             if (player.score > highestScore) {
                 highestScore = player.score;
-                winner = `Player ${index + 1}`;
+                winner = `Player ${index + 1} Wins!`;
             }
         });
         console.log("winner is", winner)
