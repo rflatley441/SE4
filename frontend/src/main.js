@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store.js'
 import { initializeApp } from 'firebase/app';
-import VueScoketIO from 'vue-3-socket.io'
+import socket from './socket.js'
 
 
 const firebaseConfig = {
@@ -18,18 +18,9 @@ const firebaseConfig = {
 
   initializeApp(firebaseConfig);
 
-  const app = createApp(App)
-
-  app.use(new VueScoketIO({
-      debug: true,
-      connection: 'http://127.0.0.1:5000', 
-      vuex: {
-          store,
-          actionPrefix: 'SOCKET_',
-          mutationPrefix: 'SOCKET_'
-      },
-  }))   
+  const app = createApp(App);
   // Use plugins
+  app.use(socket);
   app.use(router);
   app.use(store);
   
