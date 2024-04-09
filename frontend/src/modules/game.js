@@ -113,7 +113,6 @@ const actions = {
         commit('restartGame');
 
         dispatch('fetchDeck').then(() =>{
-            // commit('updateTilesAmount', 10);
             dispatch('fetchHand', 0);
             dispatch('fetchHand', 1);
             dispatch('randomStart');

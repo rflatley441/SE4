@@ -16,6 +16,18 @@
     </div>
     <button class="end-turn-button" @click="this.endTurn">End Turn</button> 
 
+    <!-- Winner Announcement Modal -->
+    <div v-if=true class="modal">
+    <div class="modal-content">
+      <h2 class="winner-announcement">{{ "Player 1 Wins" }}</h2>
+      <div class="modal-buttons">
+        <router-link to="/home" class="modal-button">Home</router-link>    
+        <router-link to="/game" class="modal-button">Play Again</router-link>
+      </div>
+    </div>
+
+      </div>
+
 </template>
 
 <script>
@@ -42,6 +54,7 @@ export default {
     setup() {
         const tileList = ref([])
         const deck = computed(() => store.getters.deck);
+        const players = computed(() => store.getters.players);
 
         for (let i = 0; i < 144; i++) {
             tileList.value.push({
@@ -55,7 +68,7 @@ export default {
         }
 
         return {
-           tileList, deck
+           tileList, deck, players
         };
     }, 
     computed: {
@@ -81,13 +94,13 @@ export default {
         this.$store.commit('updatePlayerScore', { userId: userId, amount: turn_score });
     },
 
-     determineWinner(state) {
+     determineWinner() {
         let highestScore = -1;
         let winner = ""
         console.log("winner function")
 
         if (this.deck.remaining == 0) {
-            state.players.forEach((player, index) => {
+            this.players.forEach((player, index) => {
             if (player.score > highestScore) {
                 highestScore = player.score;
                 winner = `Player ${index + 1}`;
@@ -141,9 +154,9 @@ export default {
 </script>
 
 <style scoped>
-.game-board-container {
+/* .game-board-container {
     width: 600px;
-}
+} */
 
 .game-board {
     /* width: auto; */
@@ -170,5 +183,61 @@ export default {
 
 .end-turn-button:hover {
     background-color: #45a049;
+}
+
+.game-board-container {
+    position: relative; 
+    width: 600px;
+    margin: 0 auto; 
+}
+
+.modal {
+    position: absolute; 
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #000; 
+    color: #fff; 
+    padding: 60px; 
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
+    width: 80%; 
+    text-align: center;
+    position: relative; 
+    left: 0%; 
+    top: 0%;
+}
+
+.winner-announcement {
+  font-size: 2em; 
+  margin-bottom: 1em; 
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center; 
+  gap: 3em; 
+}
+
+.modal-button {
+  text-decoration: none;
+  padding: 10px 20px;
+  color: white;
+  background-color: #444;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-button:hover {
+  background-color: #667;
 }
 </style>
