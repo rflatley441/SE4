@@ -123,6 +123,11 @@ const actions = {
     setGameOver({commit}, winner) {
         commit('gameOver', winner);
     }, 
+
+    updatePlayerScore({commit}, {userId, amount}) {
+        commit('updatePlayerScore', { userId: userId, amount: amount });
+
+    }, 
 };
 
 const mutations = {
@@ -164,7 +169,7 @@ const mutations = {
     updateTilesAmount: (state, amount) => (state.deck.remaining = amount),
 
     updatePlayerScore: (state, {userId, amount}) => {
-        console.log(` userId: ${userId} with amount: ${amount}`);
+        // console.log(` userId: ${userId} with amount: ${amount}`);
         state.players[userId].score += amount;
     }};
 

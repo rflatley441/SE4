@@ -33,8 +33,7 @@
 <script>
 import BoardTile from "./BoardTile.vue"
 import { mapActions, mapGetters } from "vuex"
-import { ref, computed } from "vue"
-import store from "@/store"
+import { ref } from "vue"
 
 export default {
     name: "GameBoard",
@@ -53,10 +52,7 @@ export default {
     },
     setup() {
         const tileList = ref([])
-        const deck = computed(() => store.getters.deck);
-        const players = computed(() => store.getters.players);
-        const gameOver = computed(() => store.getters.gameOver);
-        const winner = computed(() => store.getters.winner);
+
 
         for (let i = 0; i < 144; i++) {
             tileList.value.push({
@@ -70,14 +66,14 @@ export default {
         }
 
         return {
-           tileList, deck, players, gameOver, winner
+           tileList
         };
     }, 
     computed: {
-        ...mapGetters(['players', 'deck', 'winner']),
+        ...mapGetters(['players', 'deck', 'winner', 'gameOver']),
     },
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'gameOver']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver']),
 
         calculateScore(userId) {
         
@@ -93,7 +89,8 @@ export default {
 
         let turn_score = qwirkle + amount
        
-        this.$store.commit('updatePlayerScore', { userId: userId, amount: turn_score });
+        this.$store.dispatch('updatePlayerScore', { userId: userId, amount: turn_score });
+
     },
 
      determineWinner() {
@@ -109,7 +106,7 @@ export default {
             }
         });
         //return winner
-        this.$store.commit('gameOver', { winner: winner});
+        this.$store.dispatch('setGameOver', { winner: winner});
      
         }
       
