@@ -109,10 +109,12 @@ export default {
             await this.incrementRound(nextPlayerId);
             await this.updateHand(this.userId);
             await this.fetchHand();
-            
+     
             
         }, 
-         
+        
+            
+        } 
 
     },
 }
