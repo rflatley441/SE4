@@ -18,11 +18,11 @@ const firebaseConfig = {
 
   initializeApp(firebaseConfig);
 
+
   const app = createApp(App);
   // Use plugins
   app.use(socket);
   app.use(router);
   app.use(store);
   
-  // Mount the application
   app.mount('#app');

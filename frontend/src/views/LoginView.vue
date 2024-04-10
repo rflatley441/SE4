@@ -17,7 +17,7 @@
                 </div>
 
                 <button class="login-button" @click.prevent="login">
-                    <router-link to="/home" class="footText">LOGIN</router-link>
+                    LOGIN
                 </button>
 
             </div>
@@ -126,6 +126,7 @@ img {
 <script>
 import { ref } from 'vue';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from 'vue-router';
 import Star8ptTile from '@/assets/Star8ptTile.vue';
 import CircleTile from '@/assets/CircleTile.vue';
 
@@ -139,17 +140,16 @@ import CircleTile from '@/assets/CircleTile.vue';
         const email = ref('');
         const password = ref('');
         const errorMessage = ref('');
+        const router = useRouter();
 
         const login = () => {
             const auth = getAuth();
             signInWithEmailAndPassword(auth, email.value, password.value)
                 .then((userCredential) => {
-                    console.log(userCredential)
-                    // User is logged in
-                    // Redirect to home page or show a success message
+                    console.log(userCredential, "success")
+                    router.push('/home');
                 })
                 .catch((error) => {
-                    // Handle errors here, such as showing an error message to the user
                     errorMessage.value = error.message;
                 });
         };
