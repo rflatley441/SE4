@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store.js'
 import { initializeApp } from 'firebase/app';
+import socket from './socket.js'
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyD6DibvBg5rAkpC4vi_Rc0O3wF59EA36Lc",
@@ -16,8 +18,10 @@ const firebaseConfig = {
 
   initializeApp(firebaseConfig);
 
-  const app = createApp(App); 
-  
+
+  const app = createApp(App);
+  // Use plugins
+  app.use(socket);
   app.use(router);
   app.use(store);
   

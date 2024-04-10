@@ -4,23 +4,8 @@
 
 <script>
 
-// import axios from 'axios';
-// import GameBoard from './components/GameBoard.vue';
-
 export default {
   name: 'App',
-  data() {
-    return {
-      message: ""
-    }
-  },
-  components: {
-    // GameBoard,
-  },
-  async mounted() {
-    //const response = await axios.post('http://127.0.0.1:5000/api', { message: "hi" });
-    //alert(response.data.message)
-  }
 }
 </script>
 

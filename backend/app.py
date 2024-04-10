@@ -4,10 +4,11 @@ from gameplay import Gameplay
 from player import Player
 from gameboard import GameBoard
 from tile import Tile
-
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 game_state = None
 
@@ -72,6 +73,7 @@ def update_player_hand():
 
     return jsonify({'message': 'Player hand updated'}, request_data)
 
+
 @app.route('/playerscore', methods=['POST'])
 def update_player_score():
     request_data = request.get_json()
@@ -82,5 +84,18 @@ def update_player_score():
 
     return jsonify({'message': 'Player score updated'}, request_data)
 
+
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+    emit('message', 'Connected to server')
+
+
+@socketio.on('disconnect')
+def handle_connect():
+    print('Client disconnected')
+    emit('message', 'Disconnected to server')
+
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    socketio.run(app, debug=True, port=5000)
