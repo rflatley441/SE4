@@ -6,6 +6,7 @@
             :key="`tile-${index}`" 
             :value="index" 
             :hidden="tile.hidden" 
+            :highlighted="tile.highlighted"
             :position="tile.position"
             :color="tile.color"
             :shape="tile.shape"
@@ -38,6 +39,9 @@ export default {
     components: {
         BoardTile,
     },
+    // mounted() {
+    // this.playerHand(this.userId).$on('update-highlighted', this.updateHighlightedBoardTiles);
+    // },
     setup() {
         const tileList = ref([])
         var tilesPlayed = new Set()
@@ -46,8 +50,8 @@ export default {
         for (let i = 0; i < 144; i++) {
             tileList.value.push({
                 value: i,
+                highlighted: false,
                 hidden: true,
-                highlighted: true,
                 color: '#fff',
                 shape: '',
                 position: i,
@@ -72,6 +76,7 @@ export default {
             let tileSelected = null;
 
             tileSelected = this.getSelectedTileInHandIndex();
+            this.updateHighlightedBoardTiles();
 
             if (tileSelected !== null && this.tilePlacementIsValid(payload)) {
                 this.tileList[payload.position].color = this.playerHand(this.userId)[tileSelected].color;
@@ -85,6 +90,21 @@ export default {
                     userId: this.userId,
                     tileIndex: tileSelected
                 });
+                this.updateHighlightedBoardTiles();
+            }
+        },
+
+        updateHighlightedBoardTiles(){
+            let dummyPayload = {
+                position: 0,
+            };
+            for (let i = 0; i < this.tileList.length; i++){
+                dummyPayload.position = i;
+                if (this.tilePlacementIsValid(dummyPayload)){
+                    this.tileList[i].highlighted = true;
+                } else {
+                    this.tileList[i].highlighted = false;
+                }
             }
         },
 
@@ -101,6 +121,10 @@ export default {
             let tileSelected = null;
 
             tileSelected = this.getSelectedTileInHandIndex();
+
+            if (tileSelected == null){
+                return false;
+            }
 
             if (this.tilesPlayed.size == 0){
                 switch(payload.position){

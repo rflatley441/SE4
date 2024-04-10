@@ -46,6 +46,7 @@ import { mapGetters } from 'vuex';
                 if (this.gameState.turn == this.userId) {
                     this.playerHand(this.userId)[payload.position].selected = true;
                 }
+                // this.$emit('update-highlighted');
             }
         },
     }
