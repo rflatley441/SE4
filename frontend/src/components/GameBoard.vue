@@ -142,7 +142,7 @@ export default {
             await this.fetchHand();
             await this.incrementRound(nextPlayerId);
                 if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
-                    this.winnerMessage = this.determineWinner();
+                    this.determineWinner();
                 }
             console.log("tiles remaining" , this.deck.remaining)
 
