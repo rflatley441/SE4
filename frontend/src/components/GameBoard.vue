@@ -94,7 +94,7 @@ export default {
             }
         },
 
-        updateHighlightedBoardTiles(){
+        async updateHighlightedBoardTiles(){
             let dummyPayload = {
                 position: 0,
             };
