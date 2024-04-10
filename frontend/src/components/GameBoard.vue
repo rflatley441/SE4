@@ -83,7 +83,6 @@ export default {
         let verticalScore = 1;
         let horizontalScore = 1;
 
-        // Check vertically
         let up = position - 12;
         while (this.tilesPlayed.has(up)) {
             verticalScore++;
