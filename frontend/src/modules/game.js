@@ -95,19 +95,7 @@ const actions = {
             console.error(error.response.data)
         }
     },
-
-    async updatePlayerScore({state}, userId) {
-        try { 
-            const response = await axios.post("http://127.0.0.1:5000/playerscore", {
-                userId: userId,
-                score: state.players[userId].score,
-            });
-            console.log("update hand:", response)
-        } catch (error){ 
-            console.error(error.response.data)
-        }
-    },    
-
+    
     updateTilesAmount({commit}, amount) {
         commit('updateTilesAmount', amount);
     },
@@ -134,6 +122,11 @@ const actions = {
 
     setGameOver({commit}, winner) {
         commit('gameOver', winner);
+    }, 
+
+    updatePlayerScore({commit}, {userId, amount}) {
+        commit('updatePlayerScore', { userId: userId, amount: amount });
+
     }, 
 };
 
@@ -174,8 +167,11 @@ const mutations = {
         console.log("hand:", state.players[userId].hand)
     },
     updateTilesAmount: (state, amount) => (state.deck.remaining = amount),
-    updatePlayerScore: (state, {userId, amount}) => (state.players[userId].score += amount)
-};
+
+    updatePlayerScore: (state, {userId, amount}) => {
+        // console.log(` userId: ${userId} with amount: ${amount}`);
+        state.players[userId].score += amount;
+    }};
 
 export default {
     state,

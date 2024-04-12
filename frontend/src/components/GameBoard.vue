@@ -16,6 +16,18 @@
     </div>
     <button class="end-turn-button" @click="this.endTurn">End Turn</button> 
 
+    <!-- Winner Announcement Modal -->
+    <div v-if="winner" class="modal">
+    <div class="modal-content">
+      <h2 class="winner-announcement">{{winner.winner}}</h2>
+      <div class="modal-buttons">
+        <router-link to="/home" class="modal-button">Home</router-link>    
+        <router-link to="/game" class="modal-button">Play Again</router-link>
+      </div>
+    </div>
+
+      </div>
+
 </template>
 
 <script>
@@ -41,6 +53,7 @@ export default {
     setup() {
         const tileList = ref([])
 
+
         for (let i = 0; i < 144; i++) {
             tileList.value.push({
                 value: i,
@@ -53,14 +66,87 @@ export default {
         }
 
         return {
-           tileList,
+           tileList
         };
     }, 
     computed: {
-        ...mapGetters(['players'])
+        ...mapGetters(['players', 'deck', 'winner', 'gameOver']),
     },
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver']),
+
+        calculateScore(userId) {
+    let baseScore = 0;
+    let bonusScore = 0;
+
+    this.tilesThisTurn.forEach((position) => {
+        let verticalScore = 1;
+        let horizontalScore = 1;
+
+        let up = position - 12;
+        while (this.tilesPlayed.has(up)) {
+            verticalScore++;
+            up -= 12;
+        }
+
+        let down = position + 12;
+        while (this.tilesPlayed.has(down)) {
+            verticalScore++;
+            down += 12;
+        }
+
+        let left = position - 1;
+        while (position % 12 !== 0 && this.tilesPlayed.has(left)) {
+            horizontalScore++;
+            left--;
+        }
+
+        let right = position + 1;
+        while (position % 12 !== 11 && this.tilesPlayed.has(right)) {
+            horizontalScore++;
+            right++;
+        }
+
+        if (verticalScore === 6) {
+            bonusScore += 6;
+        }
+        if (horizontalScore === 6) {
+            bonusScore += 6;
+        }
+
+        if (verticalScore > 1) {
+            baseScore += verticalScore - 1;
+        }
+        if (horizontalScore > 1) {
+            baseScore += horizontalScore - 1;
+        }
+    });
+
+    baseScore += this.tilesThisTurn.size;
+
+    let totalScore = baseScore + bonusScore;
+    this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
+},
+
+
+     determineWinner() {
+        let highestScore = -1;
+        let winner = ""
+        console.log("winner function")
+
+        if (this.deck.remaining == 0) {
+            this.players.forEach((player, index) => {
+            if (player.score > highestScore) {
+                highestScore = player.score;
+                winner = `Player ${index + 1} Wins!`;
+            }
+        });
+        //return winner
+        this.$store.dispatch('setGameOver', { winner: winner});
+     
+        }
+      
+    },
 
         async placeTile(payload) {
             let tileSelected = null;
@@ -78,6 +164,7 @@ export default {
 
                 this.tileList[payload.position].hidden = false;
                 // tileList.value[payload.position].highlighted = true;
+                console.log("identifierr", this.userId);
                 this.$store.commit('removeTileFromHand', {
                     userId: this.userId,
                     tileIndex: tileSelected
@@ -85,22 +172,26 @@ export default {
             }
         },
         async endTurn() {
+            this.calculateScore(this.userId);
             const nextPlayerId = (this.userId + 1) % this.players.length;
             await this.updateHand(this.userId);
             await this.fetchHand();
             await this.incrementRound(nextPlayerId);
+                if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
+                    this.determineWinner();
+                }
+            console.log("tiles remaining" , this.deck.remaining)
 
-            
-        } 
+        }, 
 
     },
 }
 </script>
 
 <style scoped>
-.game-board-container {
+/* .game-board-container {
     width: 600px;
-}
+} */
 
 .game-board {
     /* width: auto; */
@@ -127,5 +218,61 @@ export default {
 
 .end-turn-button:hover {
     background-color: #45a049;
+}
+
+.game-board-container {
+    position: relative; 
+    width: 600px;
+    margin: 0 auto; 
+}
+
+.modal {
+    position: absolute; 
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #000; 
+    color: #fff; 
+    padding: 60px; 
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
+    width: 80%; 
+    text-align: center;
+    position: relative; 
+    left: 0%; 
+    top: 0%;
+}
+
+.winner-announcement {
+  font-size: 2em; 
+  margin-bottom: 1em; 
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center; 
+  gap: 3em; 
+}
+
+.modal-button {
+  text-decoration: none;
+  padding: 10px 20px;
+  color: white;
+  background-color: #444;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-button:hover {
+  background-color: #667;
 }
 </style>
