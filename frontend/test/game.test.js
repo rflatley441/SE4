@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import game from '../src/modules/game';
+import game from '../src/modules/game.js'; 
 
 describe('actions', () => {
     let store;
@@ -17,14 +17,19 @@ describe('actions', () => {
             },
           },
         });
-      });
+    });
 
     it('gets game status from game state', () => {
-        const gameState = store.getters['game/gameState'];
-        console.log(gameState); // add this line
-
-        expect(gameState.gameStatus).toEqual(false);
+        const gameState = store.getters['gameState'];
+        expect(gameState).toEqual({
+          gameStatus: false,
+          turn: null,
+          round: 0,
+          finished: false
+        });
     });
+
+
     
     // it('gets turn from game state', () => {
     //     const gameState = store.getters['game/gameState'];
