@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1713218342569" clover="3.2.0">
+  <project timestamp="1713218342569" name="All files">
+    <metrics statements="71" coveredstatements="7" conditionals="8" coveredconditionals="0" methods="34" coveredmethods="1" elements="113" coveredelements="8" complexity="0" loc="71" ncloc="71" packages="1" files="1" classes="1"/>
+    <file name="game.js" path="/Users/ryanflatley/Documents/GitHub/lab-02-rflatley441/homework2-problemset-rflatley441/SE4/frontend/src/modules/game.js">
+      <metrics statements="71" coveredstatements="7" conditionals="8" coveredconditionals="0" methods="34" coveredmethods="1"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="33" count="1" type="stmt"/>
+      <line num="34" count="0" type="stmt"/>
+      <line num="37" count="1" type="stmt"/>
+      <line num="39" count="1" type="stmt"/>
+      <line num="46" count="0" type="stmt"/>
+      <line num="47" count="0" type="stmt"/>
+      <line num="48" count="0" type="stmt"/>
+      <line num="49" count="0" type="stmt"/>
+      <line num="50" count="0" type="stmt"/>
+      <line num="51" count="0" type="stmt"/>
+      <line num="52" count="0" type="stmt"/>
+      <line num="55" count="1" type="stmt"/>
+      <line num="57" count="0" type="stmt"/>
+      <line num="58" count="0" type="stmt"/>
+      <line num="59" count="0" type="stmt"/>
+      <line num="61" count="0" type="stmt"/>
+      <line num="66" count="0" type="stmt"/>
+      <line num="67" count="0" type="stmt"/>
+      <line num="68" count="0" type="stmt"/>
+      <line num="69" count="0" type="cond" truecount="0" falsecount="4"/>
+      <line num="70" count="0" type="stmt"/>
+      <line num="76" count="0" type="stmt"/>
+      <line num="78" count="0" type="stmt"/>
+      <line num="83" count="0" type="stmt"/>
+      <line num="84" count="0" type="stmt"/>
+      <line num="88" count="0" type="stmt"/>
+      <line num="89" count="0" type="cond" truecount="0" falsecount="4"/>
+      <line num="90" count="0" type="stmt"/>
+      <line num="96" count="0" type="stmt"/>
+      <line num="98" count="0" type="stmt"/>
+      <line num="103" count="0" type="stmt"/>
+      <line num="104" count="0" type="stmt"/>
+      <line num="108" count="0" type="stmt"/>
+      <line num="110" count="0" type="stmt"/>
+      <line num="115" count="0" type="stmt"/>
+      <line num="119" count="0" type="stmt"/>
+      <line num="120" count="0" type="stmt"/>
+      <line num="124" count="0" type="stmt"/>
+      <line num="125" count="0" type="stmt"/>
+      <line num="128" count="0" type="stmt"/>
+      <line num="130" count="0" type="stmt"/>
+      <line num="131" count="0" type="stmt"/>
+      <line num="132" count="0" type="stmt"/>
+      <line num="133" count="0" type="stmt"/>
+      <line num="135" count="0" type="stmt"/>
+      <line num="139" count="0" type="stmt"/>
+      <line num="144" count="1" type="stmt"/>
+      <line num="146" count="0" type="stmt"/>
+      <line num="147" count="0" type="stmt"/>
+      <line num="148" count="0" type="stmt"/>
+      <line num="149" count="0" type="stmt"/>
+      <line num="150" count="0" type="stmt"/>
+      <line num="151" count="0" type="stmt"/>
+      <line num="153" count="0" type="stmt"/>
+      <line num="154" count="0" type="stmt"/>
+      <line num="156" count="0" type="stmt"/>
+      <line num="157" count="0" type="stmt"/>
+      <line num="159" count="0" type="stmt"/>
+      <line num="161" count="0" type="stmt"/>
+      <line num="162" count="0" type="stmt"/>
+      <line num="165" count="0" type="stmt"/>
+      <line num="166" count="0" type="stmt"/>
+      <line num="167" count="0" type="stmt"/>
+      <line num="168" count="0" type="stmt"/>
+      <line num="174" count="0" type="stmt"/>
+      <line num="177" count="0" type="stmt"/>
+      <line num="178" count="0" type="stmt"/>
+      <line num="180" count="0" type="stmt"/>
+      <line num="181" count="0" type="stmt"/>
+      <line num="184" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

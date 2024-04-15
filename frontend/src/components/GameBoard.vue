@@ -85,7 +85,7 @@ export default {
             }
         },
         async endTurn() {
-            const nextPlayerId = (this.userId + 1) % this.players.length;
+            const nextPlayerId = (this.userId + 1) % 2;
             await this.updateHand(this.userId);
             await this.fetchHand();
             await this.incrementRound(nextPlayerId);
