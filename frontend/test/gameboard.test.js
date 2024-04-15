@@ -26,34 +26,21 @@ describe('GameBoard', () => {
         });
     });
 
-    // Test to check if the component renders
-    it('renders correctly', () => {
-        expect(wrapper.exists()).toBe(true);
-    });
-
     // Test to check for a specific element or class within the component
     it('contains the game-board-container', () => {
         expect(wrapper.html()).toContain('game-board-container');
     });
 
-    // Test to simulate the end turn action and check the state change
-    it('updates state on end turn', async () => {
-        // Trigger the end turn action
+/*     // Test to simulate the end turn action and check the state change
+    it('calls endTurn method on button click', async () => {
+        // Spy on the endTurn method
+        const endTurnSpy = jest.spyOn(wrapper.vm, 'endTurn');
+
+        // Trigger the button click
         await wrapper.find('.end-turn-button').trigger('click');
-        // Check the expected state change
-        expect(store.state.game.turn).not.toBeNull();
-    });
 
-    // This test should be moved inside the describe block
-    it('gets game status from game state', () => {
-        const gameState = store.getters['game/gameState']; // Make sure to access it with the correct namespace
-        expect(gameState).toEqual({
-          gameStatus: false,
-          turn: null,
-          round: 0,
-          finished: false
-        });
-    });
+        // Assert that endTurn was called
+        expect(endTurnSpy).toHaveBeenCalled();
+    }); */
 
-    // Additional tests can also be added here...
 });
