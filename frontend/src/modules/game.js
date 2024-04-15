@@ -30,6 +30,9 @@ const state = {
         {tile: null},
     ],
 };
+const sum = (a, b) => {
+    return a + b;
+};
 
 const getters = {
     gameState: (state) => {
@@ -135,6 +138,7 @@ const actions = {
     setGameOver({commit}, winner) {
         commit('gameOver', winner);
     }, 
+    sum,
 };
 
 const mutations = {
@@ -177,9 +181,11 @@ const mutations = {
     updatePlayerScore: (state, {userId, amount}) => (state.players[userId].score += amount)
 };
 
-export default {
+const game = {
     state,
     getters,
     actions,
-    mutations
-}
+    mutations,
+
+};
+export default game;

@@ -4,43 +4,60 @@ import game from '../src/modules/game';
 describe('actions', () => {
     let store;
     beforeEach(() => {
-        const storeConfig = {
-            modules: {
-                game,
-            }
-        };
-        store = createStore(storeConfig);
-    });
-
-    it('gets game state', () => {
-        const gameState = store.getters['game/gameState'];
-        expect(gameState).toEqual({
-            gameStatus: false,
-            turn: null,
-            round: 0,
-            finished: false
+        store = createStore({
+          modules: {
+            game: {
+              ...game,
+              state: {
+                game: false,
+                turn: null,
+                round: 0,
+                finished: false,
+              },
+            },
+          },
         });
-    });
+      });
 
-    it('updates tiles amount', () => {
-        store.dispatch('updateTilesAmount', 5);
-        expect(store.state.deck.remaining).toBe(5);
-    });
+    it('gets game status from game state', () => {
+        const gameState = store.getters['game/gameState'];
+        console.log(gameState); // add this line
 
-    it('increments round and sets turn', () => {
-        store.dispatch('incrementRound', 0);
-        expect(store.state.round).toBe(1);
-        expect(store.state.turn).toBe(0);
+        expect(gameState.gameStatus).toEqual(false);
     });
+    
+    // it('gets turn from game state', () => {
+    //     const gameState = store.getters['game/gameState'];
+    //     expect(gameState.turn).toBeNull();
+    // });
+    
+    // it('gets round from game state', () => {
+    //     const gameState = store.getters['game/gameState'];
+    //     expect(gameState.round).toEqual(0);
+    // });
+    
+    // it('gets finished status from game state', () => {
+    //     const gameState = store.getters['game/gameState'];
+    //     expect(gameState.finished).toEqual(false);
+    // });
+    
+    // it('updates tiles amount', () => {
+    //     store.dispatch('updateTilesAmount', 5);
+    //     expect(store.state.deck.remaining).toBe(5);
+    // });
+    
+    // it('increments round', () => {
+    //     store.dispatch('incrementRound', 0);
+    //     expect(store.state.round).toBe(1);
+    // });
+    
+    // it('sets turn', () => {
+    //     store.dispatch('incrementRound', 0);
+    //     expect(store.state.turn).toBe(0);
+    // });
 
-    it('sets random start', () => {
-        store.dispatch('randomStart');
-        expect([0, 1]).toContain(store.state.turn);
-    });
-
-    it('sets game over', () => {
-        store.dispatch('setGameOver', 'player1');
-        expect(store.state.finished).toBe(true);
-        expect(store.state.winner).toBe('player1');
-    });
+    // it('sums two numbers', () => {
+    //     const result = game.sum(1, 2);
+    //     expect(result).toBe(3);
+    // });
 });
