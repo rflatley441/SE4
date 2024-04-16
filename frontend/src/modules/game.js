@@ -109,7 +109,10 @@ const actions = {
     },    
 
     updateTilesAmount({commit}, amount) {
-        commit('updateTilesAmount', amount);
+        // checks if the amount is a positive number
+        if (typeof amount === 'number' && amount >= 0) {
+            commit('updateTilesAmount', amount);
+        }
     },
 
     incrementRound({commit}, userId) {
