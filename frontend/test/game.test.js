@@ -1,6 +1,9 @@
 import { createStore } from "vuex";
 import game from "../src/modules/game.js";
 
+const axios = require('axios');
+jest.mock('axios')
+
 describe("actions", () => {
     let store;
 
@@ -225,5 +228,427 @@ describe("actions", () => {
         game.actions.setGameOver({ commit }, winner);
 
         expect(commit).toHaveBeenCalledWith("gameOver", winner);
+    });
+
+    // testing fetch deck
+
+    it('fetches deck successfully', async () => {
+        const mockData = [{"deckId": 0}, {"remaining": 10}];
+        axios.get.mockResolvedValue({data: mockData});
+
+        const commit = jest.fn();
+
+        await game.actions.fetchDeck({commit});
+
+        expect(commit).toHaveBeenCalledWith('setDeck', mockData)
+    });
+
+    it('handles errors properly when fetching deck', async () => {
+        const errorMessage = 'An error occured while fetching the game deck: '
+        axios.get.mockRejectedValue({response: {data: errorMessage}});
+
+        const commit = jest.fn()
+        console.error = jest.fn()
+
+        await game.actions.fetchDeck({ commit });
+
+        expect(console.error).toHaveBeenCalledWith(errorMessage)
+    });
+
+    // testing fetch hand
+
+    it('fetches player hand successfully', async () => {
+      const mockData = [{"remaining": 10}, {"userId": 0}, {"hand": [{shape: 'square', color: '#00f', selected: false}, {shape: 'square', color: '#00f', selected: false}, {shape: 'square', color: '#00f', selected: false}, {shape: 'square', color: '#00f', selected: false}, {shape: 'square', color: '#00f', selected: false}, {shape: 'square', color: '#00f', selected: false}]}];
+      axios.get.mockResolvedValue({data: mockData});
+
+      const commit = jest.fn();
+      const dispatch = jest.fn(() => Promise.resolve());
+
+      await game.actions.fetchHand({ commit, dispatch })
+
+      mockData.forEach(item => {
+        if (item.hand && item.userId) {
+          expect(commit).toHaveBeenCalledWith('setHand', {
+            playerId: item.userId,
+            hand: item.hand
+          });
+        }
+      });
+    
+  });
+  
+    it('dispatches update tiles amount correctly', async () => {
+      const mockData = [{"remaining": 10}, {"userId": 0}, {"hand": [{shape: 'square', color: '#00f', selected: false}, {shape: 'square', color: '#00f', selected: false}, {shape: 'square', color: '#00f', selected: false}, {shape: 'square', color: '#00f', selected: false}, {shape: 'square', color: '#00f', selected: false}, {shape: 'square', color: '#00f', selected: false}]}];
+      axios.get.mockResolvedValue({data: mockData});
+
+      const commit = jest.fn();
+      const dispatch = jest.fn(() => Promise.resolve());
+
+      await game.actions.fetchHand({ commit, dispatch })
+
+      expect(dispatch).toHaveBeenCalledWith('updateTilesAmount', mockData[0].remaining)
+    });
+
+    it('handles errors properly when fetching player hand', async () => {
+        const errorMessage = 'An error occured while fetching the game deck: '
+        axios.get.mockRejectedValue({response: {data: errorMessage}});
+
+        const commit = jest.fn()
+        const dispatch = jest.fn()
+        console.error = jest.fn()
+
+        await game.actions.fetchHand({ commit, dispatch });
+
+        expect(console.error).toHaveBeenCalledWith(errorMessage)
+    });
+
+    // testing update hand
+    it('posts hand successfully', async () => {
+        const userId = 0;
+        const mockState = {
+          players: {
+            [userId]: {
+              hand: [
+                  { shape: 'square', color: '#00f', selected: false },
+                  { shape: 'square', color: '#00f', selected: false }
+              ]
+            }
+          }
+        };
+
+        const mockResponseData = [
+          { userId: 0, hand: [{ shape: 'circle', color: '#f00', selected: false}, { shape: 'circle', color: '#f00', selected: false}]}
+        ];
+
+        axios.post.mockResolvedValue({ data: mockResponseData });
+
+        const commit = jest.fn();
+
+        await game.actions.updateHand({ commit, state: mockState}, userId);
+
+        expect(axios.post).toHaveBeenCalledWith('http://127.0.0.1:5000/playerhand', { userId, hand: mockState.players[userId].hand})
+    });
+
+    it('updates hand successfully', async () => {
+      const userId = 0;
+      const mockState = {
+        players: {
+          [userId]: {
+            hand: [
+                { shape: 'square', color: '#00f', selected: false },
+                { shape: 'square', color: '#00f', selected: false }
+            ]
+          }
+        }
+      };
+
+      const mockResponseData = [
+        { userId: 0, hand: [{ shape: 'circle', color: '#f00', selected: false}, { shape: 'circle', color: '#f00', selected: false}]}
+      ];
+
+      axios.post.mockResolvedValue({ data: mockResponseData });
+
+      const commit = jest.fn();
+
+      await game.actions.updateHand({ commit, state: mockState}, userId);
+
+      mockResponseData.forEach(item => {
+        if (item.hand && item.userId) {
+          expect(commit).toHaveBeenCalledWith('setHand', {
+            playerId: item.userId,
+            hand: item.hand
+          });
+        }
+      });
+  });
+
+  it('handles errors successfully when updating hand', async () => {
+    const userId = 0;
+    const mockState = {
+      players: {
+        [userId]: {
+          hand: [
+              { shape: 'square', color: '#00f', selected: false },
+              { shape: 'square', color: '#00f', selected: false }
+          ]
+        }
+      }
+    };
+
+    const errorMessage = 'An error occured while updating the player hand: '
+    axios.post.mockRejectedValue({response: {data: errorMessage}});
+
+    const commit = jest.fn();
+    console.error = jest.fn();
+
+    await game.actions.updateHand({ commit, state: mockState}, userId);
+
+    expect(console.error).toHaveBeenCalledWith(errorMessage)
+});
+
+    // testing update player score
+    it('posts player score successfully', async () => {
+        const userId = 0;
+        const mockState = {
+          players: {
+            [userId]: {
+              score: 10,
+              hand: [
+                  { shape: 'square', color: '#00f', selected: false },
+                  { shape: 'square', color: '#00f', selected: false }
+              ]
+            }
+          }
+        };
+
+        const mockResponseData = [
+          { userId: 0, score: 10}
+        ];
+
+        axios.post.mockResolvedValue({ data: mockResponseData });
+
+        await game.actions.updatePlayerScore({state: mockState}, userId);
+
+        expect(axios.post).toHaveBeenCalledWith('http://127.0.0.1:5000/playerscore', { userId, score: mockState.players[userId].score})
+    });
+
+    it('handles errors successfully when updating player score', async () => {
+      const userId = 0;
+      const mockState = {
+        players: {
+          [userId]: {
+            score: 10,
+            hand: [
+                { shape: 'square', color: '#00f', selected: false },
+                { shape: 'square', color: '#00f', selected: false }
+            ]
+          }
+        }
+      };
+
+      const mockResponseData = [
+        { userId: 0, score: 10}
+      ];
+
+      const errorMessage = 'An error occured while updating the player score: '
+      axios.post.mockRejectedValue({response: {data: errorMessage}});
+
+      console.error = jest.fn();
+
+      await game.actions.updatePlayerScore({ state: mockState}, userId);
+  
+      expect(console.error).toHaveBeenCalledWith(errorMessage)
+  });
+
+  // testing set hand
+    it('correctly sets player hand with addition to hand', () => {
+      const userId = 0;
+      store = createStore({
+        modules: {
+            game: {
+                ...game,
+                state: {
+                    game: false,
+                    turn: 0,
+                    round: 0,
+                    finished: false,
+                    players: {
+                      [userId]: {
+                          name: 'player1',
+                          score: 0,
+                          hand: [],
+                      }
+                    },
+                },
+            },
+        },
+    });
+
+    const payload = {
+      playerId: userId,
+      hand: [['circle', '#f00'], ['circle', '#f00'], ['circle', '#f00']]
+    };
+      store.commit("setHand", payload);
+
+      const expectedHand = [{shape: 'circle', color: '#f00', selected: false}, {shape: 'circle', color: '#f00', selected: false}, {shape: 'circle', color: '#f00', selected: false}]
+
+      const expectedHandJSON = JSON.stringify(expectedHand);
+      const receivedHandJSON = JSON.stringify(store.state.game.players[userId].hand);
+
+      expect(receivedHandJSON).toEqual(expectedHandJSON);
+    });
+
+    it('correctly sets player hand with no addition to hand', () => {
+      const userId = 0;
+      store = createStore({
+        modules: {
+            game: {
+                ...game,
+                state: {
+                    game: false,
+                    turn: 0,
+                    round: 0,
+                    finished: false,
+                    players: {
+                      [userId]: {
+                          name: 'player1',
+                          score: 0,
+                          hand: [],
+                      }
+                    },
+                },
+            },
+        },
+    });
+
+    const payload = {
+      playerId: userId,
+      hand: []
+    };
+      store.commit("setHand", payload);
+
+      const expectedHand = []
+
+      const expectedHandJSON = JSON.stringify(expectedHand);
+      const receivedHandJSON = JSON.stringify(store.state.game.players[userId].hand);
+
+      expect(receivedHandJSON).toEqual(expectedHandJSON);
+    });
+
+    // testing remove tile from hand
+    it('correctly removes tile from hand at the front of hand', () => {
+      const userId = 0;
+      store = createStore({
+        modules: {
+            game: {
+                ...game,
+                state: {
+                    game: false,
+                    turn: 0,
+                    round: 0,
+                    finished: false,
+                    players: {
+                      [userId]: {
+                          name: 'player1',
+                          score: 0,
+                          hand:  [['square', '#f00'], ['clover', '#f00'], ['diamond', '#f00'], ['circle', '#f00']],
+                      }
+                    },
+                },
+            },
+        },
+    });
+
+    const tileIndex = 0;
+      store.commit("removeTileFromHand", {userId, tileIndex});
+
+      const expectedHand = [['clover', '#f00'], ['diamond', '#f00'], ['circle', '#f00']]
+
+      const expectedHandJSON = JSON.stringify(expectedHand);
+      const receivedHandJSON = JSON.stringify(store.state.game.players[userId].hand);
+
+      expect(receivedHandJSON).toEqual(expectedHandJSON);
+    });
+
+    it('correctly removes tile from hand at the end of hand', () => {
+      const userId = 0;
+      store = createStore({
+        modules: {
+            game: {
+                ...game,
+                state: {
+                    game: false,
+                    turn: 0,
+                    round: 0,
+                    finished: false,
+                    players: {
+                      [userId]: {
+                          name: 'player1',
+                          score: 0,
+                          hand:  [['square', '#f00'], ['clover', '#f00'], ['diamond', '#f00'], ['circle', '#f00']],
+                      }
+                    },
+                },
+            },
+        },
+    });
+
+    const tileIndex = 3;
+      store.commit("removeTileFromHand", {userId, tileIndex});
+
+      const expectedHand = [['square', '#f00'], ['clover', '#f00'], ['diamond', '#f00']]
+
+      const expectedHandJSON = JSON.stringify(expectedHand);
+      const receivedHandJSON = JSON.stringify(store.state.game.players[userId].hand);
+
+      expect(receivedHandJSON).toEqual(expectedHandJSON);
+    });
+
+    it('correctly removes tile from hand in the middle of hand', () => {
+      const userId = 0;
+      store = createStore({
+        modules: {
+            game: {
+                ...game,
+                state: {
+                    game: false,
+                    turn: 0,
+                    round: 0,
+                    finished: false,
+                    players: {
+                      [userId]: {
+                          name: 'player1',
+                          score: 0,
+                          hand:  [['square', '#f00'], ['clover', '#f00'], ['diamond', '#f00'], ['circle', '#f00']],
+                      }
+                    },
+                },
+            },
+        },
+    });
+
+    const tileIndex = 1;
+      store.commit("removeTileFromHand", {userId, tileIndex});
+
+      const expectedHand = [['square', '#f00'], ['diamond', '#f00'], ['circle', '#f00']]
+
+      const expectedHandJSON = JSON.stringify(expectedHand);
+      const receivedHandJSON = JSON.stringify(store.state.game.players[userId].hand);
+
+      expect(receivedHandJSON).toEqual(expectedHandJSON);
+    });
+
+    it('correctly does nothing if tile index is out of bounds', () => {
+      const userId = 0;
+      store = createStore({
+        modules: {
+            game: {
+                ...game,
+                state: {
+                    game: false,
+                    turn: 0,
+                    round: 0,
+                    finished: false,
+                    players: {
+                      [userId]: {
+                          name: 'player1',
+                          score: 0,
+                          hand:  [['square', '#f00'], ['clover', '#f00'], ['diamond', '#f00'], ['circle', '#f00']],
+                      }
+                    },
+                },
+            },
+        },
+    });
+
+    const tileIndex = 5;
+      store.commit("removeTileFromHand", {userId, tileIndex});
+
+      const expectedHand = [['square', '#f00'], ['clover', '#f00'], ['diamond', '#f00'], ['circle', '#f00']]
+
+      const expectedHandJSON = JSON.stringify(expectedHand);
+      const receivedHandJSON = JSON.stringify(store.state.game.players[userId].hand);
+
+      expect(receivedHandJSON).toEqual(expectedHandJSON);
     });
 });
