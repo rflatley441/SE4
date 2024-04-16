@@ -64,11 +64,10 @@ export default {
 
         calculateScore(userId) {
         
-        const playerHand = this.playerHand(userId);
+        // const playerHand = this.playerHand(userId);
         let amount = 0;
         let qwirkle = 0
-        amount = 6 - playerHand.length;
-        console.log("amount", amount)
+        amount = 6 - 3;
 
         if (amount === 6){
             qwirkle = 6
