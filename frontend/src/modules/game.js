@@ -30,9 +30,6 @@ const state = {
         {tile: null},
     ],
 };
-const sum = (a, b) => {
-    return a + b;
-};
 
 const getters = {
     gameState: (state) => {
@@ -138,7 +135,6 @@ const actions = {
     setGameOver({commit}, winner) {
         commit('gameOver', winner);
     }, 
-    sum,
 };
 
 const mutations = {
