@@ -82,7 +82,7 @@ export default {
         async placeTile(payload) {
             let tileSelected = null;
 
-            for (let i = 0; i < this.playerHand(this.userId).length; i++) {
+            for (let i = 0; i < this.players.playerHand; i++) {
                 if (this.playerHand(this.userId)[i].selected == true){
                     tileSelected = i;
                     

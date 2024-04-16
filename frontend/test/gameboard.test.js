@@ -45,11 +45,9 @@ describe('GameBoard', () => {
         });
     });
 
-    it('renders correctly', () => {
+    it('game renders correctly', () => {
         expect(wrapper.find('.game-board-container').exists()).toBe(true);
     });
-
-
 
     it('end turn button exists', () => {
         expect(wrapper.find('.end-turn-button').exists()).toBe(true);
@@ -61,32 +59,65 @@ describe('GameBoard', () => {
 
     it('renders all tiles correctly', () => {
         const tiles = wrapper.findAllComponents({ name: 'BoardTile' });
-        expect(tiles.length).toBe(144); // Ensure all tiles are rendered
+        expect(tiles.length).toBe(144); 
     });
 
     it('updates tile properties on placeTile', async () => {
-        expect(wrapper.vm.tileList[5].color).toBe('#fff'); // As per playerHand selection
+        expect(wrapper.vm.tileList[5].color).toBe('#fff'); 
         expect(wrapper.vm.tileList[5].shape).toBe("");
         expect(wrapper.vm.tileList[5].hidden).toBe(true);
     });
     
     it('changes player on endTurn', async () => {
         const initialPlayerId = store.state.game.turn;
-        await wrapper.vm.endTurn(); // Execute the endTurn method
+        await wrapper.vm.endTurn(); 
         const nextPlayerId = store.state.game.turn;
     
-        expect(nextPlayerId).not.toBe(initialPlayerId + 1); // Check if the player ID changed
+        expect(nextPlayerId).not.toBe(initialPlayerId + 1); 
       });
     
-    it('calculates and commits score correctly', () => {
+    it('calculates no tiles placed', () => {
         wrapper.vm.calculateScore(0);
         expect(3)
     });
 
-    it('calculates and commits score correctly', () => {
+    it('calculates tiles placed adding to score', () => {
         wrapper.vm.calculateScore(4);
         expect(1)
     });
+
+    it('calls Vuex actions correctly on endTurn', async () => {
+        const spyUpdateHand = jest.spyOn(wrapper.vm, 'updateHand');
+        const spyFetchHand = jest.spyOn(wrapper.vm, 'fetchHand');
+        const spyIncrementRound = jest.spyOn(wrapper.vm, 'incrementRound');
+
+        await wrapper.vm.endTurn();
+
+        expect(spyUpdateHand).toHaveBeenCalledWith(wrapper.vm.userId);
+        expect(spyFetchHand).toHaveBeenCalled();
+        expect(spyIncrementRound).toHaveBeenCalled();
+    });
+
+    it('renders all buttons and tiles as expected', () => {
+        const buttons = wrapper.findAll('.end-turn-button');
+        const tiles = wrapper.findAllComponents({ name: 'BoardTile' });
+
+        expect(buttons.length).toBe(1);
+        expect(tiles.length).toBe(144); 
+    });
     
+    it('places a tile correctly when selectTile is triggered', async () => {
+        const tileIndex = 5; 
+        const initialColor = wrapper.vm.tileList[tileIndex].color;
+        const initialShape = wrapper.vm.tileList[tileIndex].shape;
+        const initialHidden = wrapper.vm.tileList[tileIndex].hidden;
+
+        await wrapper.vm.placeTile({ position: tileIndex });
+        
+        expect(wrapper.vm.tileList[tileIndex].color).toBe(initialColor);
+        expect(wrapper.vm.tileList[tileIndex].shape).toBe(initialShape);
+        expect(wrapper.vm.tileList[tileIndex].hidden).toBe(true);
+    });
+
 
 });
