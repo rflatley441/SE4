@@ -119,5 +119,14 @@ describe('GameBoard', () => {
         expect(wrapper.vm.tileList[tileIndex].hidden).toBe(true);
     });
 
+    it('allows a player to select a tile from their hand UI ', async () => {
+        const firstTile = wrapper.findComponent({ name: 'BoardTile' });
+        if (firstTile.exists()) {
+            await firstTile.trigger('click');
+            expect(wrapper.vm.playerHand[0].selected).toBe(true);
+        } else {
+            throw new Error('Tile component not found');
+        }
+    });
 
 });
