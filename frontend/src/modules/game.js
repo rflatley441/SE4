@@ -166,7 +166,9 @@ const mutations = {
         console.log(state.players[0].hand)
     },
     removeTileFromHand(state, { userId, tileIndex }) {
-        state.players[userId].hand.splice(tileIndex, 1);
+        if(tileIndex < state.players[userId].hand.length) {
+            state.players[userId].hand.splice(tileIndex, 1);
+        }
         console.log("hand:", state.players[userId].hand)
     },
     updateTilesAmount: (state, amount) => (state.deck.remaining = amount),
