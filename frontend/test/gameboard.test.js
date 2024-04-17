@@ -16,11 +16,15 @@ describe('GameBoard', () => {
                         ...gameModule.state,
                         turn: 0,
                         players: [{ id: 0, hand: [{ id: 1, selected: true, color: 'red', shape: 'circle' }] }],
+                        deck: {
+                            remaining: 0, 
+                        }
                     },
                     mutations: {
                         ...gameModule.mutations,
-                        removeTileFromHand: jest.fn(), // Mock the function to prevent actual implementation
+                        removeTileFromHand: jest.fn(), 
                         updatePlayerScore: jest.fn(),
+                        setGameOver: jest.fn(),
                     },
                     actions: {
                         ...gameModule.actions,
@@ -128,5 +132,12 @@ describe('GameBoard', () => {
             throw new Error('Tile component not found');
         }
     });
+
+    it('no winner yet', async () => {
+        await wrapper.vm.determineWinner();
+        const winnerAnnouncement = store.state.game.winner; 
+        expect(winnerAnnouncement).toEqual({"winner": ""});
+    });
+
 
 });

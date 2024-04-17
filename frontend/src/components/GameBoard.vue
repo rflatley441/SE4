@@ -57,10 +57,29 @@ export default {
         };
     }, 
     computed: {
-        ...mapGetters(['players'])
+        ...mapGetters(['players', 'deck', 'winner', 'gameOver']),
     },
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver']),
+
+        determineWinner() {
+        let highestScore = -1;
+        let winner = ""
+        console.log("winner function")
+
+        if (this.deck.remaining == 0) {
+            this.players.forEach((player, index) => {
+            if (player.score > highestScore) {
+                highestScore = player.score;
+                winner = `Player ${index + 1} Wins!`;
+            }
+        });
+        //return winner
+        this.$store.dispatch('setGameOver', { winner: winner});
+     
+        }
+      
+    },
 
         calculateScore(userId) {
         
@@ -102,11 +121,14 @@ export default {
             }
         },
         async endTurn() {
+            this.calculateScore(this.userId);
             const nextPlayerId = (this.userId + 1) % 2;
             await this.updateHand(this.userId);
             await this.fetchHand();
             await this.incrementRound(nextPlayerId);
-
+                if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
+                    this.determineWinner();
+                }
             
         } 
 

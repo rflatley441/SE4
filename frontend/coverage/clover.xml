@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713303003336" clover="3.2.0">
-  <project timestamp="1713303003336" name="All files">
-    <metrics statements="227" coveredstatements="123" conditionals="22" coveredconditionals="6" methods="62" coveredmethods="13" elements="311" coveredelements="142" complexity="0" loc="227" ncloc="227" packages="3" files="9" classes="9"/>
+<coverage generated="1713327947181" clover="3.2.0">
+  <project timestamp="1713327947181" name="All files">
+    <metrics statements="224" coveredstatements="126" conditionals="22" coveredconditionals="6" methods="62" coveredmethods="15" elements="308" coveredelements="147" complexity="0" loc="224" ncloc="224" packages="3" files="9" classes="9"/>
     <package name="assets">
       <metrics statements="131" coveredstatements="77" conditionals="0" coveredconditionals="0" methods="24" coveredmethods="0"/>
       <file name="CircleTile.vue" path="/Users/ryanflatley/Documents/GitHub/lab-02-rflatley441/homework2-problemset-rflatley441/SE4/frontend/src/assets/CircleTile.vue">
@@ -176,30 +176,30 @@
         <line num="5" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
-        <line num="119" count="1" type="stmt"/>
-        <line num="121" count="1" type="stmt"/>
-        <line num="124" count="1" type="stmt"/>
-        <line num="125" count="1" type="stmt"/>
-        <line num="126" count="1" type="stmt"/>
-        <line num="129" count="1" type="stmt"/>
-        <line num="133" count="12" type="stmt"/>
-        <line num="134" count="12" type="stmt"/>
-        <line num="135" count="1728" type="stmt"/>
-        <line num="148" count="0" type="cond" truecount="2" falsecount="2"/>
+        <line num="140" count="1" type="stmt"/>
+        <line num="142" count="1" type="stmt"/>
+        <line num="145" count="1" type="stmt"/>
+        <line num="146" count="1" type="stmt"/>
+        <line num="147" count="1" type="stmt"/>
         <line num="150" count="1" type="stmt"/>
+        <line num="154" count="14" type="stmt"/>
+        <line num="155" count="14" type="stmt"/>
+        <line num="156" count="2016" type="stmt"/>
+        <line num="169" count="0" type="cond" truecount="2" falsecount="2"/>
+        <line num="171" count="1" type="stmt"/>
       </file>
     </package>
     <package name="modules">
-      <metrics statements="70" coveredstatements="23" conditionals="12" coveredconditionals="4" methods="33" coveredmethods="11"/>
+      <metrics statements="67" coveredstatements="26" conditionals="12" coveredconditionals="4" methods="33" coveredmethods="13"/>
       <file name="game.js" path="/Users/ryanflatley/Documents/GitHub/lab-02-rflatley441/homework2-problemset-rflatley441/SE4/frontend/src/modules/game.js">
-        <metrics statements="70" coveredstatements="23" conditionals="12" coveredconditionals="4" methods="33" coveredmethods="11"/>
+        <metrics statements="67" coveredstatements="26" conditionals="12" coveredconditionals="4" methods="33" coveredmethods="13"/>
         <line num="3" count="2" type="stmt"/>
         <line num="34" count="2" type="stmt"/>
         <line num="36" count="2" type="stmt"/>
-        <line num="43" count="1" type="stmt"/>
+        <line num="43" count="5" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="46" count="4" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
@@ -223,46 +223,43 @@
         <line num="93" count="0" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
         <line num="100" count="0" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
-        <line num="105" count="0" type="stmt"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="113" count="5" type="cond" truecount="4" falsecount="0"/>
-        <line num="114" count="4" type="stmt"/>
-        <line num="119" count="6" type="stmt"/>
-        <line num="120" count="6" type="stmt"/>
-        <line num="124" count="1" type="stmt"/>
-        <line num="125" count="1" type="stmt"/>
+        <line num="106" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="107" count="4" type="stmt"/>
+        <line num="112" count="6" type="stmt"/>
+        <line num="113" count="6" type="stmt"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="118" count="1" type="stmt"/>
+        <line num="121" count="5" type="stmt"/>
+        <line num="123" count="5" type="stmt"/>
+        <line num="124" count="5" type="stmt"/>
+        <line num="125" count="5" type="stmt"/>
+        <line num="126" count="5" type="stmt"/>
         <line num="128" count="5" type="stmt"/>
-        <line num="130" count="5" type="stmt"/>
-        <line num="131" count="5" type="stmt"/>
-        <line num="132" count="5" type="stmt"/>
-        <line num="133" count="5" type="stmt"/>
-        <line num="135" count="5" type="stmt"/>
-        <line num="139" count="1" type="stmt"/>
-        <line num="143" count="2" type="stmt"/>
+        <line num="132" count="3" type="stmt"/>
+        <line num="136" count="2" type="stmt"/>
+        <line num="138" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="142" count="0" type="stmt"/>
+        <line num="143" count="0" type="stmt"/>
         <line num="145" count="0" type="stmt"/>
-        <line num="146" count="0" type="stmt"/>
-        <line num="147" count="0" type="stmt"/>
-        <line num="148" count="0" type="stmt"/>
-        <line num="149" count="0" type="stmt"/>
-        <line num="150" count="0" type="stmt"/>
-        <line num="152" count="0" type="stmt"/>
-        <line num="153" count="7" type="stmt"/>
-        <line num="155" count="0" type="stmt"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="158" count="6" type="stmt"/>
+        <line num="146" count="7" type="stmt"/>
+        <line num="148" count="2" type="stmt"/>
+        <line num="149" count="2" type="stmt"/>
+        <line num="151" count="6" type="stmt"/>
+        <line num="153" count="0" type="stmt"/>
+        <line num="154" count="0" type="stmt"/>
+        <line num="157" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="159" count="0" type="stmt"/>
         <line num="160" count="0" type="stmt"/>
-        <line num="161" count="0" type="stmt"/>
-        <line num="164" count="0" type="stmt"/>
-        <line num="165" count="0" type="stmt"/>
         <line num="166" count="0" type="stmt"/>
-        <line num="167" count="0" type="stmt"/>
+        <line num="169" count="0" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="172" count="4" type="stmt"/>
         <line num="173" count="0" type="stmt"/>
-        <line num="176" count="0" type="stmt"/>
-        <line num="177" count="0" type="stmt"/>
-        <line num="179" count="4" type="stmt"/>
-        <line num="180" count="0" type="stmt"/>
-        <line num="183" count="2" type="stmt"/>
+        <line num="176" count="2" type="stmt"/>
       </file>
     </package>
   </project>

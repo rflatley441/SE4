@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.94% </span>
+                <span class="strong">37.68% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>23/72</span>
+                <span class='fraction'>26/69</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">39.39% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>11/33</span>
+                <span class='fraction'>13/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">32.85% </span>
+                <span class="strong">38.8% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>23/70</span>
+                <span class='fraction'>26/67</span>
             </div>
         
             
@@ -245,14 +245,7 @@
 <a name='L180'></a><a href='#L180'>180</a>
 <a name='L181'></a><a href='#L181'>181</a>
 <a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a>
-<a name='L186'></a><a href='#L186'>186</a>
-<a name='L187'></a><a href='#L187'>187</a>
-<a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L183'></a><a href='#L183'>183</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -294,10 +287,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -350,13 +343,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -390,7 +376,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -406,8 +392,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -486,7 +472,7 @@ const getters = {
     players: (state) =&gt; state.players,
     playerHand: <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >state.players[parseInt(id)].hand,</span></span>
     playerScore: <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >state.players[parseInt(id)].score,</span></span>
-    deck: <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.deck,</span>
+    deck: (state) =&gt; state.deck,
     pile: <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.pile,</span>
     gameOver: <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.finished,</span>
     winner: <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.winner,</span>
@@ -539,16 +525,9 @@ const actions = {
         }
     },
 &nbsp;
-<span class="fstat-no" title="function not covered" >    as</span>ync updatePlayerScore({state}, userId) {
-<span class="cstat-no" title="statement not covered" >        try { </span>
-            const response = <span class="cstat-no" title="statement not covered" >await axios.post("http://127.0.0.1:5000/playerscore", {</span>
-                userId: userId,
-                score: state.players[userId].score,
-            });
-<span class="cstat-no" title="statement not covered" >            console.log("update hand:", response)</span>
-        } catch (error){ 
-<span class="cstat-no" title="statement not covered" >            console.error(error.response.data)</span>
-        }
+<span class="fstat-no" title="function not covered" >    up</span>datePlayerScore({commit}, {userId, amount}) {
+<span class="cstat-no" title="statement not covered" >        commit('updatePlayerScore', { userId: userId, amount: amount });</span>
+&nbsp;
     },    
 &nbsp;
     updateTilesAmount({commit}, amount) {
@@ -594,9 +573,9 @@ const mutations = {
     },
     setGameStart: <span class="fstat-no" title="function not covered" >(s</span>tate, value) =&gt; (<span class="cstat-no" title="statement not covered" >state.game = value)</span>,
     setTurn: (state, userId) =&gt; (state.turn = userId),
-    gameOver: <span class="fstat-no" title="function not covered" >(s</span>tate, winner) =&gt; {
-<span class="cstat-no" title="statement not covered" >        state.winner = winner;</span>
-<span class="cstat-no" title="statement not covered" >        state.finished = true;</span>
+    gameOver: (state, winner) =&gt; {
+        state.winner = winner;
+        state.finished = true;
     },
     incrementRound: (state) =&gt; (state.round++),
     setDeck: <span class="fstat-no" title="function not covered" >(s</span>tate, deck) =&gt; {
@@ -637,7 +616,7 @@ export default game;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-16T21:30:03.324Z
+                at 2024-04-17T04:25:47.155Z
             </div>
         <script src="../prettify.js"></script>
         <script>
