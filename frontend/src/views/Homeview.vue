@@ -2,7 +2,7 @@
     <div id="app">
         <NavBar/>
         <div id="content">
-            <h1 style="font-size:80px"> Welcome, User!</h1>
+            <h1 style="font-size:80px"> Welcome, {{ this.username }}!</h1>
             <h2 style="font-size:40px">What would you like to do today?<br></h2>
             <div id="inputsContainer">
                 <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">PLAY GAME</router-link></button>
@@ -169,12 +169,35 @@ import CloverTile from '@/assets/CloverTile.vue';
 import DiamondTile from '@/assets/DiamondTile.vue';
 import Star4ptTile from '@/assets/Star4ptTile.vue';
 import SquareTile from '@/assets/SquareTile.vue';
+import { getDatabase, ref, get} from 'firebase/database';
+import { getAuth } from 'firebase/auth';
 
  export default {
     name: "HomeView",
     components: {
         Star8ptTile, CloverTile, DiamondTile, Star4ptTile, SquareTile, NavBar
         // ,CircleTile
+    },
+    data() {
+        return {
+            username: null,
+        };
+    },
+    async created() {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        const db = getDatabase();
+        const userRef = ref(db, 'users/' + user.uid + '/username');
+        const usernameSnapshot = await get(userRef);
+
+        console.log(usernameSnapshot)
+
+        if (usernameSnapshot.exists()) {
+            this.username = usernameSnapshot.val();
+        } else {
+            this.username = "User";
+        }
     }
  }
 </script>
