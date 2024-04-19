@@ -38,6 +38,7 @@ import GameBoard from '@/components/GameBoard.vue';
 import PlayerHand from '@/components/PlayerHand.vue';
 import PlayerScore from '@/components/PlayerScore.vue';
 import { mapActions, mapGetters } from 'vuex';
+import { getAuth } from 'firebase/auth';
 
 export default {
     name: "GamePlayView",
@@ -47,11 +48,24 @@ export default {
         PlayerScore,
         NavBar,
     },
+    data() {
+        return {
+            userId: null,
+        };
+    },
     computed: {
         ...mapGetters(['playerHand', 'gameState']),
     },
     methods: {
         ...mapActions(['gameStart']),
+    },
+    created() {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        
+        if (user) {
+            this.userId = user.uid;
+        }
     },
     async mounted() {
         await this.gameStart();

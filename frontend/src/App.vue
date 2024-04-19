@@ -3,9 +3,20 @@
 </template>
 
 <script>
+import io from 'socket.io-client';
+
+const socket = io("http://localhost:8080")
 
 export default {
   name: 'App',
+  data() {
+    return {
+      userId: null
+    };
+  },
+  created() {
+    socket.emit("hello")
+  }
 }
 </script>
 
