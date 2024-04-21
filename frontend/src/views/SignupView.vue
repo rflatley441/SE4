@@ -1,130 +1,138 @@
 <template>
-    <div id="app">
-        <div id="content">
-            <div id = signuptitle>Sign Up</div>
-            <div id="inputsContainer">
-
-                <div class="inputLabel">
-                    Username
-                </div>
-            <div class="inputHolder">
-                <input type="text" class="inputBox" v-model="username" placeholder="Username" />
-            </div>
-
-            <div class="inputLabel" style = "padding-top: 10px;">
-                    Email
-                </div>
-            <div class="inputHolder" style="padding-bottom: 10px;">
-                <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
-            </div>
-
-            <div class="inputLabel" style = "padding-top: 10px;">
-                    Password
-                </div>
-            <div class="inputHolder" style="padding-bottom: 20px;">
-                <input type="password" class="inputBox" v-model="password" placeholder="Password" />
-            </div>
-
-                <button class="create-account-button" @click.prevent="signUp">
-                CREATE ACCOUNT
-                </button>
-            </div>
-            <div id="footer">
-                <router-link to="/" class="footText">Return to Login</router-link>
-            </div>
-            <DiamondTile id="diamondTile" fillColor="green" />
-            <CircleTile id="circleTile" fillColor="red" />
-            <CloverTile id="cloverTile" fillColor="orange" />
+  <div id="app">
+    <div id="content">
+      <div id="signuptitle">Sign Up</div>
+      <div id="inputsContainer">
+        <div class="inputLabel">Username</div>
+        <div class="inputHolder">
+          <input
+            type="text"
+            class="inputBox"
+            v-model="username"
+            placeholder="Username"
+          />
         </div>
+
+        <div class="inputLabel" style="padding-top: 10px">Email</div>
+        <div class="inputHolder" style="padding-bottom: 10px">
+          <input
+            type="text"
+            class="inputBox"
+            v-model="email"
+            placeholder="Email Address"
+          />
+        </div>
+
+        <div class="inputLabel" style="padding-top: 10px">Password</div>
+        <div class="inputHolder" style="padding-bottom: 20px">
+          <input
+            type="password"
+            class="inputBox"
+            v-model="password"
+            placeholder="Password"
+          />
+        </div>
+
+        <button class="create-account-button" @click.prevent="signUp">
+          CREATE ACCOUNT
+        </button>
+      </div>
+      <div id="footer">
+        <router-link to="/" class="footText">Return to Login</router-link>
+      </div>
+      <DiamondTile id="diamondTile" fillColor="green" />
+      <CircleTile id="circleTile" fillColor="red" />
+      <CloverTile id="cloverTile" fillColor="orange" />
     </div>
+  </div>
 </template>
 
 <style scoped>
 #app {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
 }
 
 #diamondTile {
-    position: absolute;
-    left: -40px;
-    top: 750px;
+  position: absolute;
+  left: -40px;
+  top: 750px;
 }
 #circleTile {
-    position: absolute;
-    right: -60px;
-    top: 700px;
+  position: absolute;
+  right: -60px;
+  top: 700px;
 }
 
 #cloverTile {
-    position: absolute;
-    right: -70px;
-    top: 200px;
+  position: absolute;
+  right: -70px;
+  top: 200px;
 }
 
 #signuptitle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    font-size: 100px;
-    font-weight: 80;
-    color: black;
-    font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  font-size: 100px;
+  font-weight: 80;
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #inputsContainer {
-    background: #b3daff;
-    width: 900px;
-    padding-left: 60px;
-    padding-right: 60px;
-    padding-top: 40px;
-    padding-bottom: 40px;
+  background: #b3daff;
+  width: 900px;
+  padding-left: 60px;
+  padding-right: 60px;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .inputHolder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .inputBox {
-    width: 900px;
-    border: none;
-    font-size: 30px;
-    height: 60px;
-    margin-top: 5px;
-    padding-left: 10px;
+  width: 900px;
+  border: none;
+  font-size: 30px;
+  height: 60px;
+  margin-top: 5px;
+  padding-left: 10px;
 }
 
 .inputLabel {
-    font-size: 35px;
-    font-weight: 600;
-    color: black;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: left;
+  font-size: 35px;
+  font-weight: 600;
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
 }
 #passwordrequirments {
-    font-size: 15px;
-    font-weight: 100;
-    color: black;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: right;
+  font-size: 15px;
+  font-weight: 100;
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: right;
 }
 
 #footer {
-    display: flex;
-    justify-content: space-evenly;
-    padding-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  padding-top: 20px;
 }
 
 .footText {
-    font-size: 35px;
-    font-weight: 300;
-    color: #2490F3;
-    cursor: pointer;
+  font-size: 35px;
+  font-weight: 300;
+  color: #2490f3;
+  cursor: pointer;
 }
 
 .create-account-button {
@@ -141,29 +149,32 @@
 }
 
 .create-account-button:hover {
-  background-color: #0056b3; /* Darker blue on hover, adjust as needed */ 
-  transform: translateY(2px); /* Optional: if the button moves slightly on hover */
+  background-color: #0056b3; /* Darker blue on hover, adjust as needed */
+  transform: translateY(
+    2px
+  ); /* Optional: if the button moves slightly on hover */
 }
 </style>
 
-
 <script>
-import { ref } from 'vue';
+import { ref } from "vue";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref as dbRef, set } from "firebase/database"; 
-import { useRouter } from 'vue-router'; 
-import DiamondTile from '@/assets/DiamondTile.vue';
-import CircleTile from '@/assets/CircleTile.vue';
-import CloverTile from '@/assets/CloverTile.vue';
+import { getDatabase, ref as dbRef, set } from "firebase/database";
+import { useRouter } from "vue-router";
+import DiamondTile from "@/assets/DiamondTile.vue";
+import CircleTile from "@/assets/CircleTile.vue";
+import CloverTile from "@/assets/CloverTile.vue";
 
 export default {
   name: "LoginView",
   components: {
-    DiamondTile, CircleTile, CloverTile
+    DiamondTile,
+    CircleTile,
+    CloverTile,
   },
 
   setup() {
-    const router = useRouter(); 
+    const router = useRouter();
     const email = ref("");
     const username = ref("");
     const password = ref("");
@@ -175,15 +186,15 @@ export default {
       createUserWithEmailAndPassword(auth, email.value, password.value)
         .then((userCredential) => {
           console.log("Success", userCredential.user);
-          const db = getDatabase(); 
-          return set(dbRef(db, 'users/' + userCredential.user.uid), {
+          const db = getDatabase();
+          return set(dbRef(db, "users/" + userCredential.user.uid), {
             username: username.value,
             email: email.value,
           });
         })
         .then(() => {
           console.log("User data stored in Realtime Database");
-          router.push('/Home');
+          router.push("/Home");
         })
         .catch((error) => {
           console.error("Signup failed", error);
@@ -192,6 +203,6 @@ export default {
     };
 
     return { username, email, password, errorMessage, signUp };
-  }
-}
+  },
+};
 </script>
