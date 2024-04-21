@@ -22,16 +22,25 @@
                         <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
                     </div>
                 </div>
-
             </div>
 
             <div id="volumeContainer">
-            <div id="volumeTitle">Volume</div>
-            <div class="slidecontainer">
-                <input type="range" min="1" max="100" value="50" class="slider" id="myRange">   
+                <div id="volumeTitle">Volume</div>
+                <div class="slidecontainer">
+                    <input type="range" min="1" max="100" value="50" class="slider" id="myRange" />
+                </div>
             </div>
-            </div>
+            <div id="colorblindModeBox">
+                <div class="toggleContainer">
+                    <!-- This is the text -->
 
+                    <label for="colorblindModeToggle">Colorblind Mode </label>
+                    <!-- This is the toggle button -->
+
+                    <input type="checkbox" id="colorblindModeToggle" />
+                </div>
+                <!-- Your other colorblind mode box content here -->
+            </div>
         </div>
     </div>
 </template>
@@ -68,7 +77,6 @@
     align-items: center;
     width: 100vw;
 }
-
 
 #title {
     display: flex;
@@ -115,13 +123,18 @@
 }
 
 #volumeTitle {
-    position: absolute; /* Change this from relative to absolute */
-    top: -40px; /* Adjust this value to move the title up */
-    left: 0; /* Adjust this value to move the title to the left */
-    font-size: 35px; /* Adjust this value to change the title size */
-    font-weight:bold;
+    position: absolute;
+    /* Change this from relative to absolute */
+    top: -40px;
+    /* Adjust this value to move the title up */
+    left: 0;
+    /* Adjust this value to move the title to the left */
+    font-size: 35px;
+    /* Adjust this value to change the title size */
+    font-weight: bold;
 }
-#volumeContainer { 
+
+#volumeContainer {
     background: #b3daff;
     width: 990px;
     padding-top: 30px;
@@ -130,42 +143,89 @@
     padding-right: 60px;
     margin-top: 50px;
     position: relative;
-    display: flex; /* Add this line */
-    justify-content: center; /* Add this line */
-    align-items: center; /* Add this line */
-    flex-direction: column; /* Add this line */
+    display: flex;
+    /* Add this line */
+    justify-content: center;
+    /* Add this line */
+    align-items: center;
+    /* Add this line */
+    flex-direction: column;
+    /* Add this line */
 }
 
 .slidecontainer {
-  width: 80%;
+    width: 80%;
 }
 
 /* The slider itself */
 .slider {
-  -webkit-appearance: none;  /* Override default CSS styles */
-  appearance: none;
-  width: 100%; /* Full-width */
-  height: 25px; /* Specified height */
-  background: #000000; /* Grey background */
-  outline: none; /* Remove outline */
-  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-  transition: opacity .2s;
+    -webkit-appearance: none;
+    /* Override default CSS styles */
+    appearance: none;
+    width: 100%;
+    /* Full-width */
+    height: 25px;
+    /* Specified height */
+    background: #000000;
+    /* Grey background */
+    outline: none;
+    /* Remove outline */
+    opacity: 0.7;
+    /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: 0.2s;
+    /* 0.2 seconds transition on hover */
+    transition: opacity 0.2s;
 }
 
 /* Mouse-over effects */
 .slider:hover {
-  opacity: 1; /* Fully shown on mouse-over */
+    opacity: 1;
+    /* Fully shown on mouse-over */
 }
 
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 .slider::-webkit-slider-thumb {
-  -webkit-appearance: none; /* Override default look */
-  appearance: none;
-  width: 25px; /* Set a specific slider handle width */
-  height: 25px; /* Slider handle height */
-  background: #04AA6D; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+    -webkit-appearance: none;
+    /* Override default look */
+    appearance: none;
+    width: 25px;
+    /* Set a specific slider handle width */
+    height: 25px;
+    /* Slider handle height */
+    background: #04aa6d;
+    /* Green background */
+    cursor: pointer;
+    /* Cursor on hover */
+}
+
+.toggleContainer {
+    display: flex;
+    /* Add this line */
+    align-items: center;
+    /* Add this line */
+}
+
+#colorblindModeBox {
+    background: #b3daff;
+    width: 300px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 60px;
+    margin-top: 50px;
+
+}
+
+label[for="colorblindModeToggle"] {
+    font-size: 30px;
+    /* Adjust this value to change the text size */
+    font-weight: bold;
+    /* This makes the text bold */
+}
+
+#colorblindModeToggle {
+    transform: scale(3);
+    /* Adjust this value to change the checkbox size */
+    margin-right: 60px;
 }
 
 #passwordrequirments {
@@ -191,14 +251,11 @@
 </style>
 
 <script>
-
-import NavBar from '@/components/NavBar.vue';
+import NavBar from "@/components/NavBar.vue";
 export default {
     name: "SettingsView",
     components: {
-        NavBar
+        NavBar,
     },
-}
-
-
+};
 </script>
