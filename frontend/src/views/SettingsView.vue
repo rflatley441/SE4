@@ -30,6 +30,7 @@
                     <input type="range" min="1" max="100" value="50" class="slider" id="myRange" />
                 </div>
             </div>
+<div id="bottomContainer">
             <div id="colorblindModeBox">
                 <div class="toggleContainer">
                     <!-- This is the text -->
@@ -41,6 +42,10 @@
                 </div>
                 <!-- Your other colorblind mode box content here -->
             </div>
+            <div id="returnToHomeText">
+                <router-link to="/home" class="footText">Return to Home</router-link>
+            </div>
+        </div>
         </div>
     </div>
 </template>
@@ -113,6 +118,9 @@
     margin-top: 5px;
     padding-left: 10px;
 }
+#returnToHomeText {
+    margin-left: 850px; /* Add this line to create space between the #colorblindModeBox and the text */
+    margin-top: -55px; /* Add this line to move the text up */}
 
 .inputLabel {
     font-size: 35px;
@@ -133,6 +141,12 @@
     /* Adjust this value to change the title size */
     font-weight: bold;
 }
+.colorblindContainer {
+    display: flex; /* Add this line */
+    align-items: center; /* Add this line */
+}
+
+
 
 #volumeContainer {
     background: #b3daff;
@@ -226,6 +240,13 @@ label[for="colorblindModeToggle"] {
     transform: scale(3);
     /* Adjust this value to change the checkbox size */
     margin-right: 60px;
+}
+
+.bottomContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Add this line */
+    padding-top: 20px;
 }
 
 #passwordrequirments {
