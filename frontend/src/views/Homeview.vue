@@ -165,6 +165,7 @@ h1 {
 import NavBar from '@/components/NavBar.vue';
 import Star8ptTile from '@/assets/Star8ptTile.vue';
 // import CircleTile from '@/assets/CircleTile.vue';
+import socket from '@/socket';
 import CloverTile from '@/assets/CloverTile.vue';
 import DiamondTile from '@/assets/DiamondTile.vue';
 import Star4ptTile from '@/assets/Star4ptTile.vue';
@@ -186,6 +187,11 @@ import { getAuth } from 'firebase/auth';
     async created() {
         const auth = getAuth();
         const user = auth.currentUser;
+        console.log("before");
+        // socket.emit('userConnected', user);
+        console.log(socket)
+        socket.emit("userConnected", { message: "pls work" } );
+        console.log("after");
 
         const db = getDatabase();
         const userRef = ref(db, 'users/' + user.uid + '/username');
