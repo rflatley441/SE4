@@ -39,9 +39,6 @@ export default {
     components: {
         BoardTile,
     },
-    // mounted() {
-    // this.playerHand(this.userId).$on('update-highlighted', this.updateHighlightedBoardTiles);
-    // },
     setup() {
         const tileList = ref([])
         var tilesPlayed = new Set()
@@ -67,6 +64,8 @@ export default {
     computed: {
         ...mapGetters(['players'])
     },
+    expose: ['updateHighlightedBoardTiles'],
+    
     methods: {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
 
@@ -94,7 +93,7 @@ export default {
             }
         },
 
-        async updateHighlightedBoardTiles(){
+        updateHighlightedBoardTiles(){
             let dummyPayload = {
                 position: 0,
             };

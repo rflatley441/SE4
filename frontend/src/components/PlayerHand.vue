@@ -18,7 +18,9 @@
 
 <script>
 import BoardTile from './BoardTile.vue';
+// import GameBoard from './GameBoard.vue';
 import { mapGetters } from 'vuex';
+
 
     export default {
         name: "PlayerHand",
@@ -46,7 +48,7 @@ import { mapGetters } from 'vuex';
                 if (this.gameState.turn == this.userId) {
                     this.playerHand(this.userId)[payload.position].selected = true;
                 }
-                // this.$emit('update-highlighted');
+                this.$emit('updateHighlighted');
             }
         },
     }
