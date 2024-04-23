@@ -76,56 +76,18 @@ export default {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver']),
 
         calculateScore(userId) {
-    let baseScore = 0;
-    let bonusScore = 0;
+        
+        const playerHand = this.playerHand(userId);
+        let amount = 0;
+        let qwirkle = 0
+        amount = 6 - playerHand.length;
 
-    this.tilesThisTurn.forEach((position) => {
-        let verticalScore = 1;
-        let horizontalScore = 1;
-
-        let up = position - 12;
-        while (this.tilesPlayed.has(up)) {
-            verticalScore++;
-            up -= 12;
+        if (amount === 6){
+            qwirkle = 6
         }
 
-        let down = position + 12;
-        while (this.tilesPlayed.has(down)) {
-            verticalScore++;
-            down += 12;
-        }
-
-        let left = position - 1;
-        while (position % 12 !== 0 && this.tilesPlayed.has(left)) {
-            horizontalScore++;
-            left--;
-        }
-
-        let right = position + 1;
-        while (position % 12 !== 11 && this.tilesPlayed.has(right)) {
-            horizontalScore++;
-            right++;
-        }
-
-        if (verticalScore === 6) {
-            bonusScore += 6;
-        }
-        if (horizontalScore === 6) {
-            bonusScore += 6;
-        }
-
-        if (verticalScore > 1) {
-            baseScore += verticalScore - 1;
-        }
-        if (horizontalScore > 1) {
-            baseScore += horizontalScore - 1;
-        }
-    });
-
-    baseScore += this.tilesThisTurn.size;
-
-    let totalScore = baseScore + bonusScore;
-    this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
+        let turn_score = qwirkle + amount
+        this.$store.dispatch('updatePlayerScore', { userId: userId, amount: turn_score });
 },
 
 
@@ -141,7 +103,6 @@ export default {
                 winner = `Player ${index + 1} Wins!`;
             }
         });
-        //return winner
         this.$store.dispatch('setGameOver', { winner: winner});
      
         }
