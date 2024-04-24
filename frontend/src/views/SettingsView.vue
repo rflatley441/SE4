@@ -50,7 +50,6 @@
 
             <input type="checkbox" id="colorblindModeToggle" />
           </div>
-          <!-- Your other colorblind mode box content here -->
         </div>
         <div id="returnToHomeText">
           <router-link to="/home" class="footText">Return to Home</router-link>
@@ -62,46 +61,8 @@
 
 <style scoped>
 
-#profile_picContainer {
-  position: center;
-  z-index: 0;
-  top: 100; /* Adjust as needed */
-  left: 100; /* Adjust as needed */
-  left: 260px; /* Adjust as needed */
-}
-
-.profile-pic {
-  width: 300; /* Adjust as needed */
-  height: 300; /* Adjust as needed */
-}
-
-#changePhotoBox {
-  position: relative;
-  z-index: 0;
-}
-
-.passwordContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 25px;
-}
-
-.forgotPassword {
-  color: blue;
-  cursor: pointer;
-  font-size: 15px;
-}
-
 #content {
   margin-top: 20px;
-}
-
-.innerBox {
-  width: 80%;
-  /* Adjust this value to make the box narrower */
-  margin-right: 20px;
-  /* Adjust this value to move the box to the right */
 }
 
 #app {
@@ -123,6 +84,41 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* the position of the profile picture */
+#profile_picContainer {
+  position: center;
+  z-index: 0;
+  top: 100; 
+  left: 260px; 
+  width: 200px;
+  height: 200px;
+  position: relative;
+  padding-bottom: 500px;
+  padding-top: -100px;
+}
+
+/* the actual profile picture */
+.profile-pic {
+  width: 300; 
+  height: 300; 
+}
+
+#changePhotoBox {
+  background: #b3daff;
+  width: 500px;
+  height: 20px;
+  padding-left: 0px;
+  padding-top: 30px;
+  margin-top: 210px;
+  margin-right: -500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  z-index: 0;
+}
+
 label[for="changePhotoBox"] {
   font-size: 30px;
   font-weight: bold;
@@ -133,56 +129,22 @@ label[for="changePhotoBox"] {
   padding-bottom: 30px;
 }
 
-#changePhotoBox {
-  background: #b3daff;
-  width: 500px;
-  height: 20px;
-  padding-left: 0px;
-  padding-top: 30px;
-  margin-top: 350px;
-  margin-right: -500px;
+.passwordContainer {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  flex-direction: column;
-  position: relative;
+  margin-top: 25px;
 }
 
-.changePhotoHolder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.forgotPassword {
+  color: blue;
+  cursor: pointer;
+  font-size: 15px;
 }
 
-.changePhotoButton {
-  background: transparent;
-  border: none;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  font-size: 35px;
-  /* Adjust size as needed */
-  color: #000;
-  /* Adjust color as needed */
-  padding-bottom: 25px;
-}
-
-#changePhotoContainer img {
-  width: 200px;
-  /* adjust as needed */
-  height: 200px;
-  /* adjust as needed */
-  padding-bottom: 500px;
-  padding-top: 50px;
-}
-
-#profile_picContainer {
-  width: 200px;
-  /* adjust as needed */
-  height: 200px;
-  /* adjust as needed */
-  position: relative;
-  padding-bottom: 500px;
-  padding-top: -100px;
+.innerBox {
+  width: 80%;
+  margin-right: 20px;
 }
 
 #inputsContainer {
@@ -194,6 +156,7 @@ label[for="changePhotoBox"] {
   padding-bottom: 40px;
   margin-left: 550px;
   margin-right:200px;
+  margin-top: -220px;
 }
 
 .inputHolder {
@@ -211,13 +174,6 @@ label[for="changePhotoBox"] {
   padding-left: 10px;
 }
 
-#returnToHomeText {
-  margin-left: 850px;
-  /* Add this line to create space between the #colorblindModeBox and the text */
-  margin-top: -55px;
-  /* Add this line to move the text up */
-}
-
 .inputLabel {
   font-size: 35px;
   font-weight: 600;
@@ -226,15 +182,16 @@ label[for="changePhotoBox"] {
   text-align: left;
 }
 
+#returnToHomeText {
+  margin-left: 850px;
+  margin-top: -55px;
+}
+
 #volumeTitle {
   position: absolute;
-  /* Change this from relative to absolute */
   top: -40px;
-  /* Adjust this value to move the title up */
   left: 0;
-  /* Adjust this value to move the title to the left */
   font-size: 35px;
-  /* Adjust this value to change the title size */
   font-weight: bold;
   color: black;
 }
@@ -319,7 +276,6 @@ label[for="colorblindModeToggle"] {
   color: black;
 }
 
-
 #colorblindModeToggle {
   transform: scale(3);
   /* Adjust this value to change the checkbox size */
@@ -335,13 +291,8 @@ label[for="colorblindModeToggle"] {
 
 #topContainer {
   display: flex;
-}
-
-.topContainer {
-  display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 20px;
 }
 
 .footText {
@@ -355,8 +306,8 @@ label[for="colorblindModeToggle"] {
 <script>
 import 'firebase/firestore';
 import NavBar from "@/components/NavBar.vue";
-import { getAuth } from 'firebase/auth';
-import { getDatabase, ref, get } from 'firebase/database';
+// import { getAuth } from 'firebase/auth';
+// import { getDatabase, ref, get } from 'firebase/database';
 
 export default {
   name: "SettingsView",
@@ -368,18 +319,18 @@ export default {
       profile_pic: require('./Screenshot 2024-04-23 211431.png'),
     };
   },
-  async created() {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const db = getDatabase();
-    const userRef = ref(db, 'users/' + user.uid + '/profile_pic');
-    const profile_pic = await get(userRef);
-    console.log(user);
-    if (profile_pic.exists()) {
-      this.profile_pic = profile_pic.val();
-    } else {
-      this.profile_pic = require('./Screenshot 2024-04-23 211431.png');
-    }
-  }
+  // async created() {
+  //   const auth = getAuth();
+  //   const user = auth.currentUser;
+  //   const db = getDatabase();
+  //   const userRef = ref(db, 'users/' + user.uid + '/profile_pic');
+  //   const profile_pic = await get(userRef);
+  //   console.log(user);
+  //   if (profile_pic.exists()) {
+  //     this.profile_pic = profile_pic.val();
+  //   } else {
+  //     this.profile_pic = require('./Screenshot 2024-04-23 211431.png');
+  //   }
+  // }
 };
 </script>
