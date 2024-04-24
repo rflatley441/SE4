@@ -8,6 +8,7 @@ import PasswordPage from '../views/PasswordView.vue'
 import GamePlayView from '@/views/GamePlayView.vue'
 import HomeView from '@/views/Homeview.vue'
 import FAQView from '@/views/FAQView.vue'
+import StatsView from '@/views/StatsView.vue'
 
 const requireAuth = (to, from, next) => {
   const auth = getAuth();
@@ -48,6 +49,10 @@ const router = createRouter({
     {
       path: "/faq",
       component: FAQView,
+    },
+    {
+      path: "/stats",
+      component: StatsView,
     }
 
   ]

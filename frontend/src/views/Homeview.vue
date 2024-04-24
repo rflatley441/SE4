@@ -7,7 +7,7 @@
             <div id="inputsContainer">
                 <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">PLAY GAME</router-link></button>
                 <br>
-                <button class="btn success" style="margin-top: 30px;">VIEW PLAYER STATISTICS</button>
+                <button class="btn success" style="margin-top: 30px;"><router-link to="/stats" class="footText">VIEW PLAYER STATISTICS</router-link></button>
                 <br>
                 <button class="btn success" style="margin-top: 30px;">VIEW FRIENDS LIST</button>
             </div>
@@ -100,7 +100,9 @@ h1 {
 }
 
 /* On mouse-over */
-.btn:hover {background: #a8a5a5;}
+.btn:hover {
+    background: #a8a5a5;
+}
 
 .success {
     background-color: #b3daff;
@@ -138,8 +140,9 @@ h1 {
 .footText {
     font-size: 35px;
     font-weight: 300;
-    color: #2490F3;
+    color: black;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .profile-picture {
