@@ -126,11 +126,12 @@ img {
 <script>
 import { ref } from 'vue';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, getDoc } from 'firebase/firestore';  // Import Firestore methods
 import { useRouter } from 'vue-router';
 import Star8ptTile from '@/assets/Star8ptTile.vue';
 import CircleTile from '@/assets/CircleTile.vue';
 
- export default {
+export default {
     name: "LoginView",
     components: {
         Star8ptTile, CircleTile
@@ -146,10 +147,22 @@ import CircleTile from '@/assets/CircleTile.vue';
             const auth = getAuth();
             signInWithEmailAndPassword(auth, email.value, password.value)
                 .then((userCredential) => {
-                    console.log(userCredential, "success")
-                    router.push('/home');
+                    const db = getFirestore();  
+                    const userDocRef = doc(db, 'users', userCredential.user.uid); 
+
+                    return getDoc(userDocRef)  
+                        .then(docSnapshot => {
+                            if (docSnapshot.exists()) {
+                                console.log("User document found:", docSnapshot.data());
+                                router.push('/home');
+                            } else {
+                                console.log("No user document found");
+                                errorMessage.value = "No user record found. Please complete your registration.";
+                            }
+                        });
                 })
                 .catch((error) => {
+                    console.error("Authentication failed:", error);
                     errorMessage.value = error.message;
                 });
         };
