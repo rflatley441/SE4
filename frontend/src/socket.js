@@ -24,9 +24,9 @@ socket.on("disconnect", () => {
   console.log("Socket disconnected");
 });
 
-socket.on("userConnected", (message) => {
-  console.log("User connected: ", message);
-});
+// socket.on("userConnected", (message) => {
+//   console.log("User connected: ", message);
+// });
 
 // socket.on("userConnected", (user) => {
 //   console.log("User connected: ", user);
