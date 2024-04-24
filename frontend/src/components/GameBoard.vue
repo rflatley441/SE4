@@ -64,7 +64,7 @@ export default {
     computed: {
         ...mapGetters(['players'])
     },
-    expose: ['updateHighlightedBoardTiles'],
+    expose: ['updateHighlightedBoardTiles'], // used by GamePlayView
     
     methods: {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound']),
