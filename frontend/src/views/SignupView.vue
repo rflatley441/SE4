@@ -159,14 +159,14 @@
 <script>
 import { ref } from "vue";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref as dbRef, set } from "firebase/database";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { useRouter } from "vue-router";
 import DiamondTile from "@/assets/DiamondTile.vue";
 import CircleTile from "@/assets/CircleTile.vue";
 import CloverTile from "@/assets/CloverTile.vue";
 
 export default {
-  name: "LoginView",
+  name: "SignUpView", 
   components: {
     DiamondTile,
     CircleTile,
@@ -181,20 +181,20 @@ export default {
     const errorMessage = ref("");
 
     const signUp = () => {
-      console.log("Sign Up clicked");
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email.value, password.value)
         .then((userCredential) => {
-          console.log("Success", userCredential.user);
-          const db = getDatabase();
-          return set(dbRef(db, "users/" + userCredential.user.uid), {
+          const db = getFirestore();
+          const userDocRef = doc(db, "users", userCredential.user.uid);
+
+          return setDoc(userDocRef, {
             username: username.value,
-            email: email.value,
+            email: email.value
           });
         })
         .then(() => {
-          console.log("User data stored in Realtime Database");
-          router.push("/Home");
+          console.log("User data stored in Firestore");
+          router.push("/home");
         })
         .catch((error) => {
           console.error("Signup failed", error);
