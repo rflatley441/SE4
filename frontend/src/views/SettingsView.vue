@@ -3,39 +3,33 @@
     <NavBar />
     <div id="content">
       <div id="title">User Settings</div>
-      <div id="inputsContainer">
-        <ProfilePicture/>
-        <div class="innerBox">
-          <div class="inputLabel">Username</div>
-          <div class="inputHolder">
-            <input
-              type="text"
-              class="inputBox"
-              v-model="username"
-              placeholder="Username"
-            />
-          </div>
-          <div class="passwordContainer">
-            <div class="inputLabel">Password</div>
-            <div class="forgotPassword">Forgot password?</div>
-          </div>
-          <div class="inputHolder" style="padding-bottom: 20px">
-            <input
-              type="password"
-              class="inputBox"
-              v-model="password"
-              placeholder="Password"
-            />
-          </div>
 
-          <div class="inputLabel" style="padding-top: 10px">Email</div>
-          <div class="inputHolder" style="padding-bottom: 10px">
-            <input
-              type="text"
-              class="inputBox"
-              v-model="email"
-              placeholder="Email Address"
-            />
+      <div id="topContainer">
+
+        <div id="profile_picContainer">
+          <img :src="profile_pic" alt="Profile Picture" class="profile-pic" />
+        </div>
+        <div id="changePhotoBox">
+          <label for="changePhotoBox">Change Photo </label>
+        </div>
+        <div id="inputsContainer">
+          <div class="innerBox">
+            <div class="inputLabel">Username</div>
+            <div class="inputHolder">
+              <input type="text" class="inputBox" v-model="username" placeholder="Username" />
+            </div>
+            <div class="passwordContainer">
+              <div class="inputLabel">Password</div>
+              <div class="forgotPassword">Forgot password?</div>
+            </div>
+            <div class="inputHolder" style="padding-bottom: 20px">
+              <input type="password" class="inputBox" v-model="password" placeholder="Password" />
+            </div>
+
+            <div class="inputLabel" style="padding-top: 10px">Email</div>
+            <div class="inputHolder" style="padding-bottom: 10px">
+              <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
+            </div>
           </div>
         </div>
       </div>
@@ -43,14 +37,7 @@
       <div id="volumeContainer">
         <div id="volumeTitle">Volume</div>
         <div class="slidecontainer">
-          <input
-            type="range"
-            min="1"
-            max="100"
-            value="50"
-            class="slider"
-            id="myRange"
-          />
+          <input type="range" min="1" max="100" value="50" class="slider" id="myRange" />
         </div>
       </div>
       <div id="bottomContainer">
@@ -74,6 +61,25 @@
 </template>
 
 <style scoped>
+
+#profile_picContainer {
+  position: center;
+  z-index: 0;
+  top: 100; /* Adjust as needed */
+  left: 100; /* Adjust as needed */
+  left: 260px; /* Adjust as needed */
+}
+
+.profile-pic {
+  width: 300; /* Adjust as needed */
+  height: 300; /* Adjust as needed */
+}
+
+#changePhotoBox {
+  position: relative;
+  z-index: 0;
+}
+
 .passwordContainer {
   display: flex;
   justify-content: space-between;
@@ -117,13 +123,77 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+label[for="changePhotoBox"] {
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  position: relative;
+  /* Added */
+  z-index: 1;
+  padding-bottom: 30px;
+}
+
+#changePhotoBox {
+  background: #b3daff;
+  width: 500px;
+  height: 20px;
+  padding-left: 0px;
+  padding-top: 30px;
+  margin-top: 350px;
+  margin-right: -500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.changePhotoHolder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.changePhotoButton {
+  background: transparent;
+  border: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 35px;
+  /* Adjust size as needed */
+  color: #000;
+  /* Adjust color as needed */
+  padding-bottom: 25px;
+}
+
+#changePhotoContainer img {
+  width: 200px;
+  /* adjust as needed */
+  height: 200px;
+  /* adjust as needed */
+  padding-bottom: 500px;
+  padding-top: 50px;
+}
+
+#profile_picContainer {
+  width: 200px;
+  /* adjust as needed */
+  height: 200px;
+  /* adjust as needed */
+  position: relative;
+  padding-bottom: 500px;
+  padding-top: -100px;
+}
+
 #inputsContainer {
   background: #b3daff;
   width: 500px;
+  height:400px;
   padding-left: 60px;
   padding-top: 40px;
   padding-bottom: 40px;
   margin-left: 550px;
+  margin-right:200px;
 }
 
 .inputHolder {
@@ -140,9 +210,12 @@
   margin-top: 5px;
   padding-left: 10px;
 }
+
 #returnToHomeText {
-  margin-left: 850px; /* Add this line to create space between the #colorblindModeBox and the text */
-  margin-top: -55px; /* Add this line to move the text up */
+  margin-left: 850px;
+  /* Add this line to create space between the #colorblindModeBox and the text */
+  margin-top: -55px;
+  /* Add this line to move the text up */
 }
 
 .inputLabel {
@@ -163,28 +236,26 @@
   font-size: 35px;
   /* Adjust this value to change the title size */
   font-weight: bold;
+  color: black;
 }
 
 #volumeContainer {
   background: #b3daff;
-  width: 990px;
+  width: 1190px;
   padding-top: 30px;
   padding-bottom: 30px;
   padding-left: 60px;
   padding-right: 60px;
-  margin-top: 50px;
+  margin-top: -80px;
   position: relative;
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   flex-direction: column;
 }
 
 .slidecontainer {
-  width: 80%;
+  width: 100%;
 }
 
 /* The slider itself */
@@ -245,7 +316,9 @@
 label[for="colorblindModeToggle"] {
   font-size: 30px;
   font-weight: bold;
+  color: black;
 }
+
 
 #colorblindModeToggle {
   transform: scale(3);
@@ -256,7 +329,18 @@ label[for="colorblindModeToggle"] {
 .bottomContainer {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* Add this line */
+  align-items: center;
+  padding-top: 20px;
+}
+
+#topContainer {
+  display: flex;
+}
+
+.topContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-top: 20px;
 }
 
@@ -269,12 +353,33 @@ label[for="colorblindModeToggle"] {
 </style>
 
 <script>
+import 'firebase/firestore';
 import NavBar from "@/components/NavBar.vue";
-import ProfilePicture from "@/components/ProfilePicture.vue";
+import { getAuth } from 'firebase/auth';
+import { getDatabase, ref, get } from 'firebase/database';
+
 export default {
   name: "SettingsView",
   components: {
-    NavBar, ProfilePicture,
+    NavBar,
   },
+  data() {
+    return {
+      profile_pic: require('./Screenshot 2024-04-23 211431.png'),
+    };
+  },
+  async created() {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const db = getDatabase();
+    const userRef = ref(db, 'users/' + user.uid + '/profile_pic');
+    const profile_pic = await get(userRef);
+    console.log(user);
+    if (profile_pic.exists()) {
+      this.profile_pic = profile_pic.val();
+    } else {
+      this.profile_pic = require('./Screenshot 2024-04-23 211431.png');
+    }
+  }
 };
 </script>
