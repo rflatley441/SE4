@@ -320,11 +320,12 @@ export default {
   },
   async created() {
     const auth = getAuth();
-     const user = auth.currentUser;
+     const user = auth.currentUser;     
+     console.log(user);
+
      const db = getFirestore();
      const userRef = doc(db, 'users' , user.uid);
      const docSnap = await getDoc(userRef);
-     console.log(user);
      if (docSnap.exists()) {
       const userData = docSnap.data();
        this.profile_pic = userData.profile_pic;
