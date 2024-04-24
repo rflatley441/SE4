@@ -304,10 +304,9 @@ label[for="colorblindModeToggle"] {
 </style>
 
 <script>
-import 'firebase/firestore';
 import NavBar from "@/components/NavBar.vue";
-// import { getAuth } from 'firebase/auth';
-// import { getDatabase, ref, get } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 export default {
   name: "SettingsView",
@@ -319,18 +318,19 @@ export default {
       profile_pic: require('./Screenshot 2024-04-23 211431.png'),
     };
   },
-  // async created() {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-  //   const db = getDatabase();
-  //   const userRef = ref(db, 'users/' + user.uid + '/profile_pic');
-  //   const profile_pic = await get(userRef);
-  //   console.log(user);
-  //   if (profile_pic.exists()) {
-  //     this.profile_pic = profile_pic.val();
-  //   } else {
-  //     this.profile_pic = require('./Screenshot 2024-04-23 211431.png');
-  //   }
-  // }
+  async created() {
+    const auth = getAuth();
+     const user = auth.currentUser;
+     const db = getFirestore();
+     const userRef = doc(db, 'users' , user.uid);
+     const docSnap = await getDoc(userRef);
+     console.log(user);
+     if (docSnap.exists()) {
+      const userData = docSnap.data();
+       this.profile_pic = userData.profile_pic;
+     } else {
+       this.profile_pic = require('./Screenshot 2024-04-23 211431.png');
+     }
+   }
 };
 </script>
