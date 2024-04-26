@@ -384,11 +384,11 @@ export default {
             }
             return false;
         },
+
         async endTurn() {
             this.calculateScore(this.userId);
             const nextPlayerId = (this.userId + 1) % this.players.length;
             this.tilesThisTurn = new Set();
-            await this.incrementRound(nextPlayerId);
             await this.updateHand(this.userId);
             await this.fetchHand();
             await this.incrementRound(nextPlayerId);
