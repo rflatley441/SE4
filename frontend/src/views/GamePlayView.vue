@@ -6,17 +6,17 @@
             {{ this.gameState.turn === 0 ? 'Player 1\'s Turn' : 'Player 2\'s Turn' }}
         </div>            <div class="game-board"> 
                 <!-- right now i am just setting the user ids to 0 when implementing dual players they will need to be changed based off round -->
-                <GameBoard :playerHand="this.playerHand" :userId="this.gameState.turn"/>
+                <GameBoard :playerHand="this.playerHand" :userId="this.gameState.turn" ref="gameBoard"/>
             </div>
             <div class="player-hand-background">
                 <div class="player-hand">
-                    <PlayerHand :playerHand="this.playerHand" :userId="1"/>
+                    <PlayerHand :playerHand="this.playerHand" :userId="1" @update-highlighted="updateHighlightedInGameBoard"/>
                 </div>
             </div>
 
             <div class="player-2-hand-background">
                 <div class="player-2-hand">
-                    <PlayerHand :playerHand="this.playerHand" :userId="0"/>
+                    <PlayerHand :playerHand="this.playerHand" :userId="0" @update-highlighted="updateHighlightedInGameBoard"/>
                 </div>
             </div>
 
@@ -38,6 +38,9 @@ import GameBoard from '@/components/GameBoard.vue';
 import PlayerHand from '@/components/PlayerHand.vue';
 import PlayerScore from '@/components/PlayerScore.vue';
 import { mapActions, mapGetters } from 'vuex';
+import { ref } from 'vue';
+
+
 
 export default {
     name: "GamePlayView",
@@ -50,8 +53,16 @@ export default {
     computed: {
         ...mapGetters(['playerHand', 'gameState']),
     },
+    setup(){
+        const gameBoard = ref(null);
+        return { gameBoard };
+    },
     methods: {
         ...mapActions(['gameStart']),
+        updateHighlightedInGameBoard(){
+            this.$refs.gameBoard.updateHighlightedBoardTiles();
+            console.log("working!")
+        }
     },
     async mounted() {
         await this.gameStart();
