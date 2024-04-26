@@ -7,7 +7,8 @@
             <div id="inputsContainer">
                 <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">PLAY GAME</router-link></button>
                 <br>
-                <button class="btn success" style="margin-top: 30px;"><router-link to="/stats" class="footText">VIEW PLAYER STATISTICS</router-link></button>
+                <button class="btn success" style="margin-top: 30px;" @click="openModal" >VIEW PLAYER STATISTICS</button>
+                <StatsModal :isOpen="isModalOpen" @modal-close="closeModal"/>
                 <br>
                 <button class="btn success" style="margin-top: 30px;">VIEW FRIENDS LIST</button>
             </div>
@@ -20,6 +21,43 @@
         </div>
     </div>
 </template>
+
+<script>
+import NavBar from '@/components/NavBar.vue';
+import Star8ptTile from '@/assets/Star8ptTile.vue';
+// import CircleTile from '@/assets/CircleTile.vue';
+import CloverTile from '@/assets/CloverTile.vue';
+import DiamondTile from '@/assets/DiamondTile.vue';
+import Star4ptTile from '@/assets/Star4ptTile.vue';
+import SquareTile from '@/assets/SquareTile.vue';
+import StatsModal from '@/components/StatsModal.vue';
+import { ref } from 'vue';
+
+ export default {
+    name: "HomeView",
+    components: {
+        Star8ptTile, CloverTile, DiamondTile, Star4ptTile, SquareTile, NavBar, StatsModal
+        // ,CircleTile
+    },
+    setup() {
+        const isModalOpen = ref(false);
+
+        const openModal = () => {
+            isModalOpen.value = true;
+        }
+
+        const closeModal = () => {
+            isModalOpen.value = false;
+        }
+
+        return {
+            isModalOpen,
+            openModal,
+            closeModal,
+        };
+    }
+ }
+</script>
 
 <style scoped>
 
@@ -162,22 +200,3 @@ h1 {
 
 
 </style>
-
-
-<script>
-import NavBar from '@/components/NavBar.vue';
-import Star8ptTile from '@/assets/Star8ptTile.vue';
-// import CircleTile from '@/assets/CircleTile.vue';
-import CloverTile from '@/assets/CloverTile.vue';
-import DiamondTile from '@/assets/DiamondTile.vue';
-import Star4ptTile from '@/assets/Star4ptTile.vue';
-import SquareTile from '@/assets/SquareTile.vue';
-
- export default {
-    name: "HomeView",
-    components: {
-        Star8ptTile, CloverTile, DiamondTile, Star4ptTile, SquareTile, NavBar
-        // ,CircleTile
-    }
- }
-</script>
