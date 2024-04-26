@@ -1,42 +1,42 @@
 <template>
     <div id="app">
         <NavBar/>
-        <div id="content">
+        <div class="content">
             <h1 style="font-size:80px"> Welcome, User!</h1>
-            <h2 style="font-size:40px">What would you like to do today?<br></h2>
             <div id="inputsContainer">
-                <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">PLAY GAME</router-link></button>
+                <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">Play Game</router-link></button>
                 <br>
-                <button class="btn success" style="margin-top: 30px;" @click="openModal" >VIEW PLAYER STATISTICS</button>
+                <button class="btn success" style="margin-top: 30px;" @click="openModal" >View Player Statistics</button>
                 <StatsModal :isOpen="isModalOpen" @modal-close="closeModal"/>
                 <br>
-                <button class="btn success" style="margin-top: 30px;">VIEW FRIENDS LIST</button>
+                <button class="btn success" style="margin-top: 30px;">View Friends List</button>
             </div>
-            <Star8ptTile id="starTile" fillColor="red" />
-            <!-- <CircleTile id="circleTile" fillColor="purple" /> -->
+            <!-- <Star8ptTile id="starTile" fillColor="red" />
             <Star4ptTile id="star4ptTile" fillColor="blue" />
             <DiamondTile id="diamondTile" fillColor="orange" />
             <SquareTile id="squareTile" fillColor="yellow" />
-            <CloverTile id="cloverTile" fillColor="green" />
+            <CloverTile id="cloverTile" fillColor="green" /> -->
         </div>
     </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue';
-import Star8ptTile from '@/assets/Star8ptTile.vue';
+// import Star8ptTile from '@/assets/Star8ptTile.vue';
 // import CircleTile from '@/assets/CircleTile.vue';
-import CloverTile from '@/assets/CloverTile.vue';
-import DiamondTile from '@/assets/DiamondTile.vue';
-import Star4ptTile from '@/assets/Star4ptTile.vue';
-import SquareTile from '@/assets/SquareTile.vue';
+// import CloverTile from '@/assets/CloverTile.vue';
+// import DiamondTile from '@/assets/DiamondTile.vue';
+// import Star4ptTile from '@/assets/Star4ptTile.vue';
+// import SquareTile from '@/assets/SquareTile.vue';
 import StatsModal from '@/components/StatsModal.vue';
 import { ref } from 'vue';
 
  export default {
     name: "HomeView",
     components: {
-        Star8ptTile, CloverTile, DiamondTile, Star4ptTile, SquareTile, NavBar, StatsModal
+        // Star8ptTile, CloverTile, DiamondTile, Star4ptTile, SquareTile, 
+        NavBar, 
+        StatsModal
         // ,CircleTile
     },
     setup() {
@@ -61,22 +61,21 @@ import { ref } from 'vue';
 
 <style scoped>
 
-
-
-
-#menu{
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    height: 100px;
-}
-
 #app {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    transform: scale(0.9);
+    position: relative;
+    min-height: calc(100vh - 16px); 
+    background-color: #FDF5E6;
+}
+
+.content {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-top: 80px;
+    font-weight: bold;
 }
 
 #starTile {
@@ -117,11 +116,6 @@ import { ref } from 'vue';
 
 }
 
-img {
-    padding-bottom: 40px;
-    padding-top: 30px;
-}
-
 #inputsContainer {
     padding-left: 60px;
     padding-right: 60px;
@@ -130,42 +124,33 @@ img {
 }
 
 .btn {
-    border: none;
+    border-color: transparent;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
 }
 
 h1 {
-  color: blue;
+  color: #353839;
 }
 
 /* On mouse-over */
 .btn:hover {
-    background: #a8a5a5;
+    background: #FFC999;
 }
 
 .success {
-    background-color: #b3daff;
-    width: 800px;
+    background-color: #FFB766;
+    width: 500px;
     height: 70px;
     font-size: 30px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
     white-space: nowrap;
     cursor: pointer;
     display: inline-block;
     margin: auto;
     text-align: center;
-    color: black;
-}
-
-.top{
-    background-color: white;
-    width: 200px;
-    height: 100px;
-    font-size: 30px;
-    white-space: nowrap;
-    cursor: pointer;
-    display: inline-block;
-    margin: auto;
-    text-align: center;
-    color: black;
+    color: #353839;
 }
 
 
@@ -176,26 +161,12 @@ h1 {
 }
 
 .footText {
-    font-size: 35px;
-    font-weight: 300;
-    color: black;
+    font-size: 30px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
+    color: #353839;
     cursor: pointer;
     text-decoration: none;
-}
-
-.profile-picture {
-    position: relative; /* Adjusted for positioning inside the nav bar */
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-.profile-picture img, .profile-picture .tile {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    float: right;
 }
 
 

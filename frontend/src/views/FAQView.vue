@@ -1,39 +1,41 @@
 <template>
-  <div class="faq">
+  <div id="app">
     <NavBar/>
-    <header class = "header">
-      <h1>Frequently Asked Questions</h1>
-    </header>
-  
-    <div v-for="(faq, index) in faqItems" :key="index">
-      <p class="question" @click="toggleAnswer(index)">
-        {{ faq.q }}
-        <span class="toggleIcon">
-          {{ isOpen[index] ? "—" : "＋" }}
-        </span>
-      </p>
-      <p class="answer" :style="{ height: isOpen[index] ? 'auto' : 0 }"
-        v-html="faq.a">
-      </p>
+    <div class="content">
+      <header class = "header">
+        <h1 style="font-size: 60px">Frequently Asked Questions</h1>
+      </header>
+    
+      <div v-for="(faq, index) in faqItems" :key="index">
+        <p class="question" @click="toggleAnswer(index)">
+          {{ faq.q }}
+          <span class="toggleIcon">
+            {{ isOpen[index] ? "—" : "＋" }}
+          </span>
+        </p>
+        <p class="answer" :style="{ height: isOpen[index] ? 'auto' : 0 }"
+          v-html="faq.a">
+        </p>
+      </div>
+      <header class="footer">
+        <h1>Thank You for Playing Qwirkle!</h1>
+      </header>
     </div>
-    <header class="footer">
-      <h1>Thank You for Playing Qwirkle!</h1>
-    </header>
 
   </div>    
-  <div class="tiles-container">
+  <!-- <div class="tiles-container">
       <Star8ptTile id="starTile" fillColor="yellow" />
       <CircleTile id="circleTile" fillColor="blue" />
       <CloverTile id="cloverTile" fillColor="green" />
-    </div>
+    </div> -->
 </template>
 
 <script>
 import { ref } from 'vue';
 import NavBar from '@/components/NavBar.vue';
-import Star8ptTile from '@/assets/Star8ptTile.vue';
-import CircleTile from '@/assets/CircleTile.vue';
-import CloverTile from '@/assets/CloverTile.vue';
+// import Star8ptTile from '@/assets/Star8ptTile.vue';
+// import CircleTile from '@/assets/CircleTile.vue';
+// import CloverTile from '@/assets/CloverTile.vue';
 
 export default {
   name: "FAQView",
@@ -70,7 +72,8 @@ export default {
     };
   },
   components: {
-        Star8ptTile, CircleTile, CloverTile, NavBar
+        // Star8ptTile, CircleTile, CloverTile, 
+        NavBar
   }
 };
 </script>
@@ -81,7 +84,6 @@ export default {
 * {
   font-size:1.1em;
   box-sizing: border-box;
-  font-family: system-ui;
 }
 
 #starTile {
@@ -104,11 +106,14 @@ export default {
   bottom: 0px;
 }
 
-body {
-  padding: 30px 20px;
-  max-width: 600px;
-  width: 70%;
-  margin: auto;
+.content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 90px;
+    box-sizing: border-box;
+    background-color: #FDF5E6;
 }
 
 .header { 
@@ -124,11 +129,10 @@ body {
 }
 
 #app {
-  font-family: system-ui;
-  text-align: left;
-  color: #47502c;
-  font-size: 1em;
-  padding: 20px 0px;
+    display: flex;
+    position: relative;
+    min-height: calc(100vh - 16px); 
+    background-color: #FDF5E6;
 }
 
 ::selection {
@@ -137,28 +141,24 @@ body {
 
 /* style the FAQ section */
 
-
-.faq {
-  justify-content: center; /* Center items horizontally */
-  flex-direction: column; /* Stack items vertically */
-}
-
 .question {
-  max-width: 1000px;
-  background: #b3daff;
-  text-transform: uppercase;
+  max-width: 900px;
+  background: #e5b2e5;
+  /* text-transform: uppercase; */
   cursor: pointer;
-  font-weight: bold;
-  box-shadow: 0px 4px 0px 0 #1b050555;
+  font-weight: 600;
+  font-size: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   padding: 10px 0;
   transition: transform 0.2s;
+  border-radius: 10px;
   position: relative;
   margin: 0 auto;
   margin-bottom: 30px; /* Add some margin between FAQ items */
 }
 
 .question:hover {
-  background: hsla(210, 41%, 55%, 0.464);
+  background: #f2d8f2;
 }
 
 .question::before {
@@ -190,7 +190,9 @@ body {
   position: absolute;
   right: 20px;
   display: inline-block;
+  top: 50%;
+  transform: translateY(-50%); 
   line-height: 0.5;
-  color: #666;
+  color: #353839;
 }
 </style>

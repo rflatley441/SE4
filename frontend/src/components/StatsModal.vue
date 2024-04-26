@@ -3,7 +3,7 @@
         <div class="modal-wrapper">
             <div class="modal-container">
                 <span class="close" @click="handleClose">&times;</span>
-                <h1 style="font-size: 80px;"> <span style="color: #2490F3">{{ this.username }}'s</span> Statistics</h1>
+                <h1 style="font-size: 80px;"> <span style="color: #6666FF">{{ this.username }}'s</span> Statistics</h1>
                 <h2 style="font-size:40px">High Score: {{ this.highScore }}</h2>
                 <h2 style="font-size:40px">Total Points: {{ this.totalPoints }}</h2>
                 <h2 style="font-size:40px">Wins: {{ this.wins }}</h2>
@@ -83,14 +83,6 @@ export default {
 </script>
 
 <style scoped>
-/* #content {
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    padding-top: 60px;
-    box-sizing: border-box;
-} */
 
 .modal-mask {
     position: fixed;
@@ -98,27 +90,29 @@ export default {
     justify-content: center;
     align-items: center;
     z-index: 9998;
+    border-radius: 10px;
     top: 15%;
-    /* left: 0; */
+    left: 25%;
     width: 50%;
-    height: 100%;
-    /* margin: auto; */
+    height: 50%;
+    margin: auto;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-wrapper {
-  /* display: flex; */
   justify-content: center;
   align-items: center; 
   width: 100%;
   height: 100%;
+  margin: auto;
 }
 
 .modal-container {
-    padding: 20px 30px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    padding: 10px 30px;
+    background-color: #e6e6ff;
+    border-radius: 10px;
+    margin: auto;
+    box-shadow: 0 2px 8px #ccccff;
 }
 
 .close {
@@ -130,7 +124,7 @@ export default {
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #353839;
     text-decoration: none;
     cursor: pointer;
 }
