@@ -48,6 +48,7 @@ export default {
             required: true,
         },
     },
+    
     components: {
         BoardTile,
     },
