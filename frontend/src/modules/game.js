@@ -1,6 +1,6 @@
 import axios from "axios";
 import { db } from '@/services/firebase.js'; 
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 // import { collection, getDocs } from 'firebase/firestore';
 
@@ -65,16 +65,19 @@ const actions = {
         }
     },
 
-    async fetchUsers({commit}) {
-        console.log("fetchusres function")
+    async fetchUsers({ commit }) {
+        const gameCode = 1; 
+        console.log("Fetching users with specific game code:", gameCode);
         try {
             const usersRef = collection(db, 'users');
-            const snapshot = await getDocs(usersRef);
+            const queryConstraint = query(usersRef, where('gameCode', '==', gameCode));
+            const snapshot = await getDocs(queryConstraint);
             const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            console.log("users", users)
             commit('setUsers', users);
-            console.log("users", users);
+            console.log("Users with gameCode", gameCode, ":", users);
         } catch (error) {
-            console.error("Error fetching users: ", error);
+            console.error("Error fetching users with specific game code:", error);
         }
     },
 
