@@ -51,6 +51,18 @@ export default {
     components: {
         BoardTile,
     },
+    async mounted() {
+        await this.$store.dispatch('fetchUsers');
+        const players = this.$store.getters.playerHand;
+        
+        console.log(players)
+
+        if (players.player1 && players.player2) {
+            await this.gameStart(players.player1.id, players.player2.id);
+    }   else {
+        console.error("Player data is not loaded");
+    }
+},
     setup() {
         const tileList = ref([])
         var tilesPlayed = new Set()
@@ -74,12 +86,12 @@ export default {
         };
     }, 
     computed: {
-        ...mapGetters(['players', 'deck', 'winner', 'gameOver']),
+        ...mapGetters(['players', 'deck', 'winner', 'gameOver', 'playerIDs']),
     },
     expose: ['updateHighlightedBoardTiles'], // used by GamePlayView
     
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'fetchUsers']),
 
         calculateScore(userId) {
     let baseScore = 0;

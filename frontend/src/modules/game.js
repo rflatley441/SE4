@@ -1,5 +1,7 @@
 import axios from "axios";
 import { db } from '@/services/firebase.js'; 
+import { collection, getDocs } from 'firebase/firestore';
+
 // import { collection, getDocs } from 'firebase/firestore';
 
 
@@ -44,12 +46,13 @@ const getters = {
         };
     },
     players: (state) => state.players,
-    playerHand: (state) => (id) => state.players[parseInt(id)].hand,
-    playerScore: (state) => (id) => state.players[parseInt(id)].score,
+    playerHand: (state) => (id) => state.players[id].hand,
+    playerScore: (state) => (id) => state.players[id].score,
     deck: (state) => state.deck,
     pile: (state) => state.pile,
     gameOver: (state) => state.finished,
     winner: (state) => state.winner,
+    users: state => state.users, // accessing users to get their ids
 };
 
 const actions = {
@@ -63,18 +66,19 @@ const actions = {
     },
 
     async fetchUsers({commit}) {
-        const usersRef = db.collection('users');
+        console.log("fetchusres function")
         try {
-            const snapshot = await usersRef.get();
+            const usersRef = collection(db, 'users');
+            const snapshot = await getDocs(usersRef);
             const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            commit('setUsers', users); // You might need to create this mutation
-            console.log("users",users)
+            commit('setUsers', users);
+            console.log("users", users);
         } catch (error) {
             console.error("Error fetching users: ", error);
         }
     },
 
-    async fetchHand({commit, state, dispatch}, userIndex) {  // Corrected by adding 'dispatch' to the destructured context
+    async fetchHand({commit, state, dispatch}, userIndex) {  
         if (state.users && state.users.length > userIndex) {
             const userId = state.users[userIndex].id;
             try {
@@ -87,7 +91,7 @@ const actions = {
                         });
                     }
                 });
-                dispatch('updateTilesAmount', response.data[0].remaining);  // Now 'dispatch' is correctly defined
+                dispatch('updateTilesAmount', response.data[0].remaining);  
             } catch (error) {
                 console.error(error.response.data);
             }
@@ -127,13 +131,16 @@ const actions = {
         let random = Math.round(Math.random());
         commit('setTurn', random);
     },
-    async gameStart({commit, dispatch}, { player1Id, player2Id }) {
+    async gameStart({ commit, dispatch }, payload) {
+        if (!payload || !payload.player1Id || !payload.player2Id) {
+            console.error('Invalid or missing player IDs:', payload);
+            return;
+        }
         commit('restartGame');
         try {
-            // Call to initialize the game on the backend with Firebase IDs
             await axios.post("http://127.0.0.1:5000/initialize_game", {
-                player1_id: player1Id,
-                player2_id: player2Id
+                player1_id: payload.player1Id,
+                player2_id: payload.player2Id
             });
     
             await dispatch('fetchDeck');
