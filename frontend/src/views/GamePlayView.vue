@@ -76,6 +76,7 @@ export default {
     display: flex;
     position: relative;
     min-height: calc(100vh - 16px); 
+    background-color: #FDF5E6;
 }
 
 .content {
@@ -83,8 +84,9 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding-top: 60px;
+    padding-top: 90px;
     box-sizing: border-box;
+    background-color: #FDF5E6;
 }
 
 .game-board {
@@ -165,6 +167,7 @@ export default {
     bottom: 0;
     height: 150px;
     width: 850px; 
+    border-radius: 10px;
 }
 
 .player-hand, .player-2-hand {

@@ -8,8 +8,8 @@
         v-if="randomTile" 
         :is="randomTile.component" 
         :fill-color="randomTile.color" 
-        :width="100" 
-        :height="100"
+        :width="75" 
+        :height="75"
         @click="openImagePicker"
       />
       <!-- If randomTile is falsy and profilePictureUrl is truthy, it renders an img tag -->
@@ -59,10 +59,10 @@
   <style scoped>
   .profile-picture {
     position: fixed;
-    top: 20px;
+    top: 10px;
     right: 20px;
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
     overflow: hidden;
   }

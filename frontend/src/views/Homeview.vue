@@ -1,131 +1,113 @@
 <template>
     <div id="app">
         <NavBar/>
-        <div id="content">
-            <h1 style="font-size:80px"> Welcome, User!</h1>
-            <h2 style="font-size:40px">What would you like to do today?<br></h2>
-            <div id="inputsContainer">
-                <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">PLAY GAME</router-link></button>
-                <br>
-                <button class="btn success" style="margin-top: 30px;">VIEW PLAYER STATISTICS</button>
-                <br>
-                <button class="btn success" style="margin-top: 30px;">VIEW FRIENDS LIST</button>
+        <div class="content">
+            <div class="contents-container">
+                <h1 style="font-size:80px"> Welcome, User!</h1>
+                <div id="inputsContainer">
+                    <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">Play Game</router-link></button>
+                    <br>
+                    <button class="btn success" style="margin-top: 30px;" @click="openModal" >View Player Statistics</button>
+                    <StatsModal :isOpen="isModalOpen" @modal-close="closeModal"/>
+                    <br>
+                    <button class="btn success" style="margin-top: 30px;">View Friends List</button>
+                </div>
             </div>
-            <Star8ptTile id="starTile" fillColor="red" />
-            <!-- <CircleTile id="circleTile" fillColor="purple" /> -->
-            <Star4ptTile id="star4ptTile" fillColor="blue" />
-            <DiamondTile id="diamondTile" fillColor="orange" />
-            <SquareTile id="squareTile" fillColor="yellow" />
-            <CloverTile id="cloverTile" fillColor="green" />
         </div>
     </div>
 </template>
 
+<script>
+import NavBar from '@/components/NavBar.vue';
+import StatsModal from '@/components/StatsModal.vue';
+import { ref } from 'vue';
+
+ export default {
+    name: "HomeView",
+    components: {
+        NavBar, 
+        StatsModal
+    },
+    setup() {
+        const isModalOpen = ref(false);
+
+        const openModal = () => {
+            isModalOpen.value = true;
+        }
+
+        const closeModal = () => {
+            isModalOpen.value = false;
+        }
+
+        return {
+            isModalOpen,
+            openModal,
+            closeModal,
+        };
+    }
+ }
+</script>
+
 <style scoped>
-
-
-
-
-#menu{
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    height: 100px;
-}
 
 #app {
     display: flex;
-    justify-content: center;
+    position: relative;
+    min-height: calc(100vh - 16px); 
+    background-image: url("@/assets/background.svg");
+    background-size: cover;
+}
+
+.content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-top: 80px;
+    font-weight: bold;
     align-items: center;
-    width: 100vw;
-    transform: scale(0.9);
+    justify-content: center;
 }
 
-#starTile {
-    position: absolute;
-    left: 100px;
-    top: 450px;
-}
-#circleTile {
-    position: absolute;
-    right: -140px;
-    top: 0px;
-}
-#diamondTile {
-    position: absolute;
-    right: -100px;
-    bottom: -200px;
-    width: 300;
-    height: 300;
-}
-#star4ptTile {
-    position: absolute;
-    left: -50px;
-    bottom: 300px;
-    width: 125;
-    height: 125;
-}
-#squareTile {
-    position: absolute;
-    left: -100px;
-    bottom: -200px;
-    width: 250;
-    height: 250;
-}
-#cloverTile {
-    position: absolute;
-    right: -50px;
-    bottom: 200px;
-
-}
-
-img {
-    padding-bottom: 40px;
-    padding-top: 30px;
-}
-
-#inputsContainer {
-    padding-left: 60px;
-    padding-right: 60px;
-    padding-top: 40px;
-    padding-bottom: 40px;
+.contents-container {
+    width: fit-content;
+    padding: 40px;
+    border-radius: 20px;
+    background-color: rgba(238, 221, 221, 0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    margin: auto;
 }
 
 .btn {
-    border: none;
+    border-color: transparent;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
 }
 
 h1 {
-  color: blue;
+  color: #353839;
 }
 
 /* On mouse-over */
-.btn:hover {background: #a8a5a5;}
-
-.success {
-    background-color: #b3daff;
-    width: 800px;
-    height: 70px;
-    font-size: 30px;
-    white-space: nowrap;
-    cursor: pointer;
-    display: inline-block;
-    margin: auto;
-    text-align: center;
-    color: black;
+.btn:hover {
+    background: #FFC999;
 }
 
-.top{
-    background-color: white;
-    width: 200px;
-    height: 100px;
+.success {
+    background-color: #FFB766;
+    width: 500px;
+    height: 70px;
     font-size: 30px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
     white-space: nowrap;
     cursor: pointer;
     display: inline-block;
     margin: auto;
     text-align: center;
-    color: black;
+    color: #353839;
 }
 
 
@@ -136,45 +118,13 @@ h1 {
 }
 
 .footText {
-    font-size: 35px;
-    font-weight: 300;
-    color: #2490F3;
+    font-size: 30px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
+    color: #353839;
     cursor: pointer;
-}
-
-.profile-picture {
-    position: relative; /* Adjusted for positioning inside the nav bar */
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-.profile-picture img, .profile-picture .tile {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    float: right;
+    text-decoration: none;
 }
 
 
 </style>
-
-
-<script>
-import NavBar from '@/components/NavBar.vue';
-import Star8ptTile from '@/assets/Star8ptTile.vue';
-// import CircleTile from '@/assets/CircleTile.vue';
-import CloverTile from '@/assets/CloverTile.vue';
-import DiamondTile from '@/assets/DiamondTile.vue';
-import Star4ptTile from '@/assets/Star4ptTile.vue';
-import SquareTile from '@/assets/SquareTile.vue';
-
- export default {
-    name: "HomeView",
-    components: {
-        Star8ptTile, CloverTile, DiamondTile, Star4ptTile, SquareTile, NavBar
-        // ,CircleTile
-    }
- }
-</script>
