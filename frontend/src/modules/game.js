@@ -127,16 +127,27 @@ const actions = {
         let random = Math.round(Math.random());
         commit('setTurn', random);
     },
-    gameStart({commit, dispatch}) {
+    async gameStart({commit, dispatch}, { player1Id, player2Id }) {
         commit('restartGame');
-
-        dispatch('fetchDeck').then(() =>{
-            dispatch('fetchHand', 0);
-            dispatch('fetchHand', 1);
+        try {
+            // Call to initialize the game on the backend with Firebase IDs
+            await axios.post("http://127.0.0.1:5000/initialize_game", {
+                player1_id: player1Id,
+                player2_id: player2Id
+            });
+    
+            await dispatch('fetchDeck');
+            await Promise.all([
+                dispatch('fetchHand', 0),
+                dispatch('fetchHand', 1)
+            ]);
             dispatch('randomStart');
-        });
-        commit('setGameStart', true);
+            commit('setGameStart', true);
+        } catch (error) {
+            console.error("Error starting game:", error.response ? error.response.data : error);
+        }
     },
+    
 
     setGameOver({commit}, winner) {
         commit('gameOver', winner);
