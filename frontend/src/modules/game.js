@@ -1,4 +1,7 @@
 import axios from "axios";
+import { db } from '@/services/firebase.js'; 
+// import { collection, getDocs } from 'firebase/firestore';
+
 
 const state = {
     game: false,
@@ -59,20 +62,35 @@ const actions = {
         }
     },
 
-    async fetchHand({commit, dispatch}) {
+    async fetchUsers({commit}) {
+        const usersRef = db.collection('users');
         try {
-            const response = await axios.get("http://127.0.0.1:5000/playerhand");
-            response.data.forEach(item => {
-                if (item.hand && item.userId) {
-                    commit('setHand', {
-                        'playerId': item.userId,
-                        'hand': item.hand
-                    });
-                }
-            })
-            dispatch('updateTilesAmount', response.data[0].remaining);
-        } catch(error) {
-            console.error(error.response.data)
+            const snapshot = await usersRef.get();
+            const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            commit('setUsers', users); // You might need to create this mutation
+            console.log("users",users)
+        } catch (error) {
+            console.error("Error fetching users: ", error);
+        }
+    },
+
+    async fetchHand({commit, state, dispatch}, userIndex) {  // Corrected by adding 'dispatch' to the destructured context
+        if (state.users && state.users.length > userIndex) {
+            const userId = state.users[userIndex].id;
+            try {
+                const response = await axios.get(`http://127.0.0.1:5000/playerhand?userId=${userId}`);
+                response.data.forEach(item => {
+                    if (item.hand && item.userId) {
+                        commit('setHand', {
+                            'playerId': item.userId,
+                            'hand': item.hand
+                        });
+                    }
+                });
+                dispatch('updateTilesAmount', response.data[0].remaining);  // Now 'dispatch' is correctly defined
+            } catch (error) {
+                console.error(error.response.data);
+            }
         }
     },
 
@@ -171,7 +189,10 @@ const mutations = {
     updatePlayerScore: (state, {userId, amount}) => {
         // console.log(` userId: ${userId} with amount: ${amount}`);
         state.players[userId].score += amount;
-    }};
+    },
+    setUsers: (state, users) => (state.users = users),
+
+};
 
 export default {
     state,

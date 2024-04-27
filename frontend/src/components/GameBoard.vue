@@ -40,11 +40,11 @@ export default {
     name: "GameBoard",
     props: {
         userId: {
-            type: Number,
+            type: String,
             required: true,
         },
         playerHand: {
-            type: Array,
+            type: String,
             required: true,
         },
     },
