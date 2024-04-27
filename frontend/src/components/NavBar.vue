@@ -1,6 +1,7 @@
 <template>
     <div id="navBar">
         <div class="navItems">
+            <img src="../assets/Qwirkle.png"/>
             <router-link to="/home" class="navItem">Home</router-link>    
             <router-link to="/game" class="navItem">Play Game</router-link>
             <router-link to="/faq" class="navItem">How to Play</router-link>
@@ -34,6 +35,12 @@
     color: #353839;
     font-family: 'Quicksand', sans-serif;
     padding: 10px;
+}
+
+img {
+    width: 100px; 
+    max-width: 100%;
+    margin-right: 20px;
 }
 
 .navItem:hover {

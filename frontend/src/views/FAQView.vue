@@ -23,19 +23,11 @@
     </div>
 
   </div>    
-  <!-- <div class="tiles-container">
-      <Star8ptTile id="starTile" fillColor="yellow" />
-      <CircleTile id="circleTile" fillColor="blue" />
-      <CloverTile id="cloverTile" fillColor="green" />
-    </div> -->
 </template>
 
 <script>
 import { ref } from 'vue';
 import NavBar from '@/components/NavBar.vue';
-// import Star8ptTile from '@/assets/Star8ptTile.vue';
-// import CircleTile from '@/assets/CircleTile.vue';
-// import CloverTile from '@/assets/CloverTile.vue';
 
 export default {
   name: "FAQView",
@@ -72,8 +64,7 @@ export default {
     };
   },
   components: {
-        // Star8ptTile, CircleTile, CloverTile, 
-        NavBar
+      NavBar
   }
 };
 </script>
@@ -84,26 +75,6 @@ export default {
 * {
   font-size:1.1em;
   box-sizing: border-box;
-}
-
-#starTile {
-    position: absolute;
-    left: -70px;
-    top: 450px;
-}
-#circleTile {
-    position: absolute;
-    right: -90px;
-    top: 200px;
-}
-#cloverTile {
-  position: absolute;
-  right:0px;
-}
-#diamondTile {
-  position: absolute;
-  left: 350px;
-  bottom: 0px;
 }
 
 .content {
