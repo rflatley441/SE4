@@ -81,9 +81,9 @@ const actions = {
         }
     },
 
-    async fetchHand({commit, state, dispatch}, userIndex) {  
-        if (state.users && state.users.length > userIndex) {
-            const userId = state.users[userIndex].id;
+    async fetchHand({ commit, dispatch, state }, userId) {
+        const user = state.users.find(user => user.id === userId);
+        if (user) {
             try {
                 const response = await axios.get(`http://127.0.0.1:5000/playerhand?userId=${userId}`);
                 response.data.forEach(item => {
@@ -94,10 +94,12 @@ const actions = {
                         });
                     }
                 });
-                dispatch('updateTilesAmount', response.data[0].remaining);  
+                dispatch('updateTilesAmount', response.data[0].remaining);
             } catch (error) {
-                console.error(error.response.data);
+                console.error("Error fetching hand for userId:", userId, ";", error.response.data);
             }
+        } else {
+            console.error("User not found for userId:", userId);
         }
     },
 
@@ -134,16 +136,16 @@ const actions = {
         let random = Math.round(Math.random());
         commit('setTurn', random);
     },
-    async gameStart({ commit, dispatch }, payload) {
-        if (!payload || !payload.player1Id || !payload.player2Id) {
-            console.error('Invalid or missing player IDs:', payload);
-            return;
-        }
+    async gameStart({ commit, dispatch, state }) {
+    
+        const player1Id = state.users[0].id; 
+        const player2Id = state.users[1].id; 
+    
         commit('restartGame');
         try {
             await axios.post("http://127.0.0.1:5000/initialize_game", {
-                player1_id: payload.player1Id,
-                player2_id: payload.player2Id
+                player1_id: player1Id,
+                player2_id: player2Id
             });
     
             await dispatch('fetchDeck');
@@ -151,12 +153,13 @@ const actions = {
                 dispatch('fetchHand', 0),
                 dispatch('fetchHand', 1)
             ]);
-            dispatch('randomStart');
+            dispatch('randomStart'); 
             commit('setGameStart', true);
         } catch (error) {
             console.error("Error starting game:", error.response ? error.response.data : error);
         }
     },
+    
     
 
     setGameOver({commit}, winner) {
