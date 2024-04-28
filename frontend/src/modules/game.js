@@ -11,17 +11,20 @@ const state = {
     turn: null,
     winner: null,
     finished: false,
+    users: [],
 
     players: [
         {
             name: 'player1',
             score: 0,
             hand: [],
+            id: "",
         },
         {
             name: 'player2',
             score: 0,
             hand: [],
+            id: "",
         }
     ],
 
@@ -81,25 +84,26 @@ const actions = {
         }
     },
 
-    async fetchHand({ commit, dispatch, state }, userId) {
-        const user = state.users.find(user => user.id === userId);
+    async fetchHand({ commit, dispatch, state }, playerId) {
+        const user = state.players.find(player => player.id === playerId);
         if (user) {
             try {
-                const response = await axios.get(`http://127.0.0.1:5000/playerhand?userId=${userId}`);
+                const response = await axios.get(`http://127.0.0.1:5000/playerhand?userId=${playerId}`);
+                console.log("data response", response.data)
                 response.data.forEach(item => {
-                    if (item.hand && item.userId) {
+                        console.log("here", response.data)
+                        console.log(item.hand)
                         commit('setHand', {
-                            'playerId': item.userId,
+                            'playerId': playerId,
                             'hand': item.hand
                         });
-                    }
                 });
                 dispatch('updateTilesAmount', response.data[0].remaining);
             } catch (error) {
-                console.error("Error fetching hand for userId:", userId, ";", error.response.data);
+                console.error("Error fetching hand for playerId:", playerId, ";", error.response.data);
             }
         } else {
-            console.error("User not found for userId:", userId);
+            console.error("User not found for playerId:", playerId);
         }
     },
 
@@ -138,9 +142,11 @@ const actions = {
     },
     async gameStart({ commit, dispatch, state }) {
     
-        const player1Id = state.users[0].id; 
-        const player2Id = state.users[1].id; 
-    
+        const player1Id = state.players[0].id; 
+        console.log("player 1 id" , state.players[0].id)
+        const player2Id = state.players[1].id; 
+        console.log("player 2 id" , state.players[1].id)
+
         commit('restartGame');
         try {
             await axios.post("http://127.0.0.1:5000/initialize_game", {
@@ -150,8 +156,8 @@ const actions = {
     
             await dispatch('fetchDeck');
             await Promise.all([
-                dispatch('fetchHand', 0),
-                dispatch('fetchHand', 1)
+                dispatch('fetchHand', player1Id),
+                dispatch('fetchHand', player2Id)
             ]);
             dispatch('randomStart'); 
             commit('setGameStart', true);
@@ -214,7 +220,20 @@ const mutations = {
         // console.log(` userId: ${userId} with amount: ${amount}`);
         state.players[userId].score += amount;
     },
-    setUsers: (state, users) => (state.users = users),
+    setUsers: (state, users) => {
+        state.users = users;
+        console.log("blah blah")
+    
+        state.players.forEach((player, index) => {
+            const user = users[index];
+            if (user) {
+                player.id = user.id;
+                console.log("player has been set", player.id)
+            } else {
+                console.error("User not found for player at index:", index);
+            }
+        });
+    },
 
 };
 

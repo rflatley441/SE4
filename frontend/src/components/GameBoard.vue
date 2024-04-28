@@ -53,15 +53,8 @@ export default {
     },
     async mounted() {
         await this.$store.dispatch('fetchUsers');
-        const players = this.$store.getters.playerHand;
-        
-        console.log(players)
-
-        if (players.player1 && players.player2) {
-            await this.gameStart(players.player1.id, players.player2.id);
-    }   else {
-        console.error("Player data is not loaded");
-    }
+        await this.$store.dispatch('gameStart')
+    
 },
     setup() {
         const tileList = ref([])
@@ -91,7 +84,7 @@ export default {
     expose: ['updateHighlightedBoardTiles'], // used by GamePlayView
     
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'fetchUsers']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'fetchUsers', 'gameStart']),
 
         calculateScore(userId) {
     let baseScore = 0;
