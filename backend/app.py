@@ -33,31 +33,23 @@ def get_data():
 
 @app.route('/playerhand', methods=['GET'])
 def get_player_hands():
-    userId = request.args.get('userId')  # Fetch userId from query parameters
-    if not userId:
-        return jsonify({'error': 'Missing userId parameter'}), 400
+    game_state.dealTiles()
 
-    print("error in app.py")
-    # Assuming userIds '0' and '1' for player1 and player2 respectively.
-    # You might need to adjust this based on how userIds are assigned in your game state.
-    if userId == game_state.player1.userId:
-        player = game_state.player1
-    elif userId == game_state.player2.userId:
-        player = game_state.player2
-    else:
-        return jsonify({'error': 'User not found'}), 404
+    player1Hand = []
 
-    hand = []
-    for tile in player.hand:
-        hand.append([str(tile.shape), str(tile.color)])
+    for tile in game_state.player1.hand:
+        player1Hand.append([str(tile.shape), str(tile.color)])
 
-    userHand = {
-        'userId': userId,
-        'hand': hand,
-        'remaining': len(game_state.game_board.tiles)
-    }
+    player2Hand = []
 
-    return jsonify([userHand])
+    for tile in game_state.player2.hand:
+        player2Hand.append([str(tile.shape), str(tile.color)])
+
+    userHands = [{"remaining": len(game_state.game_board.tiles)}, {'userId': game_state.player1.userId, 'hand': player1Hand},
+                 {'userId': game_state.player2.userId, 'hand': player2Hand}]
+
+    return jsonify(userHands)
+
 
 
 @app.route('/deck', methods=['GET'])

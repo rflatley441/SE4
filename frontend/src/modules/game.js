@@ -88,16 +88,21 @@ const actions = {
         const user = state.players.find(player => player.id === playerId);
         if (user) {
             try {
-                const response = await axios.get(`http://127.0.0.1:5000/playerhand?userId=${playerId}`);
-                console.log("data response", response.data)
-                response.data.forEach(item => {
-                        console.log("here", response.data)
-                        console.log(item.hand)
-                        commit('setHand', {
-                            'playerId': playerId,
-                            'hand': item.hand
-                        });
-                });
+                const response = await axios.get(`http://127.0.0.1:5000/playerhand`);
+                console.log("data response", response.data);
+
+                const playersData = response.data.slice(1); // cuts out the remaining tiles info
+                for (const playerData of playersData) {
+                    console.log("playerData", playerData)
+                    const playerId = playerData.userId; 
+                    const hand = playerData.hand;
+                    console.log("playerId in loop",playerId)
+                    console.log("player hand in loop", hand)
+                    commit('setHand', {
+                        'playerId': playerId,
+                        'hand': hand
+                    });
+                }
                 dispatch('updateTilesAmount', response.data[0].remaining);
             } catch (error) {
                 console.error("Error fetching hand for playerId:", playerId, ";", error.response.data);
@@ -200,7 +205,11 @@ const mutations = {
     },
     setHand: (state, payload) => {
         let userId = payload.playerId;
-        state.players[userId].hand = []
+
+        console.log("userid in set Hand", userId)
+       console.log("hit" , state.players[userId])
+        console.log(this.playerHand)
+
         payload.hand.forEach((tile) => {
             state.players[userId].hand.push({
                 'shape': tile[0],
@@ -208,7 +217,7 @@ const mutations = {
                 'selected': false,
             })
         });
-        console.log(state.players[0].hand)
+        
     },
     removeTileFromHand(state, { userId, tileIndex }) {
         state.players[userId].hand.splice(tileIndex, 1);
