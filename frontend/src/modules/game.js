@@ -89,11 +89,9 @@ const actions = {
         if (user) {
             try {
                 const response = await axios.get(`http://127.0.0.1:5000/playerhand`);
-                console.log("data response", response.data);
 
-                const playersData = response.data.slice(1); // cuts out the remaining tiles info
+                const playersData = response.data.slice(1); // cuts out the remaining tiles info as isnt needed for fetchHand
                 for (const playerData of playersData) {
-                    console.log("playerData", playerData)
                     const playerId = playerData.userId; 
                     const hand = playerData.hand;
                     console.log("playerId in loop",playerId)
@@ -123,17 +121,22 @@ const actions = {
                 });
     
                 response.data.forEach(item => {
+                    // Check if both item.userId and item.hand are defined before committing
                     if (item.hand && item.userId) {
                         commit('setHand', {
                             playerId: item.userId,
                             hand: item.hand
                         });
+                        console.log("Updated item:", item.userId);
+                        console.log("Updated hand:", item.hand);
+                    } else {
+                        // Log when the data is undefined and therefore not committed
+                        console.log("Skipped updating due to undefined item or hand for userId:", item.userId);
                     }
                 });
     
-                console.log("Updated hand:", response);
             } catch (error) {
-                console.error("Error updating hand for player:", userId, ";", error.response.data);
+                console.error("Error updating hand for player:", userId, ";", error.response ? error.response.data : error.message);
             }
         } else {
             console.error("Player not found with userId:", userId);
@@ -156,9 +159,7 @@ const actions = {
     async gameStart({ commit, dispatch, state }) {
     
         const player1Id = state.players[0].id; 
-        console.log("player 1 id" , state.players[0].id)
         const player2Id = state.players[1].id; 
-        console.log("player 2 id" , state.players[1].id)
 
         commit('restartGame');
         try {
@@ -237,7 +238,6 @@ const mutations = {
     },
     setUsers: (state, users) => {
         state.users = users;
-        console.log("blah blah")
     
         state.players.forEach((player, index) => {
             const user = users[index];

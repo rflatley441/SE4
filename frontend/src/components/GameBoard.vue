@@ -395,28 +395,33 @@ export default {
         },
 
         async endTurn() {
-            console.log("End Turn: Current Player ID", this.players[this.userId].id);
-            // cant get this to work
-            //this.calculateScore(this.players[this.userId].id);
-            
-            // determine the next player index, looping back to 0 if at the end of the array
-            const nextPlayerIndex = (this.userId + 1) % this.players.length;
-            // get the next player's id from the players array
-            const nextPlayerId = this.players[nextPlayerIndex].id;
+
+            const currentIndex = this.userId
+            const currentPlayer = this.players.findIndex(player => player.id === this.userId);
+
+
+            const nextPlayerIndex = (currentIndex + 1) % this.players.length;
+            const nextPlayer = this.players[nextPlayerIndex];
+
+            if (!nextPlayer) {
+                console.error("Next player not found at index:", nextPlayerIndex);
+                return;
+            }
 
             this.tilesThisTurn = new Set();
 
-            await this.updateHand(this.players[this.userId].id);
-            console.log("Next Player ID", nextPlayerId);
-            await this.fetchHand(nextPlayerId);
-            await this.incrementRound(nextPlayerId);
+            // Using current player ID for clarity and correctness
+            await this.updateHand(currentPlayer.id);
+            console.log("Next Player ID", nextPlayer.id);
+            await this.fetchHand(nextPlayer.id);
+            await this.incrementRound(nextPlayer.id);
 
             // Check for game ending conditions
             if (this.deck.remaining === 0 && this.players.some(player => player.hand.length === 0)) {
                 this.determineWinner();
             }
             console.log("Tiles remaining", this.deck.remaining);
-}, 
+        },
 
     },
 }
