@@ -396,6 +396,7 @@ export default {
                     this.determineWinner();
                 }
             console.log("tiles remaining" , this.deck.remaining);
+            console.log("hello", this.$store.state);
             socket.emit('end-turn', this.$store.state); 
             
         }, 

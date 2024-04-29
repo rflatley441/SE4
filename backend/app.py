@@ -103,12 +103,17 @@ def on_join(data):
     room = data['room']
     join_room(room)
     send(username + ' has entered the room', to=room)
-    room_players = rooms()[1]
+    room_players = rooms()
     # num_players = len(room_players)
     print(room_players)
     emit('start-game')
     # if (num_players > 1):
     #     emit('start-game')
+
+
+@socketio.on('game-start')
+def handle_game_start(data):
+    emit('update-game-state', data, broadcast=True)
 
 
 @socketio.on('leave')
@@ -121,7 +126,7 @@ def on_leave(data):
 
 @socketio.on('end-turn')
 def on_end_turn(data):
-    emit('update-game-state', data)
+    emit('update-game-state', data, broadcast=True)
 
 
 if __name__ == '__main__':

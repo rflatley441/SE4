@@ -68,6 +68,9 @@ export default {
             this.updateGameState(data);
         },
     },
+    // async beforeMount() {
+    //     await this.gameStart();
+    // },
     async mounted() {
         await this.gameStart();
         socket.on('update-game-state', this.handleUpdateGameState);
