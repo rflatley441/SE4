@@ -40,11 +40,15 @@ export default {
     name: "GameBoard",
     props: {
         userId: {
-            type: String,
+            type: Number,
             required: true,
         },
-        playerHand: {
+        playerId: { // Actual player identifier
             type: String,
+            required: true
+        },
+        playerHand: {
+            type: Array,
             required: true,
         },
     },
@@ -79,7 +83,7 @@ export default {
         };
     }, 
     computed: {
-        ...mapGetters(['players', 'deck', 'winner', 'gameOver', 'playerIDs']),
+        ...mapGetters(['players', 'deck', 'winner', 'gameOver']),
     },
     expose: ['updateHighlightedBoardTiles'], // used by GamePlayView
     
@@ -391,18 +395,28 @@ export default {
         },
 
         async endTurn() {
-            this.calculateScore(this.userId);
-            const nextPlayerId = (this.userId + 1) % this.players.length;
-            this.tilesThisTurn = new Set();
-            await this.updateHand(this.userId);
-            await this.fetchHand();
-            await this.incrementRound(nextPlayerId);
-                if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
-                    this.determineWinner();
-                }
-            console.log("tiles remaining" , this.deck.remaining)
+            console.log("End Turn: Current Player ID", this.players[this.userId].id);
+            // cant get this to work
+            //this.calculateScore(this.players[this.userId].id);
+            
+            // determine the next player index, looping back to 0 if at the end of the array
+            const nextPlayerIndex = (this.userId + 1) % this.players.length;
+            // get the next player's id from the players array
+            const nextPlayerId = this.players[nextPlayerIndex].id;
 
-        }, 
+            this.tilesThisTurn = new Set();
+
+            await this.updateHand(this.players[this.userId].id);
+            console.log("Next Player ID", nextPlayerId);
+            await this.fetchHand(nextPlayerId);
+            await this.incrementRound(nextPlayerId);
+
+            // Check for game ending conditions
+            if (this.deck.remaining === 0 && this.players.some(player => player.hand.length === 0)) {
+                this.determineWinner();
+            }
+            console.log("Tiles remaining", this.deck.remaining);
+}, 
 
     },
 }
