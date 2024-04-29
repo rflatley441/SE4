@@ -20,15 +20,12 @@ const state = {
         }
     ],
 
+    board: [],
+
     deck: {
         deck_id: null,
         remaining: null,
     },
-
-    pile: [
-        {tile: null},
-        {tile: null},
-    ],
 };
 
 const getters = {
@@ -40,6 +37,7 @@ const getters = {
             finished: state.finished
         };
     },
+    board: (state) => state.board,
     players: (state) => state.players,
     playerHand: (state) => (id) => state.players[parseInt(id)].hand,
     playerScore: (state) => (id) => state.players[parseInt(id)].score,
@@ -50,6 +48,10 @@ const getters = {
 };
 
 const actions = {
+    updateGameState({commit}, gameState) {
+        commit('updateGameState', gameState);
+        console.log("game state updated", state)
+    },
     async fetchDeck({commit}) {
         try {
             const response = await axios.get("http://127.0.0.1:5000/deck");
@@ -95,6 +97,11 @@ const actions = {
             console.error(error.response.data)
         }
     },
+
+    updateBoard({commit}, board) {
+        commit('updateBoard', board);
+        console.log("board", state.board)
+    },
     
     updateTilesAmount({commit}, amount) {
         commit('updateTilesAmount', amount);
@@ -111,6 +118,7 @@ const actions = {
     },
     gameStart({commit, dispatch}) {
         commit('restartGame');
+        commit('initializeBoard');
 
         dispatch('fetchDeck').then(() =>{
             dispatch('fetchHand', 0);
@@ -139,6 +147,19 @@ const mutations = {
         state.players[1].hand = [];
         state.pile = [{tile: null}, {tile: null}]
     },
+    initializeBoard: (state) => {
+        state.board = [];
+        for (let i = 0; i < 144; i++) {
+            state.board.push({
+                value: i,
+                highlighted: false,
+                hidden: true,
+                color: '#fff',
+                shape: '',
+                position: i,
+            })
+        }
+    },
     setGameStart: (state, value) => (state.game = value),
     setTurn: (state, userId) => (state.turn = userId),
     gameOver: (state, winner) => {
@@ -166,8 +187,13 @@ const mutations = {
         state.players[userId].hand.splice(tileIndex, 1);
         console.log("hand:", state.players[userId].hand)
     },
+    updateBoard: (state, board) => (state.board = board),
     updateTilesAmount: (state, amount) => (state.deck.remaining = amount),
-
+    updateGameState: (state, gameState) => {
+        for(let key in gameState) {
+            state[key] = gameState[key];
+        }
+    },
     updatePlayerScore: (state, {userId, amount}) => {
         // console.log(` userId: ${userId} with amount: ${amount}`);
         state.players[userId].score += amount;
