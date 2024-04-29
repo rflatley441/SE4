@@ -39,6 +39,7 @@ import PlayerHand from '@/components/PlayerHand.vue';
 import PlayerScore from '@/components/PlayerScore.vue';
 import { mapActions, mapGetters } from 'vuex';
 import { ref } from 'vue';
+import socket from '@/socket';
 
 
 
@@ -58,14 +59,18 @@ export default {
         return { gameBoard };
     },
     methods: {
-        ...mapActions(['gameStart']),
+        ...mapActions(['gameStart', 'updateGameState']),
         updateHighlightedInGameBoard(){
             this.$refs.gameBoard.updateHighlightedBoardTiles();
             console.log("working!")
-        }
+        },
+        handleUpdateGameState(data) {
+            this.updateGameState(data);
+        },
     },
     async mounted() {
         await this.gameStart();
+        socket.on('update-game-state', this.handleUpdateGameState);
     },
 }
 

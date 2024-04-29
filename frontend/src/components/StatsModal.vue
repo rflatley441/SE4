@@ -19,7 +19,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 export default {
-    name: "StatsView",
+    name: "StatsModal",
     props: {
         isOpen: {
             default: false,

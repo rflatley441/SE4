@@ -4,7 +4,7 @@ from gameplay import Gameplay
 from player import Player
 from gameboard import GameBoard
 from tile import Tile
-from flask_socketio import SocketIO, emit, join_room, leave_room, send
+from flask_socketio import SocketIO, emit, join_room, leave_room, rooms, send
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -103,7 +103,12 @@ def on_join(data):
     room = data['room']
     join_room(room)
     send(username + ' has entered the room', to=room)
-    print(username, " ", room)
+    room_players = rooms()[1]
+    # num_players = len(room_players)
+    print(room_players)
+    emit('start-game')
+    # if (num_players > 1):
+    #     emit('start-game')
 
 
 @socketio.on('leave')
