@@ -88,11 +88,11 @@ export default {
     expose: ['updateHighlightedBoardTiles'], // used by GamePlayView
     
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'fetchUsers', 'gameStart']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'fetchUsers', 'gameStart', 'updatePlayerScore']),
 
         calculateScore(userId) {
-    let baseScore = 0;
-    let bonusScore = 0;
+        let baseScore = 0;
+        let bonusScore = 0;
 
     this.tilesThisTurn.forEach((position) => {
         let verticalScore = 1;
@@ -398,11 +398,11 @@ export default {
 
             const currentIndex = this.userId
             const currentPlayer = this.players.findIndex(player => player.id === this.userId);
-
+            //this.calculateScore(currentPlayer.id);
 
             const nextPlayerIndex = (currentIndex + 1) % this.players.length;
             const nextPlayer = this.players[nextPlayerIndex];
-
+            console.log(nextPlayer)
             if (!nextPlayer) {
                 console.error("Next player not found at index:", nextPlayerIndex);
                 return;
@@ -413,7 +413,7 @@ export default {
             // Using current player ID for clarity and correctness
             await this.updateHand(currentPlayer.id);
             console.log("Next Player ID", nextPlayer.id);
-            await this.fetchHand(nextPlayer.id);
+            await this.fetchHand();
             await this.incrementRound(nextPlayer.id);
 
             // Check for game ending conditions

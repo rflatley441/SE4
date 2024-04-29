@@ -233,7 +233,6 @@ const mutations = {
     updateTilesAmount: (state, amount) => (state.deck.remaining = amount),
 
     updatePlayerScore: (state, {userId, amount}) => {
-        // console.log(` userId: ${userId} with amount: ${amount}`);
         state.players[userId].score += amount;
     },
     setUsers: (state, users) => {
