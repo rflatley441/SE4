@@ -112,23 +112,31 @@ const actions = {
         }
     },
 
-    async updateHand({commit, state}, userId) {
-        try {
-            const response = await axios.post("http://127.0.0.1:5000/playerhand", {
-                userId: userId,
-                hand: state.players[userId].hand,
-            });
-            response.data.forEach(item => {
-                if (item.hand && item.userId) {
-                    commit('setHand', {
-                        'playerId': item.userId,
-                        'hand': item.hand
-                    });
-                }
-            })
-            console.log("update hand:", response)
-        } catch (error) {
-            console.error(error.response.data)
+    async updateHand({ commit, state }, userId) {
+        const player = state.players.find(player => player.id === userId);
+    
+        if (player) {
+            try {
+                const response = await axios.post("http://127.0.0.1:5000/playerhand", {
+                    userId: userId,
+                    hand: player.hand,
+                });
+    
+                response.data.forEach(item => {
+                    if (item.hand && item.userId) {
+                        commit('setHand', {
+                            playerId: item.userId,
+                            hand: item.hand
+                        });
+                    }
+                });
+    
+                console.log("Updated hand:", response);
+            } catch (error) {
+                console.error("Error updating hand for player:", userId, ";", error.response.data);
+            }
+        } else {
+            console.error("Player not found with userId:", userId);
         }
     },
     
@@ -206,12 +214,10 @@ const mutations = {
     setHand: (state, payload) => {
         let userId = payload.playerId;
 
-        console.log("userid in set Hand", userId)
-       console.log("hit" , state.players[userId])
-        console.log(this.playerHand)
+        state.players.find(player => player.id === userId).hand = []
 
         payload.hand.forEach((tile) => {
-            state.players[userId].hand.push({
+            state.players.find(player => player.id === userId).hand.push({
                 'shape': tile[0],
                 'color': tile[1],
                 'selected': false,
