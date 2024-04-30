@@ -66,9 +66,13 @@ export default {
             if (gameData.gameCode === this.gameCode) {
                 console.log('game code found', doc.id)
                 this.disabled = false;
-                await updateDoc(doc.ref, {
+
+                if(!gameData.players.includes(this.userId)) {
+                    await updateDoc(doc.ref, {
                     players: [... gameData.players, this.userId]
                 });
+                }
+
                 socket.emit('join', { username: this.username, room: this.gameCode})
                 router.push('/game')
                 console.log("Player added to game: ", this.userId);
