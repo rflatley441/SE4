@@ -114,8 +114,8 @@ const actions = {
     },
 
     randomStart({commit}) {
-        let random = Math.round(Math.random());
-        commit('setTurn', random);
+        // let random = Math.round(Math.random());
+        commit('setTurn', 0);
     },
     gameStart({commit, dispatch}) {
         commit('restartGame');
@@ -193,7 +193,7 @@ const mutations = {
     updateGameState: (state, gameState) => {
         console.log("testtest", gameState['game'])
         for(let key in gameState['game']) {
-            console.log("hello")
+            // console.log("hello")
             console.log(key, " ", gameState['game'][key])
             state[key] = gameState['game'][key];
         }
