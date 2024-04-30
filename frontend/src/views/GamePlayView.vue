@@ -70,7 +70,6 @@ export default {
     },
     async mounted() {
         await this.gameStart();
-        console.log("yay", this.$store.state);
         // socket.emit('game-start', this.gameState.turn);
         socket.on('update-game-state', this.handleUpdateGameState);
     },

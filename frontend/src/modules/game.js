@@ -49,7 +49,6 @@ const getters = {
 
 const actions = {
     updateGameState({commit}, gameState) {
-        console.log("game state test", gameState);
         commit('updateGameState', gameState);
         console.log("game state updated", state)
     },
@@ -191,10 +190,7 @@ const mutations = {
     updateBoard: (state, board) => (state.board = board),
     updateTilesAmount: (state, amount) => (state.deck.remaining = amount),
     updateGameState: (state, gameState) => {
-        console.log("testtest", gameState['game'])
         for(let key in gameState['game']) {
-            // console.log("hello")
-            console.log(key, " ", gameState['game'][key])
             state[key] = gameState['game'][key];
         }
     },

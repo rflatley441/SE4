@@ -60,15 +60,6 @@ export default {
            tilesThisTurn,
         };
     }, 
-    // mounted() {
-    //     // Listen for the 'update-game-state' event from the server
-    //     socket.on('update-game-state', this.handleUpdateGameState);
-    // },
-
-    // beforeUnmount() {
-    //     // Remove the event listener when the component is unmounted
-    //     socket.off('update-game-state', this.handleUpdateGameState);
-    // },
     computed: {
         ...mapGetters(['players', 'deck', 'winner', 'gameOver', 'board']),
     },
@@ -76,10 +67,7 @@ export default {
     
     methods: {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard']),
-
-        // handleUpdateGameState(data) {
-        //     this.updateGameState(data);
-        // },
+        
         calculateScore(userId) {
     let baseScore = 0;
     let bonusScore = 0;

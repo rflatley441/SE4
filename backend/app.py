@@ -111,9 +111,9 @@ def on_join(data):
     #     emit('start-game')
 
 
-@socketio.on('game-start')
-def handle_game_start(data):
-    emit('update-game-state', data, broadcast=True)
+# @socketio.on('game-start')
+# def handle_game_start(data):
+#     emit('update-game-state', data, broadcast=True)
 
 
 @socketio.on('leave')
