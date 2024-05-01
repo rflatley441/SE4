@@ -1,5 +1,7 @@
 <template>
     <div id="app">
+      <!-- Content goes here -->
+    </div>
         <div class="content">
             <div class="contents-container">
                 <div id = signuptitle>Sign Up</div>
