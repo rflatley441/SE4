@@ -387,7 +387,7 @@ export default {
             const currentIndex = this.userId
             const currentPlayer = this.players[currentIndex];
             console.log("current player", currentPlayer)
-            //this.calculateScore(currentPlayer.id);
+            this.calculateScore(currentIndex);
 
             const nextPlayerIndex = (currentIndex + 1) % this.players.length;
             const nextPlayer = this.players[nextPlayerIndex];
@@ -403,7 +403,7 @@ export default {
             await this.updateHand(currentPlayer.id);
             console.log("Next Player ID", nextPlayer.id);
             await this.fetchHand(nextPlayer.id);
-            await this.incrementRound(nextPlayer.id);
+            await this.incrementRound(nextPlayerIndex);
 
             // Check for game ending conditions
             if (this.deck.remaining === 0 && this.players.some(player => player.hand.length === 0)) {
