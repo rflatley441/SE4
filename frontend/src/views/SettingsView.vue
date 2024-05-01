@@ -7,7 +7,9 @@
       <div id="topContainer">
 
         <div id="profile_picContainer">
-          <img :src="profile_pic" alt="Profile Picture" class="profile-pic" />
+          <img v-if="profile_pic" src={{ this.profile_pic }} alt="Profile Picture" class="profile-pic" />
+          <img v-else src="https://picsum.photos/id/237/250" alt="Profile Picture" class="profile-pic" />
+          
         </div>
         <div id="changePhotoBox">
           <label for="changePhotoBox">Change Photo </label>
@@ -313,11 +315,6 @@ export default {
   components: {
     NavBar,
   },
-  data() {
-    return {
-      profile_pic: require('./Screenshot 2024-04-23 211431.png'),
-    };
-  },
   async created() {
     const auth = getAuth();
      const user = auth.currentUser;     
@@ -327,11 +324,12 @@ export default {
      const userRef = doc(db, 'users' , user.uid);
      const docSnap = await getDoc(userRef);
      if (docSnap.exists()) {
-      const userData = docSnap.data();
-       this.profile_pic = userData.profile_pic;
-     } else {
-       this.profile_pic = require('./Screenshot 2024-04-23 211431.png');
-     }
+      const userData = docSnap.data();      
+      console.log(userData);
+
+       this.profile_pic = userData.profil_pic;
+     } 
+     console.log(this.profile_pic);
    }
 };
 </script>

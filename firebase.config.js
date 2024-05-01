@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import {getStorage} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: `${process.env.apiKey}`,
@@ -13,3 +14,4 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+const storage = getStorage(firebaseApp, "gs://qwirkle-dc485.appspot.com");
