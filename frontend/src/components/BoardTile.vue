@@ -1,7 +1,7 @@
 <template>
     <div class="tile" @click="handleTileClick">
-        <div class="tile-shown is-hidden" v-if="this.hidden"/>
-        <!-- <div class="tile-shown is-highlighted" v-else-if="this.highlighted">hello</div> -->
+        <div class="tile-shown is-highlighted" v-if="this.highlighted"></div>
+        <div class="tile-shown is-hidden" v-else-if="this.hidden"></div>
         <component v-else :is="getTileComponent()" :fillColor="this.color" :width="width" :height="height" :class="{ 'selected': isSelected }"/>
     </div>
 </template>
@@ -47,10 +47,10 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
             type: Boolean,
             default: false,
         },
-        // highlighted: {
-        //     type: Boolean,
-        //     default: false
-        // }
+        highlighted: {
+            type: Boolean,
+            default: false
+        }
 
     }, 
     setup(props, context) {
@@ -108,10 +108,10 @@ import Star8ptTile from '@/assets/Star8ptTile.vue';
     border-color: #99cccc;
     box-sizing: border-box;
 }
-/* .tile-shown.is-highlighted {
+.tile-shown.is-highlighted {
     background-color: gray;
     position: absolute
-} */
+}
 
 </style>
 

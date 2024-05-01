@@ -6,17 +6,17 @@
             {{ this.gameState.turn === 0 ? 'Player 1\'s Turn' : 'Player 2\'s Turn' }}
         </div>            <div class="game-board"> 
                 <!-- right now i am just setting the user ids to 0 when implementing dual players they will need to be changed based off round -->
-                <GameBoard :playerHand="this.playerHand" :userId="this.gameState.turn"/>
+                <GameBoard :playerHand="this.playerHand" :userId="this.gameState.turn" ref="gameBoard"/>
             </div>
             <div class="player-hand-background">
                 <div class="player-hand">
-                    <PlayerHand :playerHand="this.playerHand" :userId="1"/>
+                    <PlayerHand :playerHand="this.playerHand" :userId="1" @update-highlighted="updateHighlightedInGameBoard"/>
                 </div>
             </div>
 
             <div class="player-2-hand-background">
                 <div class="player-2-hand">
-                    <PlayerHand :playerHand="this.playerHand" :userId="0"/>
+                    <PlayerHand :playerHand="this.playerHand" :userId="0" @update-highlighted="updateHighlightedInGameBoard"/>
                 </div>
             </div>
 
@@ -38,6 +38,10 @@ import GameBoard from '@/components/GameBoard.vue';
 import PlayerHand from '@/components/PlayerHand.vue';
 import PlayerScore from '@/components/PlayerScore.vue';
 import { mapActions, mapGetters } from 'vuex';
+import { ref } from 'vue';
+import socket from '@/socket';
+
+
 
 export default {
     name: "GamePlayView",
@@ -50,11 +54,24 @@ export default {
     computed: {
         ...mapGetters(['playerHand', 'gameState']),
     },
+    setup(){
+        const gameBoard = ref(null);
+        return { gameBoard };
+    },
     methods: {
-        ...mapActions(['gameStart']),
+        ...mapActions(['gameStart', 'updateGameState']),
+        updateHighlightedInGameBoard(){
+            this.$refs.gameBoard.updateHighlightedBoardTiles();
+            console.log("working!")
+        },
+        handleUpdateGameState(data) {
+            this.updateGameState(data);
+        },
     },
     async mounted() {
         await this.gameStart();
+        // socket.emit('game-start', this.gameState.turn);
+        socket.on('update-game-state', this.handleUpdateGameState);
     },
 }
 
@@ -65,6 +82,7 @@ export default {
     display: flex;
     position: relative;
     min-height: calc(100vh - 16px); 
+    background-color: #FDF5E6;
 }
 
 .content {
@@ -72,8 +90,9 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding-top: 60px;
+    padding-top: 90px;
     box-sizing: border-box;
+    background-color: #FDF5E6;
 }
 
 .game-board {
@@ -154,6 +173,7 @@ export default {
     bottom: 0;
     height: 150px;
     width: 850px; 
+    border-radius: 10px;
 }
 
 .player-hand, .player-2-hand {

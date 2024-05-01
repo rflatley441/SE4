@@ -49,12 +49,7 @@ const router = createRouter({
     {
       path: "/faq",
       component: FAQView,
-    }, 
-    {
-      path: "/settings",
-      component: SettingsView,
-    } 
-
+    },
   ]
 })
 
