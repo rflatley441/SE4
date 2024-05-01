@@ -35,7 +35,7 @@
     width: 250px;
     bottom: 150px;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 10px;
   }
   .player2-score {
     position: absolute;
@@ -46,6 +46,6 @@
     width: 200px;
     bottom: 150px;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 10px;
   }
   </style>

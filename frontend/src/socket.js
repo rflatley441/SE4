@@ -10,4 +10,8 @@ const URL = process.env.NODE_ENV === "production" ? undefined : "http://127.0.0.
 
 const socket = io(URL);
 
+socket.on('join')
+
+socket.on('leave')
+
 export default socket;

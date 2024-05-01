@@ -48,8 +48,7 @@ const router = createRouter({
     {
       path: "/faq",
       component: FAQView,
-    }
-
+    },
   ]
 })
 

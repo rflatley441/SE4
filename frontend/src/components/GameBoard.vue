@@ -2,7 +2,7 @@
     <div class="game-board-container">
         <section class="game-board">
             <BoardTile 
-            v-for="(tile, index) in tileList" 
+            v-for="(tile, index) in this.board" 
             :key="`tile-${index}`" 
             :value="index" 
             :hidden="tile.hidden" 
@@ -32,9 +32,9 @@
 </template>
 
 <script>
+import socket from "@/socket"
 import BoardTile from "./BoardTile.vue"
 import { mapActions, mapGetters } from "vuex"
-import { ref } from "vue"
 
 export default {
     name: "GameBoard",
@@ -61,35 +61,22 @@ export default {
     
 },
     setup() {
-        const tileList = ref([])
         var tilesPlayed = new Set()
         var tilesThisTurn = new Set()
 
-        for (let i = 0; i < 144; i++) {
-            tileList.value.push({
-                value: i,
-                highlighted: false,
-                hidden: true,
-                color: '#fff',
-                shape: '',
-                position: i,
-            })
-        }
-
         return {
-           tileList,
            tilesPlayed,
            tilesThisTurn,
         };
     }, 
     computed: {
-        ...mapGetters(['players', 'deck', 'winner', 'gameOver']),
+        ...mapGetters(['players', 'deck', 'winner', 'gameOver', 'board']),
     },
     expose: ['updateHighlightedBoardTiles'], // used by GamePlayView
     
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'fetchUsers', 'gameStart', 'updatePlayerScore']),
-
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard', 'fetchUsers', 'gameStart', 'updatePlayerScore']),
+        
         calculateScore(userId) {
         let baseScore = 0;
         let bonusScore = 0;
@@ -170,10 +157,10 @@ export default {
             this.updateHighlightedBoardTiles();
 
             if (tileSelected !== null && this.tilePlacementIsValid(payload)) {
-                this.tileList[payload.position].color = this.playerHand(this.userId)[tileSelected].color;
-                this.tileList[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
+                this.board[payload.position].color = this.playerHand(this.userId)[tileSelected].color;
+                this.board[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
 
-                this.tileList[payload.position].hidden = false;
+                this.board[payload.position].hidden = false;
                 this.tilesPlayed.add(payload.position);
                 this.tilesThisTurn.add(payload.position);
                 // tileList.value[payload.position].highlighted = true;
@@ -182,6 +169,7 @@ export default {
                     userId: this.userId,
                     tileIndex: tileSelected
                 });
+                this.updateBoard(this.board);
                 this.updateHighlightedBoardTiles();
             }
         },
@@ -190,12 +178,12 @@ export default {
             let dummyPayload = {
                 position: 0,
             };
-            for (let i = 0; i < this.tileList.length; i++){
+            for (let i = 0; i < this.board.length; i++){
                 dummyPayload.position = i;
                 if (this.tilePlacementIsValid(dummyPayload)){
-                    this.tileList[i].highlighted = true;
+                    this.board[i].highlighted = true;
                 } else {
-                    this.tileList[i].highlighted = false;
+                    this.board[i].highlighted = false;
                 }
             }
         },
@@ -256,15 +244,15 @@ export default {
                 var seenColors = new Set();
                 var seenShapes = new Set();
                 var currentIndex = payload.position - verticalIncrement;
-                while(!(currentIndex < 0 || this.tileList[currentIndex].hidden)){ // up
-                    seenColors.add(this.tileList[currentIndex].color);
-                    seenShapes.add(this.tileList[currentIndex].shape);
+                while(!(currentIndex < 0 || this.board[currentIndex].hidden)){ // up
+                    seenColors.add(this.board[currentIndex].color);
+                    seenShapes.add(this.board[currentIndex].shape);
                     currentIndex = currentIndex - verticalIncrement;
                 }
                 currentIndex = payload.position + verticalIncrement;
-                while(!(currentIndex > 143 || this.tileList[currentIndex].hidden)){ // down
-                    seenColors.add(this.tileList[currentIndex].color);
-                    seenShapes.add(this.tileList[currentIndex].shape);
+                while(!(currentIndex > 143 || this.board[currentIndex].hidden)){ // down
+                    seenColors.add(this.board[currentIndex].color);
+                    seenShapes.add(this.board[currentIndex].shape);
                     currentIndex = currentIndex + verticalIncrement;
                 }
                 // must all be same color XOR same shape
@@ -277,15 +265,15 @@ export default {
                 seenColors = new Set();
                 seenShapes = new Set();
                 currentIndex = payload.position - 1;
-                while(!(currentIndex < rowStart || this.tileList[currentIndex].hidden)){ // left
-                    seenColors.add(this.tileList[currentIndex].color);
-                    seenShapes.add(this.tileList[currentIndex].shape);
+                while(!(currentIndex < rowStart || this.board[currentIndex].hidden)){ // left
+                    seenColors.add(this.board[currentIndex].color);
+                    seenShapes.add(this.board[currentIndex].shape);
                     currentIndex = currentIndex - 1;
                 }
                 currentIndex = payload.position + 1;
-                while(!(currentIndex > rowEnd || this.tileList[currentIndex].hidden)){ // right
-                    seenColors.add(this.tileList[currentIndex].color);
-                    seenShapes.add(this.tileList[currentIndex].shape);
+                while(!(currentIndex > rowEnd || this.board[currentIndex].hidden)){ // right
+                    seenColors.add(this.board[currentIndex].color);
+                    seenShapes.add(this.board[currentIndex].shape);
                     currentIndex = currentIndex + 1;
                 }
 
@@ -314,7 +302,7 @@ export default {
                 adjacentTiles.add(payload.position + 1)
             }
             for (let tile of adjacentTiles){
-                if (!this.tileList[tile].hidden){
+                if (!this.board[tile].hidden){
                     return true;
                 }
             }
@@ -357,7 +345,7 @@ export default {
                     if (payload.position == currentIndex && currentIndex >= leftBorder){
                         return true;
                     }
-                } while(!(currentIndex < leftBorder || this.tileList[currentIndex].hidden));
+                } while(!(currentIndex < leftBorder || this.board[currentIndex].hidden));
 
                 currentIndex = maxTile;
                 let rightBorder = maxTile + (11 - (maxTile % 12));
@@ -366,7 +354,7 @@ export default {
                     if (payload.position == currentIndex && currentIndex <= rightBorder){
                         return true;
                     }
-                } while(!(currentIndex > rightBorder || this.tileList[currentIndex].hidden));
+                } while(!(currentIndex > rightBorder || this.board[currentIndex].hidden));
 
                 console.log("horizontal failure!");
             } 
@@ -378,7 +366,7 @@ export default {
                     if (payload.position == currentIndex && currentIndex >= topBorder){
                         return true;
                     }
-                } while(!(currentIndex < topBorder || this.tileList[currentIndex].hidden));
+                } while(!(currentIndex < topBorder || this.board[currentIndex].hidden));
                 
                 currentIndex = minTile;
                 let bottomBorder = 143;
@@ -387,7 +375,7 @@ export default {
                     if (payload.position == currentIndex && currentIndex <= bottomBorder){
                         return true;
                     }
-                } while(!(currentIndex > bottomBorder || this.tileList[currentIndex].hidden));
+                } while(!(currentIndex > bottomBorder || this.board[currentIndex].hidden));
 
                 console.log("vertical failure!");
             }
@@ -422,6 +410,8 @@ export default {
                 this.determineWinner();
             }
             console.log("Tiles remaining", this.deck.remaining);
+            socket.emit('end-turn', this.$store.state); 
+
         },
 
     },

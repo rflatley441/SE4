@@ -4,6 +4,7 @@ import router from './router'
 import store from './store.js'
 import { initializeApp } from 'firebase/app';
 import socket from './socket.js'
+import './fonts.css'
 
 
 const firebaseConfig = {
