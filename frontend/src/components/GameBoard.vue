@@ -35,6 +35,8 @@
 import socket from "@/socket"
 import BoardTile from "./BoardTile.vue"
 import { mapActions, mapGetters } from "vuex"
+import { getFirestore, doc, updateDoc, increment, getDoc } from 'firebase/firestore';
+
 
 export default {
     name: "GameBoard",
@@ -69,78 +71,108 @@ export default {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard']),
         
         calculateScore(userId) {
-    let baseScore = 0;
-    let bonusScore = 0;
+            let baseScore = 0;
+            let bonusScore = 0;
 
-    this.tilesThisTurn.forEach((position) => {
-        let verticalScore = 1;
-        let horizontalScore = 1;
+            this.tilesThisTurn.forEach((position) => {
+                let verticalScore = 1;
+                let horizontalScore = 1;
 
-        let up = position - 12;
-        while (this.tilesPlayed.has(up)) {
-            verticalScore++;
-            up -= 12;
-        }
+                let up = position - 12;
+                while (this.tilesPlayed.has(up)) {
+                    verticalScore++;
+                    up -= 12;
+                }
 
-        let down = position + 12;
-        while (this.tilesPlayed.has(down)) {
-            verticalScore++;
-            down += 12;
-        }
+                let down = position + 12;
+                while (this.tilesPlayed.has(down)) {
+                    verticalScore++;
+                    down += 12;
+                }
 
-        let left = position - 1;
-        while (position % 12 !== 0 && this.tilesPlayed.has(left)) {
-            horizontalScore++;
-            left--;
-        }
+                let left = position - 1;
+                while (position % 12 !== 0 && this.tilesPlayed.has(left)) {
+                    horizontalScore++;
+                    left--;
+                }
 
-        let right = position + 1;
-        while (position % 12 !== 11 && this.tilesPlayed.has(right)) {
-            horizontalScore++;
-            right++;
-        }
+                let right = position + 1;
+                while (position % 12 !== 11 && this.tilesPlayed.has(right)) {
+                    horizontalScore++;
+                    right++;
+                }
 
-        if (verticalScore === 6) {
-            bonusScore += 6;
-        }
-        if (horizontalScore === 6) {
-            bonusScore += 6;
-        }
+                if (verticalScore === 6) {
+                    bonusScore += 6;
+                }
+                if (horizontalScore === 6) {
+                    bonusScore += 6;
+                }
 
-        if (verticalScore > 1) {
-            baseScore += verticalScore - 1;
-        }
-        if (horizontalScore > 1) {
-            baseScore += horizontalScore - 1;
-        }
-    });
+                if (verticalScore > 1) {
+                    baseScore += verticalScore - 1;
+                }
+                if (horizontalScore > 1) {
+                    baseScore += horizontalScore - 1;
+                }
+            });
 
-    baseScore += this.tilesThisTurn.size;
+            baseScore += this.tilesThisTurn.size;
 
-    let totalScore = baseScore + bonusScore;
-    this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
-},
+            let totalScore = baseScore + bonusScore;
+            this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
+        },
 
 
-     determineWinner() {
-        let highestScore = -1;
-        let winner = ""
-        console.log("winner function")
+        determineWinner() {
+            let highestScore = -1;
+            let winner = ""
+            console.log("winner function")
 
-        if (this.deck.remaining == 0) {
-            this.players.forEach((player, index) => {
-            if (player.score > highestScore) {
-                highestScore = player.score;
-                winner = `Player ${index + 1} Wins!`;
+            if (this.deck.remaining == 0) {
+                this.players.forEach((player, index) => {
+                if (player.score > highestScore) {
+                    highestScore = player.score;
+                    winner = `Player ${index + 1} Wins!`;
+                }
+                updatePlayerStats(highestScore, [1, 0, 0]); // needs to be updated once websocket is set up
+            });
+            //return winner
+            this.$store.dispatch('setGameOver', { winner: winner});
+        
             }
-        });
-        //return winner
-        this.$store.dispatch('setGameOver', { winner: winner});
-     
-        }
-      
-    },
+        
+        },
+        async updatePlayerStats(score, record){
+            const auth = getAuth();
+            const user = auth.currentUser;
+            const db = getFirestore();
+            const docRef = doc(db, 'users', user.uid);
+            const docSnap = await getDoc(docRef);
+            await updateDoc(docRef,{
+                wins: increment(record[0]),
+                losses: increment(record[1]),
+                draws: increment(record[2]),
+                total_points: increment(score)
+            })
 
+            console.log("hello", docSnap);
+            let top_score = 999999;
+            if(docSnap.exists()) {
+                const data = docSnap.data()
+                console.log("Document data:", data);
+                top_score = data.high_score;
+            }
+            if (high_score < score){
+                await updateDoc(docRef,{
+                    wins: increment(record[0]),
+                    losses: increment(record[1]),
+                    draws: increment(record[2]),
+                    total_points: increment(score),
+                    high_score: top_score
+                })
+            }
+        },
         async placeTile(payload) {
             let tileSelected = null;
 
