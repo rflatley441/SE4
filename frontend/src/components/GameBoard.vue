@@ -397,12 +397,13 @@ export default {
         async endTurn() {
 
             const currentIndex = this.userId
-            const currentPlayer = this.players.findIndex(player => player.id === this.userId);
+            const currentPlayer = this.players[currentIndex];
+            console.log("current player", currentPlayer)
             //this.calculateScore(currentPlayer.id);
 
             const nextPlayerIndex = (currentIndex + 1) % this.players.length;
             const nextPlayer = this.players[nextPlayerIndex];
-            console.log(nextPlayer)
+            console.log("next player" , nextPlayer)
             if (!nextPlayer) {
                 console.error("Next player not found at index:", nextPlayerIndex);
                 return;
@@ -413,7 +414,7 @@ export default {
             // Using current player ID for clarity and correctness
             await this.updateHand(currentPlayer.id);
             console.log("Next Player ID", nextPlayer.id);
-            await this.fetchHand();
+            await this.fetchHand(nextPlayer.id);
             await this.incrementRound(nextPlayer.id);
 
             // Check for game ending conditions
