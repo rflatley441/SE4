@@ -5,6 +5,7 @@
             <router-link to="/home" class="navItem">Home</router-link>    
             <router-link to="/game" class="navItem">Play Game</router-link>
             <router-link to="/faq" class="navItem">How to Play</router-link>
+            <router-link to="/settings" class="navItem">Settings</router-link>
             <router-link to="/" class="navItem">Logout</router-link>
             <ProfilePicture v-if="showProfilePicture" style="margin-left: auto;" />      
         </div>

@@ -1,21 +1,20 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
 import { getAuth } from "firebase/auth";
 
-
-import LoginPage from '../views/LoginView.vue'
-import SignupPage from '../views/SignupView.vue'
-import PasswordPage from '../views/PasswordView.vue'
-import GamePlayView from '@/views/GamePlayView.vue'
-import HomeView from '@/views/Homeview.vue'
-import FAQView from '@/views/FAQView.vue'
-import SettingsView from '@/views/SettingsView.vue' 
+import LoginPage from "../views/LoginView.vue";
+import SignupPage from "../views/SignupView.vue";
+import PasswordPage from "../views/PasswordView.vue";
+import GamePlayView from "@/views/GamePlayView.vue";
+import HomeView from "@/views/Homeview.vue";
+import FAQView from "@/views/FAQView.vue";
+import SettingsView from "@/views/SettingsView.vue";
 
 const requireAuth = (to, from, next) => {
   const auth = getAuth();
   const user = auth.currentUser;
   if (!user) {
     // User not logged in, redirect to login page
-    next({ name: 'Login' });
+    next({ name: "Login" });
   } else {
     // User is logged in, proceed to requested route
     next();
@@ -26,16 +25,16 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/',
-      component: LoginPage
+      path: "/",
+      component: LoginPage,
     },
     {
-      path: '/signup',
-      component: SignupPage
+      path: "/signup",
+      component: SignupPage,
     },
     {
-      path: '/password',
-      component: PasswordPage
+      path: "/password",
+      component: PasswordPage,
     },
     {
       path: "/game",
@@ -44,13 +43,17 @@ const router = createRouter({
     {
       path: "/home",
       component: HomeView,
-      beforeEnter: requireAuth, 
+      beforeEnter: requireAuth,
     },
     {
       path: "/faq",
       component: FAQView,
     },
-  ]
-})
+    {
+      path: "/settings",
+      component: SettingsView,
+    },
+  ],
+});
 
-export default router
+export default router;

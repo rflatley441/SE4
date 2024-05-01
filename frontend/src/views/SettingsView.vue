@@ -7,9 +7,9 @@
       <div id="topContainer">
 
         <div id="profile_picContainer">
-          <img v-if="profile_pic" src={{ this.profile_pic }} alt="Profile Picture" class="profile-pic" />
+          <img v-if="profile_pic" src='{{ this.profile_pic }}' alt="Profile Picture" class="profile-pic" />
           <img v-else src="https://picsum.photos/id/237/250" alt="Profile Picture" class="profile-pic" />
-          
+
         </div>
         <div id="changePhotoBox">
           <label for="changePhotoBox">Change Photo </label>
@@ -62,7 +62,6 @@
 </template>
 
 <style scoped>
-
 #content {
   margin-top: 20px;
 }
@@ -90,8 +89,8 @@
 #profile_picContainer {
   position: center;
   z-index: 0;
-  top: 100; 
-  left: 260px; 
+  top: 100;
+  left: 260px;
   width: 200px;
   height: 200px;
   position: relative;
@@ -101,8 +100,8 @@
 
 /* the actual profile picture */
 .profile-pic {
-  width: 300; 
-  height: 300; 
+  width: 300;
+  height: 300;
 }
 
 #changePhotoBox {
@@ -152,12 +151,12 @@ label[for="changePhotoBox"] {
 #inputsContainer {
   background: #b3daff;
   width: 500px;
-  height:400px;
+  height: 400px;
   padding-left: 60px;
   padding-top: 40px;
   padding-bottom: 40px;
   margin-left: 550px;
-  margin-right:200px;
+  margin-right: 200px;
   margin-top: -220px;
 }
 
@@ -315,21 +314,27 @@ export default {
   components: {
     NavBar,
   },
+  data() {
+    return {
+      username: null,
+      profile_pic: null,
+    };
+  },
   async created() {
     const auth = getAuth();
-     const user = auth.currentUser;     
-     console.log(user);
+    const user = auth.currentUser;
+    const db = getFirestore();
+    const docRef = doc(db, 'users', user.uid);
+    const docSnap = await getDoc(docRef);
 
-     const db = getFirestore();
-     const userRef = doc(db, 'users' , user.uid);
-     const docSnap = await getDoc(userRef);
-     if (docSnap.exists()) {
-      const userData = docSnap.data();      
-      console.log(userData);
+    if (docSnap.exists()) {
+      const data = docSnap.data()
+      console.log("Document data:", data);
+      this.username = data.username;
+      this.profile_pic = data.profil_pic;
+      console.log(this.profile_pic);
+    }
+  }
+}
 
-       this.profile_pic = userData.profil_pic;
-     } 
-     console.log(this.profile_pic);
-   }
-};
 </script>
