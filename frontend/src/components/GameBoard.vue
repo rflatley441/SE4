@@ -35,6 +35,7 @@
 import socket from "@/socket"
 import BoardTile from "./BoardTile.vue"
 import { mapActions, mapGetters } from "vuex"
+import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, updateDoc, increment, getDoc } from 'firebase/firestore';
 
 
@@ -124,21 +125,21 @@ export default {
         },
 
 
-        determineWinner() {
+        async determineWinner() {
             let highestScore = -1;
             let winner = ""
             console.log("winner function")
 
             if (this.deck.remaining == 0) {
-                this.players.forEach((player, index) => {
-                if (player.score > highestScore) {
-                    highestScore = player.score;
-                    winner = `Player ${index + 1} Wins!`;
-                }
-                updatePlayerStats(highestScore, [1, 0, 0]); // needs to be updated once websocket is set up
-            });
-            //return winner
-            this.$store.dispatch('setGameOver', { winner: winner});
+                await this.players.forEach((player, index) => {
+                    if (player.score > highestScore) {
+                        highestScore = player.score;
+                        winner = `Player ${index + 1} Wins!`;
+                    }
+                    this.updatePlayerStats(highestScore, [1, 0, 0]); // needs to be updated once websocket is set up
+                });
+                //return winner
+                this.$store.dispatch('setGameOver', { winner: winner});
         
             }
         
@@ -163,7 +164,7 @@ export default {
                 console.log("Document data:", data);
                 top_score = data.high_score;
             }
-            if (high_score < score){
+            if (top_score < score){
                 await updateDoc(docRef,{
                     wins: increment(record[0]),
                     losses: increment(record[1]),
@@ -413,7 +414,7 @@ export default {
             await this.fetchHand();
             await this.incrementRound(nextPlayerId);
                 if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
-                    this.determineWinner();
+                    await this.determineWinner();
                 }
             console.log("tiles remaining" , this.deck.remaining);
             console.log("hello", this.$store.state);
