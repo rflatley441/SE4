@@ -2,17 +2,40 @@
   <div id="app">
     <NavBar />
     <div id="content">
-      <div id="title">User Settings</div>
-
+      <header class = "header">
+        <h1 style="font-size: 80px">User Settings</h1>
+      </header>
       <div id="topContainer">
-
         <div id="profile_picContainer">
-          <img v-if="profile_pic" src='{{ this.profile_pic }}' alt="Profile Picture" class="profile-pic" />
-          <img v-else src="https://picsum.photos/id/237/250" alt="Profile Picture" class="profile-pic" />
 
+          <div>
+            <div v-if="open">
+              <div>
+                <form @click="openFilePicker">
+                  <input type="file" accept="image/*" @change="handleFileChange" ref="fileInput" hidden />
+                  <div v-if="photoURL">
+                    <img :src="photoURL" :alt="fileName" class="profile-pic" />
+                  </div>
+                  <div v-else>
+                    <span>Upload</span>
+                  </div>
+                </form>
+              </div>
+              <div>
+                <button @click="closeModal">Cancel</button>
+                <button :disabled="loading || !photo" @click="handleUpload">
+                  Upload
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
         <div id="changePhotoBox">
-          <label for="changePhotoBox">Change Photo </label>
+          
+          <button class="change-photo-button" @click="openModal">Change Photo</button>
+          <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" />
+
+
         </div>
         <div id="inputsContainer">
           <div class="innerBox">
@@ -62,15 +85,32 @@
 </template>
 
 <style scoped>
-#content {
-  margin-top: 20px;
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+.content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    background-color: #FDF5E6;
 }
+
+.header { 
+  font-size:2em;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 50px;
+}
+
 
 #app {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
+  font-family: 'Quicksand', sans-serif;
 }
 
 #title {
@@ -82,7 +122,6 @@
   font-size: 100px;
   font-weight: 80;
   color: black;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* the position of the profile picture */
@@ -100,8 +139,11 @@
 
 /* the actual profile picture */
 .profile-pic {
-  width: 300;
-  height: 300;
+  width: 500px;
+  height: 350px;
+  border-radius: 10px; 
+  object-fit: cover; /* Ensures the aspect ratio of the image is maintained */
+  margin-left: -60px;
 }
 
 #changePhotoBox {
@@ -110,7 +152,7 @@
   height: 20px;
   padding-left: 0px;
   padding-top: 30px;
-  margin-top: 210px;
+  margin-top: 140px;
   margin-right: -500px;
   display: flex;
   justify-content: center;
@@ -118,6 +160,7 @@
   flex-direction: column;
   position: relative;
   z-index: 0;
+  border-radius: 10px; /* Adjust this value as needed */
 }
 
 label[for="changePhotoBox"] {
@@ -128,6 +171,29 @@ label[for="changePhotoBox"] {
   /* Added */
   z-index: 1;
   padding-bottom: 30px;
+}
+
+.change-photo-button {
+  width: 500px;
+  height: 200px;
+  background-color: #b3daff; 
+  border: none;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  padding-bottom: 20px;
+  padding-top: 30px;
+  transition: background-color 0.3s ease;
+  border-radius: 10px;
+}
+
+.change-photo-button:hover {
+  background-color: #6a90d7;
 }
 
 .passwordContainer {
@@ -158,6 +224,7 @@ label[for="changePhotoBox"] {
   margin-left: 550px;
   margin-right: 200px;
   margin-top: -220px;
+  border-radius: 10px;
 }
 
 .inputHolder {
@@ -179,7 +246,6 @@ label[for="changePhotoBox"] {
   font-size: 35px;
   font-weight: 600;
   color: black;
-  font-family: Arial, Helvetica, sans-serif;
   text-align: left;
 }
 
@@ -210,6 +276,7 @@ label[for="changePhotoBox"] {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  border-radius: 10px;
 }
 
 .slidecontainer {
@@ -269,6 +336,7 @@ label[for="changePhotoBox"] {
   padding-bottom: 10px;
   padding-right: 60px;
   margin-top: 50px;
+  border-radius: 10px;
 }
 
 label[for="colorblindModeToggle"] {
@@ -305,36 +373,125 @@ label[for="colorblindModeToggle"] {
 </style>
 
 <script>
+import { storage, ref, uploadBytes, getDownloadURL, updateProfile } from "firebase/storage";
+import { auth } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import NavBar from "@/components/NavBar.vue";
-import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-
 export default {
-  name: "SettingsView",
+  // ...
   components: {
     NavBar,
   },
   data() {
     return {
-      username: null,
-      profile_pic: null,
+      open: false,
+      loading: false,
+      photoURL: "",
+      photo: null,
+      fileName: "No file selected",
+      // ...
     };
   },
-  async created() {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const db = getFirestore();
-    const docRef = doc(db, 'users', user.uid);
-    const docSnap = await getDoc(docRef);
+  methods: {
+    async created() {
+      const user = auth.currentUser;
+      if (user) {
+        const userDoc = doc(getFirestore(), "users", user.uid);
+        const userDocData = await getDoc(userDoc);
+        if (userDocData.exists()) {
+          this.profile_pic = userDocData.data().profile_pic;
+        }
+      }
+    },
+    openModal() {
+      this.open = true;
+    },
+    closeModal() {
+      this.photo = null;
+      this.photoURL = "";
+      this.fileName = "No file selected";
+      this.open = false;
+    },
+    openFilePicker() {
+      this.$refs.fileInput.click();
+    },
+    handleFileChange(event) {
+      if (event.target.files[0]) {
+        this.photo = event.target.files[0];
+        this.fileName = event.target.files[0].name;
+        this.photoURL = URL.createObjectURL(event.target.files[0]);
+      }
+    },
+    async fetchUserInfo() {
+      if (this.user?.photoURL) {
+        this.profile_pic = this.user.photoURL;
+      }
 
-    if (docSnap.exists()) {
-      const data = docSnap.data()
-      console.log("Document data:", data);
-      this.username = data.username;
-      this.profile_pic = data.profil_pic;
-      console.log(this.profile_pic);
-    }
-  }
-}
+      await this.fetchUserName();
 
+      this.infoLoading = false;
+    },
+    async handleFileUpload(event) {
+      const file = event.target.files[0];
+      const user = auth.currentUser;
+      await this.uploadProfilePic(file, user);
+    },
+    async uploadProfilePic(file, user) {
+      try {
+        const fileRef = ref(storage, user.uid + ".png");
+        this.loading = true;
+        await uploadBytes(fileRef, file);
+        const photoURL = await getDownloadURL(fileRef);
+        await updateProfile(user, { photoURL });
+        this.profile_pic = photoURL;
+
+        // Add these lines to update the user's document in Firestore
+        const db = getFirestore();
+        const userDoc = doc(db, "users", user.uid);
+        await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
+        console.log("I hate this class");
+        console.log(this.profile_pic);
+        this.loading = false;
+        alert("Uploaded Image!");
+      } catch (err) {
+        console.error(err);
+        alert(err.message);
+      }
+      this.open = false; // Close the modal
+    },
+    // ...
+  },
+  // ...
+};
+// import NavBar from "@/components/NavBar.vue";
+// import { getAuth } from 'firebase/auth';
+// import { getFirestore, doc, getDoc } from 'firebase/firestore';
+
+// export default {
+//   name: "SettingsView",
+//   components: {
+//     NavBar,
+//   },
+//   data() {
+//     return {
+//       username: null,
+//       profile_pic: null,
+//     };
+//   },
+//   async created() {
+//     const auth = getAuth();
+//     const user = auth.currentUser;
+//     const db = getFirestore();
+//     const docRef = doc(db, 'users', user.uid);
+//     const docSnap = await getDoc(docRef);
+
+//     if (docSnap.exists()) {
+//       const data = docSnap.data()
+//       console.log("Document data:", data);
+//       this.username = data.username;
+//       this.profile_pic = data.profil_pic;
+//       console.log(this.profile_pic);
+//     }
+//   }
+// }
 </script>
