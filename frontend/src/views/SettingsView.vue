@@ -2,7 +2,7 @@
   <div id="app">
     <NavBar />
     <div id="content">
-      <header class = "header">
+      <header class="header">
         <h1 style="font-size: 80px">User Settings</h1>
       </header>
       <div id="topContainer">
@@ -17,21 +17,24 @@
                     <img :src="photoURL" :alt="fileName" class="profile-pic" />
                   </div>
                   <div v-else>
-                    <span>Upload</span>
+                    <div>Upload</div>
+                    <div>
+                      <button @click="closeModal">Cancel</button>
+                    </div>
                   </div>
                 </form>
               </div>
               <div>
-                <button @click="closeModal">Cancel</button>
-                <button :disabled="loading || !photo" @click="handleUpload">
+                <!-- <button @click="closeModal">Cancel</button> -->
+                <!-- <button :disabled="loading || !photo" @click="handleUpload">
                   Upload
-                </button>
+                </button> -->
               </div>
             </div>
           </div>
         </div>
         <div id="changePhotoBox">
-          
+
           <button class="change-photo-button" @click="openModal">Change Photo</button>
           <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" />
 
@@ -85,20 +88,19 @@
 </template>
 
 <style scoped>
-
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 .content {
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    background-color: #FDF5E6;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background-color: #FDF5E6;
 }
 
-.header { 
-  font-size:2em;
+.header {
+  font-size: 2em;
   text-align: center;
   padding: 20px 0;
   margin-top: 50px;
@@ -141,8 +143,9 @@
 .profile-pic {
   width: 500px;
   height: 350px;
-  border-radius: 10px; 
-  object-fit: cover; /* Ensures the aspect ratio of the image is maintained */
+  border-radius: 10px;
+  object-fit: cover;
+  /* Ensures the aspect ratio of the image is maintained */
   margin-left: -60px;
 }
 
@@ -160,7 +163,8 @@
   flex-direction: column;
   position: relative;
   z-index: 0;
-  border-radius: 10px; /* Adjust this value as needed */
+  border-radius: 10px;
+  /* Adjust this value as needed */
 }
 
 label[for="changePhotoBox"] {
@@ -176,7 +180,7 @@ label[for="changePhotoBox"] {
 .change-photo-button {
   width: 500px;
   height: 200px;
-  background-color: #b3daff; 
+  background-color: #b3daff;
   border: none;
   color: black;
   text-align: center;
