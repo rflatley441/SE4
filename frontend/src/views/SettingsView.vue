@@ -197,7 +197,7 @@ label[for="changePhotoBox"] {
 }
 
 .change-photo-button:hover {
-  background-color: #6a90d7;
+  background-color: #a1c2ff;
 }
 
 .passwordContainer {
