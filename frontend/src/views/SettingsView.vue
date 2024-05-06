@@ -11,10 +11,10 @@
           <div>
             <div v-if="open">
               <div>
-                <form @click="openFilePicker">
-                  <input type="file" accept="image/*" @change="handleFileChange" ref="fileInput" hidden />
+                <button @click="openFilePicker">
+                  <input type="file" accept="image/*" @change="handleFileUpload" ref="fileInput" hidden />
                   <div v-if="photoURL">
-                    <img :src="photoURL" :alt="fileName" class="profile-pic" />
+                    <img :src="photoURL" :alt="fileName" class="profile-pic" /> {{ fileName }}
                   </div>
                   <div v-else>
                     <div>Upload</div>
@@ -22,7 +22,7 @@
                       <button @click="closeModal">Cancel</button>
                     </div>
                   </div>
-                </form>
+                </button>
               </div>
               <div>
                 <!-- <button @click="closeModal">Cancel</button> -->
@@ -86,6 +86,151 @@
     </div>
   </div>
 </template>
+
+<script>
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getAuth, updateProfile } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { getApp } from "firebase/app";
+import NavBar from "@/components/NavBar.vue";
+export default {
+  // ...
+  components: {
+    NavBar,
+  },
+  data() {
+    return {
+      open: false,
+      loading: false,
+      photoURL: "",
+      photo: null,
+      fileName: "No file selected",
+      // ...
+    };
+  },
+  async created() {
+      const auth = getAuth();
+      console.log(auth)
+      const user = auth.currentUser;
+      console.log(user)
+      if (user) {
+        const userDoc = doc(getFirestore(), "users", user.uid);
+        const userDocData = await getDoc(userDoc);
+        if (userDocData.exists()) {
+          this.profile_pic = userDocData.data().profile_pic;
+        }
+      }
+    },
+  methods: {
+    openModal() {
+      this.open = true;
+    },
+    closeModal() {
+      this.photo = null;
+      this.photoURL = "";
+      this.fileName = "No file selected";
+      this.open = false;
+    },
+    openFilePicker() {
+      console.log("hello???")
+      this.$refs.fileInput.click();
+    },
+    async handleFileChange(event) {
+      console.log("before")
+      if (event.target.files[0]) {
+        console.log("test")
+        this.photo = event.target.files[0];
+        this.fileName = event.target.files[0].name;
+        this.photoURL = URL.createObjectURL(event.target.files[0]);
+        console.log(this.photoURL);
+        const auth = getAuth();
+        const file = event.target.files[0];
+        console.log("file", file);
+        const user = auth.currentUser;
+        await this.uploadProfilePic(file, user);
+      }
+    },
+    async fetchUserInfo() {
+      if (this.user?.photoURL) {
+        this.profile_pic = this.user.photoURL;
+      }
+
+      await this.fetchUserName();
+
+      this.infoLoading = false;
+    },
+    // async handleFileUpload(event) {
+    //   console.log("file upload")
+    //   const file = event.target.files[0];
+    //   const auth = getAuth();
+    //   const user = auth.currentUser;
+    //   await this.uploadProfilePic(file, user);
+    // },
+    async uploadProfilePic(file, user) {
+      console.log("uploading");
+      try {
+        const firebaseApp = getApp();
+        console.log(firebaseApp);
+        const storage = getStorage();
+        console.log("hellokjdflasd", storage);
+        const fileRef = ref(storage, user.uid + ".png");
+        console.log("before haflka" ,fileRef);
+        this.loading = true;
+        await uploadBytes(fileRef, file);
+        const photoURL = await getDownloadURL(fileRef);
+        await updateProfile(user, { photoURL });
+        this.profile_pic = photoURL;
+
+        // Add these lines to update the user's document in Firestore
+        const db = getFirestore();
+        const userDoc = doc(db, "users", user.uid);
+        await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
+        console.log("I hate this class");
+        console.log(this.profile_pic);
+        this.loading = false;
+        alert("Uploaded Image!");
+      } catch (err) {
+        console.error(err);
+        alert(err.message);
+      }
+      this.open = false; // Close the modal
+    },
+    // ...
+  },
+  // ...
+};
+// import NavBar from "@/components/NavBar.vue";
+// import { getAuth } from 'firebase/auth';
+// import { getFirestore, doc, getDoc } from 'firebase/firestore';
+
+// export default {
+//   name: "SettingsView",
+//   components: {
+//     NavBar,
+//   },
+//   data() {
+//     return {
+//       username: null,
+//       profile_pic: null,
+//     };
+//   },
+//   async created() {
+//     const auth = getAuth();
+//     const user = auth.currentUser;
+//     const db = getFirestore();
+//     const docRef = doc(db, 'users', user.uid);
+//     const docSnap = await getDoc(docRef);
+
+//     if (docSnap.exists()) {
+//       const data = docSnap.data()
+//       console.log("Document data:", data);
+//       this.username = data.username;
+//       this.profile_pic = data.profil_pic;
+//       console.log(this.profile_pic);
+//     }
+//   }
+// }
+</script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
@@ -375,127 +520,3 @@ label[for="colorblindModeToggle"] {
   cursor: pointer;
 }
 </style>
-
-<script>
-import { storage, ref, uploadBytes, getDownloadURL, updateProfile } from "firebase/storage";
-import { auth } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
-import NavBar from "@/components/NavBar.vue";
-export default {
-  // ...
-  components: {
-    NavBar,
-  },
-  data() {
-    return {
-      open: false,
-      loading: false,
-      photoURL: "",
-      photo: null,
-      fileName: "No file selected",
-      // ...
-    };
-  },
-  methods: {
-    async created() {
-      const user = auth.currentUser;
-      if (user) {
-        const userDoc = doc(getFirestore(), "users", user.uid);
-        const userDocData = await getDoc(userDoc);
-        if (userDocData.exists()) {
-          this.profile_pic = userDocData.data().profile_pic;
-        }
-      }
-    },
-    openModal() {
-      this.open = true;
-    },
-    closeModal() {
-      this.photo = null;
-      this.photoURL = "";
-      this.fileName = "No file selected";
-      this.open = false;
-    },
-    openFilePicker() {
-      this.$refs.fileInput.click();
-    },
-    handleFileChange(event) {
-      if (event.target.files[0]) {
-        this.photo = event.target.files[0];
-        this.fileName = event.target.files[0].name;
-        this.photoURL = URL.createObjectURL(event.target.files[0]);
-      }
-    },
-    async fetchUserInfo() {
-      if (this.user?.photoURL) {
-        this.profile_pic = this.user.photoURL;
-      }
-
-      await this.fetchUserName();
-
-      this.infoLoading = false;
-    },
-    async handleFileUpload(event) {
-      const file = event.target.files[0];
-      const user = auth.currentUser;
-      await this.uploadProfilePic(file, user);
-    },
-    async uploadProfilePic(file, user) {
-      try {
-        const fileRef = ref(storage, user.uid + ".png");
-        this.loading = true;
-        await uploadBytes(fileRef, file);
-        const photoURL = await getDownloadURL(fileRef);
-        await updateProfile(user, { photoURL });
-        this.profile_pic = photoURL;
-
-        // Add these lines to update the user's document in Firestore
-        const db = getFirestore();
-        const userDoc = doc(db, "users", user.uid);
-        await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
-        console.log("I hate this class");
-        console.log(this.profile_pic);
-        this.loading = false;
-        alert("Uploaded Image!");
-      } catch (err) {
-        console.error(err);
-        alert(err.message);
-      }
-      this.open = false; // Close the modal
-    },
-    // ...
-  },
-  // ...
-};
-// import NavBar from "@/components/NavBar.vue";
-// import { getAuth } from 'firebase/auth';
-// import { getFirestore, doc, getDoc } from 'firebase/firestore';
-
-// export default {
-//   name: "SettingsView",
-//   components: {
-//     NavBar,
-//   },
-//   data() {
-//     return {
-//       username: null,
-//       profile_pic: null,
-//     };
-//   },
-//   async created() {
-//     const auth = getAuth();
-//     const user = auth.currentUser;
-//     const db = getFirestore();
-//     const docRef = doc(db, 'users', user.uid);
-//     const docSnap = await getDoc(docRef);
-
-//     if (docSnap.exists()) {
-//       const data = docSnap.data()
-//       console.log("Document data:", data);
-//       this.username = data.username;
-//       this.profile_pic = data.profil_pic;
-//       console.log(this.profile_pic);
-//     }
-//   }
-// }
-</script>
