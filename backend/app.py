@@ -4,7 +4,7 @@ from gameplay import Gameplay
 from player import Player
 from gameboard import GameBoard
 from tile import Tile
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, leave_room, rooms, send
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -92,9 +92,41 @@ def handle_connect():
 
 
 @socketio.on('disconnect')
-def handle_connect():
+def handle_disconnect():
     print('Client disconnected')
     emit('message', 'Disconnected to server')
+
+
+@socketio.on('join')
+def on_join(data):
+    username = data['username']
+    room = data['room']
+    join_room(room)
+    send(username + ' has entered the room', to=room)
+    room_players = rooms()
+    # num_players = len(room_players)
+    print(room_players)
+    emit('start-game')
+    # if (num_players > 1):
+    #     emit('start-game')
+
+
+# @socketio.on('game-start')
+# def handle_game_start(data):
+#     emit('update-game-state', data, broadcast=True)
+
+
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    send(username + ' has left the room.', to=room)
+
+
+@socketio.on('end-turn')
+def on_end_turn(data):
+    emit('update-game-state', data, broadcast=True)
 
 
 if __name__ == '__main__':

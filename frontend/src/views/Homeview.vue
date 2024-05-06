@@ -3,12 +3,16 @@
         <NavBar/>
         <div class="content">
             <div class="contents-container">
-                <h1 style="font-size:80px"> Welcome, User!</h1>
+                <h1 style="font-size:80px"> Welcome, {{ this.username }}!</h1>
                 <div id="inputsContainer">
-                    <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">Play Game</router-link></button>
-                    <br>
-                    <button class="btn success" style="margin-top: 30px;" @click="openModal" >View Player Statistics</button>
-                    <StatsModal :isOpen="isModalOpen" @modal-close="closeModal"/>
+                    <!-- <button class="btn success" @click="join()">Test</button> -->
+                    <button class="btn success" @click="openStartGameModal">Start Game</button><br> 
+                    <StartGameModal :isOpen="isStartGameModalOpen" @modal-close="closeStartGameModal"/>
+                    <button class="btn success" style="margin-top: 30px;" @click="openJoinGameModal">Join Game</button><br>
+                    <JoinGameModal :isOpen="isJoinGameModal" :userId="this.userId" @modal-close="closeJoinGameModal"/>
+                    <!-- <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">Play Game</router-link></button> -->
+                    <button class="btn success" style="margin-top: 30px;" @click="openStatsModal" >View Player Statistics</button>
+                    <StatsModal :isOpen="isStatsModalOpen" @modal-close="closeStatsModal"/>
                     <br>
                     <button class="btn success" style="margin-top: 30px;">View Friends List</button>
                 </div>
@@ -20,31 +24,78 @@
 <script>
 import NavBar from '@/components/NavBar.vue';
 import StatsModal from '@/components/StatsModal.vue';
+import StartGameModal from '@/components/StartGameModal.vue'
+import JoinGameModal from '@/components/JoinGameModal.vue'
+import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { ref } from 'vue';
 
  export default {
     name: "HomeView",
     components: {
         NavBar, 
-        StatsModal
+        StatsModal,
+        StartGameModal,
+        JoinGameModal
     },
     setup() {
-        const isModalOpen = ref(false);
+        const isStatsModalOpen = ref(false);
+        const isStartGameModalOpen = ref(false);
+        const isJoinGameModal = ref(false);
 
-        const openModal = () => {
-            isModalOpen.value = true;
+        const openStatsModal = () => {
+            isStatsModalOpen.value = true;
+        }
+        const openStartGameModal = () => {
+            isStartGameModalOpen.value = true;
+        }
+        const openJoinGameModal = () => {
+            isJoinGameModal.value = true;
         }
 
-        const closeModal = () => {
-            isModalOpen.value = false;
+        const closeStatsModal = () => {
+            isStatsModalOpen.value = false;
+        }
+        const closeStartGameModal = () => {
+            isStartGameModalOpen.value = false;
+        }
+        const closeJoinGameModal = () => {
+            isJoinGameModal.value = false;
         }
 
         return {
-            isModalOpen,
-            openModal,
-            closeModal,
+            isStatsModalOpen,
+            openStatsModal,
+            closeStatsModal,
+            isStartGameModalOpen,
+            openStartGameModal,
+            closeStartGameModal,
+            isJoinGameModal,
+            openJoinGameModal,
+            closeJoinGameModal
         };
-    }
+    },
+    data() {
+        return {
+            username: null,
+            userId: null,
+        };
+    },
+    async created() {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const db = getFirestore();
+        const docRef = doc(db, 'users', user.uid);
+        this.userId = user.uid;
+        const docSnap = await getDoc(docRef);
+
+        if(docSnap.exists()) {
+            const data = docSnap.data()
+            console.log("Document data:", data);
+
+            this.username = data.username;
+        }
+    },
  }
 </script>
 

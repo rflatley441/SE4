@@ -7,26 +7,11 @@
                 <h2 style="font-size:40px">High Score: {{ this.highScore }}</h2>
                 <h2 style="font-size:40px">Total Points: {{ this.totalPoints }}</h2>
                 <h2 style="font-size:40px">Wins: {{ this.wins }}</h2>
-                <h2 style="font-size:40px">Losses : {{ this.losses }}</h2>
+                <h2 style="font-size:40px">Losses: {{ this.losses }}</h2>
                 <h2 style="font-size:40px">Draws: {{ this.draws }}</h2>
             </div>
         </div>
     </div>
-    <!-- <div id="content"> -->
-    <!-- <div id="statsModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h1 style="font-size: 80px;"> <span style="color: #2490F3">{{ this.username }}'s</span> Statistics</h1>
-            <div class="stats">
-                <h2 style="font-size:40px">High Score: {{ this.highScore }}</h2>
-                <h2 style="font-size:40px">Total Points: {{ this.totalPoints }}</h2>
-                <h2 style="font-size:40px">Wins: {{ this.wins }}</h2>
-                <h2 style="font-size:40px">Losses : {{ this.losses }}</h2>
-                <h2 style="font-size:40px">Draws: {{ this.draws }}</h2>
-            </div>
-        </div>
-    </div> -->
-    <!-- </div> -->
 </template>
 
 <script>
@@ -34,7 +19,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 export default {
-    name: "StatsView",
+    name: "StatsModal",
     props: {
         isOpen: {
             default: false,
@@ -65,6 +50,8 @@ export default {
         const db = getFirestore();
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
+
+        console.log("hello", docSnap);
 
         if(docSnap.exists()) {
             const data = docSnap.data()
