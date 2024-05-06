@@ -12,7 +12,7 @@
             <div v-if="open">
               <div>
                 <form @click="openFilePicker">
-                  <input type="file" accept="image/*" @change="handleFileChange" ref="fileInput" hidden />
+                  <input type="file" accept="image/*" @change="handleFileUpload" ref="fileInput" hidden />
                   <div v-if="photoURL">
                     <img :src="photoURL" :alt="fileName" class="profile-pic" />
                     <div> {{ fileName }} </div>
