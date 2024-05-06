@@ -14,7 +14,7 @@ const requireAuth = (to, from, next) => {
   const user = auth.currentUser;
   if (!user) {
     // User not logged in, redirect to login page
-    next({ name: "Login" });
+    next({ name: "LoginPage" });
   } else {
     // User is logged in, proceed to requested route
     next();
