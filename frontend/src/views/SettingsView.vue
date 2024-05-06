@@ -15,6 +15,7 @@
                   <input type="file" accept="image/*" @change="handleFileChange" ref="fileInput" hidden />
                   <div v-if="photoURL">
                     <img :src="photoURL" :alt="fileName" class="profile-pic" />
+                    <div> {{ fileName }} </div>
                   </div>
                   <div v-else>
                     <div>Upload</div>
@@ -452,6 +453,7 @@ export default {
         // Add these lines to update the user's document in Firestore
         const db = getFirestore();
         const userDoc = doc(db, "users", user.uid);
+        console.log(userDoc);
         await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
         console.log("I hate this class");
         console.log(this.profile_pic);
