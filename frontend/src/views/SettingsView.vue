@@ -7,38 +7,14 @@
       </header>
       <div id="topContainer">
         <div id="profile_picContainer">
-
-          <div>
-            <div v-if="open">
-              <div>
-                <button @click="openFilePicker">
-                  <input type="file" accept="image/*" @change="handleFileUpload" ref="fileInput" hidden />
-                  <div v-if="photoURL">
-                    <img :src="photoURL" :alt="fileName" class="profile-pic" /> {{ fileName }}
-                  </div>
-                  <div v-else>
-                    <div>Upload</div>
-                    <div>
-                      <button @click="closeModal">Cancel</button>
-                    </div>
-                  </div>
-                </button>
-              </div>
-              <div>
-                <!-- <button @click="closeModal">Cancel</button> -->
-                <!-- <button :disabled="loading || !photo" @click="handleUpload">
-                  Upload
-                </button> -->
-              </div>
-            </div>
-          </div>
+          <input type="file" accept="image/*" @change="handleFileUpload" ref="fileInput" hidden />
+          <img :src="this.profile_pic" class="profile-pic" /> {{ this.profile_pic }}
         </div>
         <div id="changePhotoBox">
-
-          <button class="change-photo-button" @click="openModal">Change Photo</button>
+          <button class="change-photo-button" @click="openFilePicker">
+            Change Photo
+          </button>
           <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" />
-
-
         </div>
         <div id="inputsContainer">
           <div class="innerBox">
@@ -105,40 +81,37 @@ export default {
       photoURL: "",
       photo: null,
       fileName: "No file selected",
-      // ...
     };
   },
   async created() {
-      const auth = getAuth();
-      console.log(auth)
-      const user = auth.currentUser;
-      console.log(user)
-      if (user) {
-        const userDoc = doc(getFirestore(), "users", user.uid);
-        const userDocData = await getDoc(userDoc);
-        if (userDocData.exists()) {
-          this.profile_pic = userDocData.data().profile_pic;
-        }
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      const db = getFirestore();
+      const userDoc = doc(db, "users", user.uid);
+      const userDocData = await getDoc(userDoc);
+      if (userDocData.exists()) {
+        this.profile_pic = userDocData.data().profile_pic;
       }
-    },
+      if (user && user.photoURL) {
+        this.profile_pic = user.photoURL;
+      }
+    }
+  },
   methods: {
-    openModal() {
-      this.open = true;
-    },
-    closeModal() {
-      this.photo = null;
-      this.photoURL = "";
-      this.fileName = "No file selected";
-      this.open = false;
-    },
     openFilePicker() {
-      console.log("hello???")
       this.$refs.fileInput.click();
     },
+    async handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        await this.uploadProfilePic(file, this.user);
+      }
+    },
     async handleFileChange(event) {
-      console.log("before")
+      console.log("before");
       if (event.target.files[0]) {
-        console.log("test")
+        console.log("test");
         this.photo = event.target.files[0];
         this.fileName = event.target.files[0].name;
         this.photoURL = URL.createObjectURL(event.target.files[0]);
@@ -159,13 +132,7 @@ export default {
 
       this.infoLoading = false;
     },
-    // async handleFileUpload(event) {
-    //   console.log("file upload")
-    //   const file = event.target.files[0];
-    //   const auth = getAuth();
-    //   const user = auth.currentUser;
-    //   await this.uploadProfilePic(file, user);
-    // },
+
     async uploadProfilePic(file, user) {
       console.log("uploading");
       try {
@@ -174,66 +141,33 @@ export default {
         const storage = getStorage();
         console.log("hellokjdflasd", storage);
         const fileRef = ref(storage, user.uid + ".png");
-        console.log("before haflka" ,fileRef);
         this.loading = true;
         await uploadBytes(fileRef, file);
         const photoURL = await getDownloadURL(fileRef);
         await updateProfile(user, { photoURL });
         this.profile_pic = photoURL;
 
+        // Update this.user manually
+        this.user = { ...this.user, photoURL };
+
         // Add these lines to update the user's document in Firestore
         const db = getFirestore();
         const userDoc = doc(db, "users", user.uid);
         await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
-        console.log("I hate this class");
         console.log(this.profile_pic);
         this.loading = false;
-        alert("Uploaded Image!");
+        alert("Successfully Uploaded Image!");
       } catch (err) {
         console.error(err);
         alert(err.message);
       }
-      this.open = false; // Close the modal
     },
-    // ...
   },
-  // ...
 };
-// import NavBar from "@/components/NavBar.vue";
-// import { getAuth } from 'firebase/auth';
-// import { getFirestore, doc, getDoc } from 'firebase/firestore';
-
-// export default {
-//   name: "SettingsView",
-//   components: {
-//     NavBar,
-//   },
-//   data() {
-//     return {
-//       username: null,
-//       profile_pic: null,
-//     };
-//   },
-//   async created() {
-//     const auth = getAuth();
-//     const user = auth.currentUser;
-//     const db = getFirestore();
-//     const docRef = doc(db, 'users', user.uid);
-//     const docSnap = await getDoc(docRef);
-
-//     if (docSnap.exists()) {
-//       const data = docSnap.data()
-//       console.log("Document data:", data);
-//       this.username = data.username;
-//       this.profile_pic = data.profil_pic;
-//       console.log(this.profile_pic);
-//     }
-//   }
-// }
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 .content {
   position: relative;
@@ -241,7 +175,7 @@ export default {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  background-color: #FDF5E6;
+  background-color: #fdf5e6;
 }
 
 .header {
@@ -251,13 +185,12 @@ export default {
   margin-top: 50px;
 }
 
-
 #app {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
-  font-family: 'Quicksand', sans-serif;
+  font-family: "Quicksand", sans-serif;
 }
 
 #title {
@@ -332,7 +265,7 @@ label[for="changePhotoBox"] {
   text-decoration: none;
   display: inline-block;
   font-size: 30px;
-  font-family: 'Quicksand', sans-serif;
+  font-family: "Quicksand", sans-serif;
   font-weight: bold;
   cursor: pointer;
   padding-bottom: 20px;
