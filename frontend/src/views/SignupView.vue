@@ -156,13 +156,13 @@
 <script>
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref as dbRef, set } from "firebase/database"; 
+import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 import { useRouter } from 'vue-router'; 
 
 export default {
   name: "LoginView",
 
-  setup() {
+setup() {
     const router = useRouter(); 
     const email = ref("");
     const username = ref("");
@@ -170,28 +170,30 @@ export default {
     const errorMessage = ref("");
 
     const signUp = () => {
-      console.log("Sign Up clicked");
-      const auth = getAuth();
-      createUserWithEmailAndPassword(auth, email.value, password.value)
-        .then((userCredential) => {
-          console.log("Success", userCredential.user);
-          const db = getDatabase(); 
-          return set(dbRef(db, 'users/' + userCredential.user.uid), {
-            username: username.value,
-            email: email.value,
-          });
-        })
-        .then(() => {
-          console.log("User data stored in Realtime Database");
-          router.push('/Home');
-        })
-        .catch((error) => {
-          console.error("Signup failed", error);
-          errorMessage.value = error.message;
-        });
+        console.log("Sign Up clicked");
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, email.value, password.value)
+            .then((userCredential) => {
+                console.log("Success", userCredential.user);
+                const db = getFirestore(); // Change to Firestore
+                const usersCollection = collection(db, 'users'); // Create a collection reference
+                const userDoc = doc(usersCollection, userCredential.user.uid); // Create a document reference
+                return setDoc(userDoc, { // Use setDoc instead of set
+                    username: username.value,
+                    email: email.value,
+                });
+            })
+            .then(() => {
+                console.log("User data stored in Firestore");
+                router.push('/Home');
+            })
+            .catch((error) => {
+                console.error("Signup failed", error);
+                errorMessage.value = error.message;
+            });
     };
 
     return { username, email, password, errorMessage, signUp };
-  }
+}
 }
 </script>

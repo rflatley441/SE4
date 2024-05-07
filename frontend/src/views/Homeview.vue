@@ -9,7 +9,7 @@
                     <button class="btn success" @click="openStartGameModal">Start Game</button><br> 
                     <StartGameModal :isOpen="isStartGameModalOpen" @modal-close="closeStartGameModal"/>
                     <button class="btn success" style="margin-top: 30px;" @click="openJoinGameModal">Join Game</button><br>
-                    <JoinGameModal :isOpen="isJoinGameModal" :userId="this.userId" @modal-close="closeJoinGameModal"/>
+                    <JoinGameModal :isOpen="isJoinGameModal" :userId="this.userId" :username="this.username" @modal-close="closeJoinGameModal"/>
                     <!-- <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">Play Game</router-link></button> -->
                     <button class="btn success" style="margin-top: 30px;" @click="openStatsModal" >View Player Statistics</button>
                     <StatsModal :isOpen="isStatsModalOpen" @modal-close="closeStatsModal"/>

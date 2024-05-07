@@ -47,6 +47,10 @@ export default {
             type: Array,
             required: true,
         },
+        gameId: {
+            type: String,
+            required: true,
+        }
     },
     components: {
         BoardTile,
@@ -383,9 +387,8 @@ export default {
                 if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
                     this.determineWinner();
                 }
-            console.log("tiles remaining" , this.deck.remaining);
-            console.log("hello", this.$store.state);
-            socket.emit('end-turn', this.$store.state); 
+            console.log("gameId" , this.gameId);
+            socket.emit('end-turn', { gameState: this.$store.state, room_id: this.gameId }); 
             
         }, 
 
@@ -394,16 +397,11 @@ export default {
 </script>
 
 <style scoped>
-/* .game-board-container {
-    width: 600px;
-} */
 
 .game-board {
-    /* width: auto; */
     display: grid;
     grid-template-columns: repeat(12, 50px);
     grid-template-rows: repeat(12, 50px);
-    /* position: absolute; */
 }
 
 .end-turn-button {

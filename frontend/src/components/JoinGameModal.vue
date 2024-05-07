@@ -7,6 +7,7 @@
                     <div class="inputHolder">
                         <input type="gameCode" class="inputBox" v-model="gameCode" placeholder="Game code" />
                     </div>
+                    {{ this.message }}
                     <button @click="this.join">Join Game</button>
              </div>
         </div>
@@ -14,10 +15,8 @@
 </template>
 
 <script>
-// import socket from '@/socket';
 
-import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDocs, collection, getDoc, updateDoc } from 'firebase/firestore';
+import { getFirestore, getDocs, collection, updateDoc } from 'firebase/firestore';
 import { ref } from 'vue';
 import socket from '@/socket';
 import { useRouter } from 'vue-router';
@@ -31,6 +30,10 @@ export default {
             default: false,
         },
         userId: {
+            type: String,
+            required: true,
+        }, 
+        username: {
             type: String,
             required: true,
         }
@@ -50,7 +53,8 @@ export default {
     },
     data() {
         return {
-            username: null,
+            // username: null,
+            message: "",
             disabled: true,
         };
     },
@@ -64,35 +68,31 @@ export default {
             gamesQuerySnapshot.forEach(async (doc) => {
             const gameData = doc.data();
             if (gameData.gameCode === this.gameCode) {
-                console.log('game code found', doc.id)
                 this.disabled = false;
 
-                if(!gameData.players.includes(this.userId)) {
+                if(!gameData.players.includes(this.userId) && gameData.players.length < 2) {
                     await updateDoc(doc.ref, {
                     players: [... gameData.players, this.userId]
                 });
                 }
+                console.log(this.userId, "huh?")
 
-                socket.emit('join', { username: this.username, room: this.gameCode})
-                router.push('/game')
-                console.log("Player added to game: ", this.userId);
+                if(gameData.players.includes(this.userId)) {
+                    console.log("username", this.username)
+                    socket.emit('join', { username: this.username, room: this.gameCode});
+                    router.push('/game')
+                    socket.emit('start-game', { room: this.gameCode });
+                    console.log("Player added to game: ", this.userId);
+                } else {
+                    this.message = "Game is full";
+                }
             }
         });
         }
     },
     async created() {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        const db = getFirestore();
-        const docRef = doc(db, 'users', user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if(docSnap.exists()) {
-            const data = docSnap.data()
-
-            this.username = data.username;
-        }
         this.disabled = true;
+        console.log("user id pls" , this.userId)
     }
 }
 

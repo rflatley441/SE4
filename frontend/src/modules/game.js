@@ -2,6 +2,7 @@ import axios from "axios";
 
 const state = {
     game: false,
+    id: 0,
     round: 0,
     turn: null,
     winner: null,
@@ -32,6 +33,7 @@ const getters = {
     gameState: (state) => {
         return {
             gameStatus: state.game,
+            id: state.id,
             turn: state.turn,
             round: state.round,
             finished: state.finished
@@ -116,9 +118,11 @@ const actions = {
         // let random = Math.round(Math.random());
         commit('setTurn', 0);
     },
-    gameStart({commit, dispatch}) {
+    gameStart({commit, dispatch}, roomId) {
         commit('restartGame');
         commit('initializeBoard');
+        console.log("game started", roomId);
+        commit('setGameId', roomId);
 
         dispatch('fetchDeck').then(() =>{
             dispatch('fetchHand', 0);
@@ -147,6 +151,7 @@ const mutations = {
         state.players[1].hand = [];
         state.pile = [{tile: null}, {tile: null}]
     },
+    setGameId: (state, id) => (state.id = id),
     initializeBoard: (state) => {
         state.board = [];
         for (let i = 0; i < 144; i++) {

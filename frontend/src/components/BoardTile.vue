@@ -7,12 +7,12 @@
 </template>
 
 <script>
-import CircleTile from '@/assets/CircleTile.vue';
-import CloverTile from '@/assets/CloverTile.vue';
-import DiamondTile from '@/assets/DiamondTile.vue';
-import SquareTile from '@/assets/SquareTile.vue';
-import Star4ptTile from '@/assets/Star4ptTile.vue';
-import Star8ptTile from '@/assets/Star8ptTile.vue';
+import CircleTile from '@/components/CircleTile.vue';
+import CloverTile from '@/components/CloverTile.vue';
+import DiamondTile from '@/components/DiamondTile.vue';
+import SquareTile from '@/components/SquareTile.vue';
+import Star4ptTile from '@/components/Star4ptTile.vue';
+import Star8ptTile from '@/components/Star8ptTile.vue';
 
  export default {
     name: "BoardTile",
