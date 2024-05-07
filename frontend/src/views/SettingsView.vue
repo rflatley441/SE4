@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="background">
     <NavBar />
     <div id="content">
       <header class="header">
@@ -7,9 +7,8 @@
       </header>
       <div id="topContainer">
         <div id="profile_picContainer">
-          <input type="file" accept="image/*" @change="handleFileUpload" ref="fileInput" hidden />
-          <img :src="this.profile_pic" class="profile-pic" /> {{ this.profile_pic }}
-        </div>
+          <img :src="this.profile_pic" class="profile-pic"/>
+          </div>
         <div id="changePhotoBox">
           <button class="change-photo-button" @click="openFilePicker">
             Change Photo
@@ -66,7 +65,7 @@
 <script>
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth, updateProfile } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import NavBar from "@/components/NavBar.vue";
 export default {
@@ -81,33 +80,28 @@ export default {
       photoURL: "",
       photo: null,
       fileName: "No file selected",
+      profile_pic:"",
     };
   },
   async created() {
     const auth = getAuth();
     const user = auth.currentUser;
-    if (user) {
-      const db = getFirestore();
-      const userDoc = doc(db, "users", user.uid);
-      const userDocData = await getDoc(userDoc);
-      if (userDocData.exists()) {
-        this.profile_pic = userDocData.data().profile_pic;
-      }
-      if (user && user.photoURL) {
-        this.profile_pic = user.photoURL;
-      }
-    }
+    console.log("created!")
+    if (!user) return;
+    this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
+    console.log("link", this.profile_pic)
   },
   methods: {
     openFilePicker() {
-      this.$refs.fileInput.click();
-    },
-    async handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        await this.uploadProfilePic(file, this.user);
-      }
-    },
+    this.$refs.fileInput.click();
+  },
+  async handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const url = await this.uploadProfilePic(file, this.user);
+      this.profile_pic = url;
+    }
+  },
     async handleFileChange(event) {
       console.log("before");
       if (event.target.files[0]) {
@@ -168,6 +162,11 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+.background {
+  background-color: #fdf5e6; /* Replace #yourColor with the color you want */
+  min-height: 100vh; /* This makes sure the background color covers the full height of the viewport */
+}
 
 .content {
   position: relative;
