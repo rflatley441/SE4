@@ -43,6 +43,10 @@ export default {
             type: Number,
             required: true,
         },
+        playerId: { // Actual player identifier
+            type: String,
+            required: true
+        },
         playerHand: {
             type: Array,
             required: true,
@@ -51,6 +55,11 @@ export default {
     components: {
         BoardTile,
     },
+    async mounted() {
+        await this.$store.dispatch('fetchUsers');
+        await this.$store.dispatch('gameStart')
+    
+},
     setup() {
         var tilesPlayed = new Set()
         var tilesThisTurn = new Set()
@@ -66,11 +75,11 @@ export default {
     expose: ['updateHighlightedBoardTiles'], // used by GamePlayView
     
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard', 'fetchUsers', 'gameStart', 'updatePlayerScore']),
         
         calculateScore(userId) {
-    let baseScore = 0;
-    let bonusScore = 0;
+        let baseScore = 0;
+        let bonusScore = 0;
 
     this.tilesThisTurn.forEach((position) => {
         let verticalScore = 1;
@@ -374,20 +383,36 @@ export default {
         },
 
         async endTurn() {
-            this.calculateScore(this.userId);
-            const nextPlayerId = (this.userId + 1) % this.players.length;
+
+            const currentIndex = this.userId
+            const currentPlayer = this.players[currentIndex];
+            console.log("current player", currentPlayer)
+            this.calculateScore(currentIndex);
+
+            const nextPlayerIndex = (currentIndex + 1) % this.players.length;
+            const nextPlayer = this.players[nextPlayerIndex];
+            console.log("next player" , nextPlayer)
+            if (!nextPlayer) {
+                console.error("Next player not found at index:", nextPlayerIndex);
+                return;
+            }
+
             this.tilesThisTurn = new Set();
-            await this.updateHand(this.userId);
-            await this.fetchHand();
-            await this.incrementRound(nextPlayerId);
-                if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
-                    this.determineWinner();
-                }
-            console.log("tiles remaining" , this.deck.remaining);
-            console.log("hello", this.$store.state);
+
+            // Using current player ID for clarity and correctness
+            await this.updateHand(currentPlayer.id);
+            console.log("Next Player ID", nextPlayer.id);
+            await this.fetchHand(nextPlayer.id);
+            await this.incrementRound(nextPlayerIndex);
+
+            // Check for game ending conditions
+            if (this.deck.remaining === 0 && this.players.some(player => player.hand.length === 0)) {
+                this.determineWinner();
+            }
+            console.log("Tiles remaining", this.deck.remaining);
             socket.emit('end-turn', this.$store.state); 
-            
-        }, 
+
+        },
 
     },
 }
