@@ -69,7 +69,6 @@ import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import NavBar from "@/components/NavBar.vue";
 export default {
-  // ...
   components: {
     NavBar,
   },
@@ -86,54 +85,30 @@ export default {
   async created() {
     const auth = getAuth();
     const user = auth.currentUser;
-    console.log("created!")
     if (!user) return;
     this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
-    console.log("link", this.profile_pic)
   },
   methods: {
     openFilePicker() {
     this.$refs.fileInput.click();
   },
-  async handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const url = await this.uploadProfilePic(file, this.user);
-      this.profile_pic = url;
-    }
-  },
     async handleFileChange(event) {
-      console.log("before");
       if (event.target.files[0]) {
-        console.log("test");
         this.photo = event.target.files[0];
         this.fileName = event.target.files[0].name;
         this.photoURL = URL.createObjectURL(event.target.files[0]);
-        console.log(this.photoURL);
         const auth = getAuth();
         const file = event.target.files[0];
-        console.log("file", file);
         const user = auth.currentUser;
         await this.uploadProfilePic(file, user);
       }
     },
-    async fetchUserInfo() {
-      if (this.user?.photoURL) {
-        this.profile_pic = this.user.photoURL;
-      }
-
-      await this.fetchUserName();
-
-      this.infoLoading = false;
-    },
 
     async uploadProfilePic(file, user) {
-      console.log("uploading");
       try {
         const firebaseApp = getApp();
         console.log(firebaseApp);
         const storage = getStorage();
-        console.log("hellokjdflasd", storage);
         const fileRef = ref(storage, user.uid + ".png");
         this.loading = true;
         await uploadBytes(fileRef, file);
@@ -141,14 +116,12 @@ export default {
         await updateProfile(user, { photoURL });
         this.profile_pic = photoURL;
 
-        // Update this.user manually
         this.user = { ...this.user, photoURL };
 
-        // Add these lines to update the user's document in Firestore
+        // these lines update the user's document in Firestore
         const db = getFirestore();
         const userDoc = doc(db, "users", user.uid);
         await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
-        console.log(this.profile_pic);
         this.loading = false;
         alert("Successfully Uploaded Image!");
       } catch (err) {
@@ -164,8 +137,8 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 .background {
-  background-color: #fdf5e6; /* Replace #yourColor with the color you want */
-  min-height: 100vh; /* This makes sure the background color covers the full height of the viewport */
+  background-color: #fdf5e6; 
+  min-height: 100vh; 
 }
 
 .content {
