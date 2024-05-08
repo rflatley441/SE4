@@ -3,11 +3,11 @@
         <div class="modal-wrapper">
             <div class="modal-container">
                 <span class="close" @click="handleClose">&times;</span>
-                <h1 style="font-size: 60px;">Join game</h1>
+                <h1 style="font-size: 100px;">Join game</h1>
                     <div class="inputHolder">
                         <input type="gameCode" class="inputBox" v-model="gameCode" placeholder="Game code" />
                     </div>
-                    {{ this.message }}
+                    <span style="font-size: 30px">{{ this.message }}</span>
                     <button class="join-button" @click="this.join">Join Game</button>
              </div>
         </div>
@@ -146,14 +146,14 @@ export default {
     border-radius: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     background-color: #FFB766;
-    width: 300px;
-    height: 60px;
+    width: 600px;
+    height: 70px;
     cursor: pointer;
     display: inline-block;
     margin: auto;
     text-align: center;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 50px;
     font-family: 'Quicksand', sans-serif;
 }
 
@@ -184,8 +184,8 @@ export default {
     border: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     border-radius: 10px;
-    font-size: 30px;
-    height: 60px;
+    font-size: 50px;
+    height: 80px;
     margin-top: 5px;
     padding-left: 10px;
 }

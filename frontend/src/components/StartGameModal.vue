@@ -3,10 +3,10 @@
         <div class="modal-wrapper">
             <div class="modal-container">
                 <span class="close" @click="handleClose">&times;</span>
-                <h1 style="font-size: 40px;"> Here's your game code <span style="color: #6666FF">{{ this.username }}</span></h1>
-                <h2 style="font-size:80px">{{ this.gameCode }}</h2>
+                <h1 style="font-size: 60px;"> Here's your game code <span style="color: #6666FF">{{ this.username }}</span></h1>
+                <h2 style="font-size:100px">{{ this.gameCode }}</h2>
                 <button v-if="!this.gameStarted" class="start-button" @click="this.startGame">Start New Game</button>
-                <span v-else>Waiting for more players</span>
+                <span :style="{ fontSize: '40px', color: '#6666FF' }" v-else>Waiting for more players . . .</span>
             </div>
         </div>
     </div>
@@ -146,14 +146,14 @@ export default {
     border-radius: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     background-color: #FFB766;
-    width: 300px;
-    height: 60px;
+    width: 600px;
+    height: 70px;
     cursor: pointer;
     display: inline-block;
     margin: auto;
     text-align: center;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 50px;
     font-family: 'Quicksand', sans-serif;
 }
 
