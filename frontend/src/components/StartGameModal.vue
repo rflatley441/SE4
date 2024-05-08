@@ -5,7 +5,7 @@
                 <span class="close" @click="handleClose">&times;</span>
                 <h1 style="font-size: 40px;"> Here's your game code <span style="color: #6666FF">{{ this.username }}</span></h1>
                 <h2 style="font-size:80px">{{ this.gameCode }}</h2>
-                <button v-if="!this.gameStarted" @click="this.startGame">Start New Game</button>
+                <button v-if="!this.gameStarted" class="start-button" @click="this.startGame">Start New Game</button>
                 <span v-else>Waiting for more players</span>
             </div>
         </div>
@@ -123,19 +123,38 @@ export default {
 }
 
 .modal-wrapper {
-  justify-content: center;
-  align-items: center; 
-  width: 100%;
-  height: 100%;
-  margin: auto;
+    justify-content: center;
+    align-items: center; 
+    width: 100%;
+    height: 100%;
 }
-
 .modal-container {
-    padding: 10px 30px;
+    padding: 10px 30px 30px;
     background-color: #e6e6ff;
     border-radius: 10px;
     margin: auto;
     box-shadow: 0 2px 8px #ccccff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-button {
+    border-color: transparent;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    background-color: #FFB766;
+    width: 300px;
+    height: 60px;
+    cursor: pointer;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+    font-family: 'Quicksand', sans-serif;
 }
 
 .close {
@@ -143,6 +162,7 @@ export default {
     float: right;
     font-size: 50px;
     font-weight: bold;
+    align-self: flex-end;
 }
 
 .close:hover,

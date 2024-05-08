@@ -8,7 +8,7 @@
                         <input type="gameCode" class="inputBox" v-model="gameCode" placeholder="Game code" />
                     </div>
                     {{ this.message }}
-                    <button @click="this.join">Join Game</button>
+                    <button class="join-button" @click="this.join">Join Game</button>
              </div>
         </div>
     </div>
@@ -126,30 +126,44 @@ export default {
   align-items: center; 
   width: 100%;
   height: 100%;
-  margin: auto;
 }
 
 .modal-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    padding: 10px 30px;
+    padding: 10px 30px 30px;
     background-color: #e6e6ff;
     border-radius: 10px;
     margin: auto;
     box-shadow: 0 2px 8px #ccccff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.join-button {
+    border-color: transparent;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    background-color: #FFB766;
+    width: 300px;
+    height: 60px;
+    cursor: pointer;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+    font-family: 'Quicksand', sans-serif;
 }
 
 .close {
-    position: absolute;
     color: #aaa;
     top: 10px;
     right: 30px; 
     font-size: 50px;
     font-weight: bold;
+    align-self: flex-end;
 }
 
 .close:hover,
