@@ -30,6 +30,7 @@ const state = {
     ],
 
     board: [],
+    tilesPlayed: [],
 
     deck: {
         deck_id: null,
@@ -47,6 +48,7 @@ const getters = {
             finished: state.finished
         };
     },
+    tilesPlayed: (state) => state.tilesPlayed,
     board: (state) => state.board,
     players: (state) => state.players,
     playerHand: (state) => (id) => state.players[id].hand,
@@ -148,6 +150,11 @@ const actions = {
 
     updateBoard({commit}, board) {
         commit('updateBoard', board);
+    },
+
+    updateTilesPlayed({commit}, tilesPlayed){
+        commit('updateTilesPlayed', tilesPlayed);
+        console.log("tiles played", state.tilesPlayed)
     },
     
     updateTilesAmount({commit}, amount) {
@@ -253,6 +260,7 @@ const mutations = {
         state.players[userId].hand.splice(tileIndex, 1);
     },
     updateBoard: (state, board) => (state.board = board),
+    updateTilesPlayed: (state, tilesPlayed) => (state.tilesPlayed = tilesPlayed),
     updateTilesAmount: (state, amount) => (state.deck.remaining = amount),
     updateGameState: (state, gameState) => {
         for(let key in gameState['game']) {
