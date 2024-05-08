@@ -35,23 +35,36 @@
 <script>
 import { ref } from 'vue';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore"; // Import Firestore
 import { useRouter } from 'vue-router';
 
- export default {
+export default {
     name: "LoginView",
-
     setup() {
         const email = ref('');
         const password = ref('');
         const errorMessage = ref('');
         const router = useRouter();
 
-        const login = () => {
+        const login = async () => {
             const auth = getAuth();
             signInWithEmailAndPassword(auth, email.value, password.value)
-                .then((userCredential) => {
-                    console.log(userCredential, "success")
-                    router.push('/home');
+                .then(async (userCredential) => {
+                    const db = getFirestore(); 
+                    const userDoc = doc(db, "users", userCredential.user.uid); 
+
+                    try {
+                        const docSnap = await getDoc(userDoc);
+                        if (docSnap.exists()) {
+                            console.log("Document data:", docSnap.data()); 
+                            router.push('/home');
+                        } else {
+                            console.log("No such document!");
+                        }
+                    } catch (error) {
+                        console.error("Error getting document:", error);
+                        errorMessage.value = "Failed to fetch user details.";
+                    }
                 })
                 .catch((error) => {
                     errorMessage.value = error.message;
@@ -60,7 +73,7 @@ import { useRouter } from 'vue-router';
 
         return { email, password, errorMessage, login };
     }
- }
+}
 </script>
 
 <style scoped>

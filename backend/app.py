@@ -16,16 +16,16 @@ game_state = None
 joined_users = {}
 
 
-def initialize_game():
+def initialize_game(player1_id, player2_id):
     global game_state
-    player1 = Player("0", 0)
-    player2 = Player("1", 0)
+    player1 = Player(player1_id, 0) 
+    player2 = Player(player2_id, 0)
     gameboard = GameBoard()
     game_state = Gameplay(player1, player2, gameboard)
     game_state.createTiles()
 
 
-initialize_game()
+# initialize_game()
 
 
 @app.route('/api', methods=['GET', 'POST'])
@@ -52,6 +52,7 @@ def get_player_hands():
                  {'userId': game_state.player2.userId, 'hand': player2Hand}]
 
     return jsonify(userHands)
+
 
 
 @app.route('/deck', methods=['GET'])
@@ -87,6 +88,14 @@ def update_player_score():
 
     return jsonify({'message': 'Player score updated'}, request_data)
 
+
+@app.route('/initialize_game', methods=['POST'])
+def web_initialize_game():
+    data = request.get_json()
+    player1_id = data.get('player1_id')
+    player2_id = data.get('player2_id')
+    initialize_game(player1_id, player2_id)
+    return jsonify({'message': 'Game initialized successfully'})
 
 @socketio.on('connect')
 def handle_connect():
