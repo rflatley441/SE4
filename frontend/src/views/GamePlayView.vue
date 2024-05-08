@@ -61,7 +61,6 @@ export default {
         ...mapActions(['gameStart', 'updateGameState']),
         updateHighlightedInGameBoard(){
             this.$refs.gameBoard.updateHighlightedBoardTiles();
-            console.log("working!")
         },
         handleUpdateGameState(data) {
             this.updateGameState(data);

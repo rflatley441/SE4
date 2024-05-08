@@ -87,16 +87,10 @@ import { ref } from 'vue';
         const db = getFirestore();
         const docRef = doc(db, 'users', user.uid);
         this.userId = user.uid;
-        console.log("User ID: ", this.userId)
         const docSnap = await getDoc(docRef);
-
-        auth.onAuthStateChanged((user) => {
-            console.log("Auth state changed:", user);
-        });
 
         if(docSnap.exists()) {
             const data = docSnap.data()
-            console.log("Document data:", data);
 
             this.username = data.username;
         }

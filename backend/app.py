@@ -120,7 +120,6 @@ def on_join(data):
 @socketio.on('start-game')
 def handle_start_game(data):
     room = data['room']
-    print("room", room)
     emit('game-started', room, room=room)
 
 
@@ -135,7 +134,6 @@ def on_leave(data):
 @socketio.on('end-turn')
 def on_end_turn(data):
     room = data['room_id']
-    print(room)
     emit('update-game-state', data['gameState'], room=room)
 
 

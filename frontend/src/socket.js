@@ -24,7 +24,6 @@ socket.on('disconnect', function() {
 });
 
 socket.on('game-started', function(roomId) {
-  console.log('Game started:', roomId);
   store.dispatch('gameStart', roomId);
 });
 

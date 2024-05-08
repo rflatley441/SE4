@@ -386,7 +386,6 @@ export default {
                 if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
                     this.determineWinner();
                 }
-            console.log("gameId" , this.gameId);
             socket.emit('end-turn', { gameState: this.$store.state, room_id: this.gameId }); 
             
         }, 

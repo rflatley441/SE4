@@ -51,11 +51,8 @@ export default {
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
 
-        console.log("hello", docSnap);
-
         if(docSnap.exists()) {
             const data = docSnap.data()
-            console.log("Document data:", data);
 
             this.username = data.username;
             this.highScore = data.high_score;

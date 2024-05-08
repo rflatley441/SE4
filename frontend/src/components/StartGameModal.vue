@@ -88,7 +88,6 @@ export default {
             this.createGameSession();
         }
         socket.on('navigateToGame', (room) => {
-            console.log("Navigating to game room", room);
             router.push(`/game/${room}`);
         });
     }

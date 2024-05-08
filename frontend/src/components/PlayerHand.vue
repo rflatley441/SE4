@@ -18,7 +18,6 @@
 
 <script>
 import BoardTile from './BoardTile.vue';
-// import GameBoard from './GameBoard.vue';
 import { mapGetters } from 'vuex';
 
 

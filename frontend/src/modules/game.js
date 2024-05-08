@@ -52,7 +52,6 @@ const getters = {
 const actions = {
     updateGameState({commit}, gameState) {
         commit('updateGameState', gameState);
-        console.log("game state updated", state)
     },
     async fetchDeck({commit}) {
         try {
@@ -94,7 +93,6 @@ const actions = {
                     });
                 }
             })
-            console.log("update hand:", response)
         } catch (error) {
             console.error(error.response.data)
         }
@@ -102,7 +100,6 @@ const actions = {
 
     updateBoard({commit}, board) {
         commit('updateBoard', board);
-        console.log("board", state.board)
     },
     
     updateTilesAmount({commit}, amount) {
@@ -121,7 +118,6 @@ const actions = {
     gameStart({commit, dispatch}, roomId) {
         commit('restartGame');
         commit('initializeBoard');
-        console.log("game started", roomId);
         commit('setGameId', roomId);
 
         dispatch('fetchDeck').then(() =>{
@@ -186,11 +182,9 @@ const mutations = {
                 'selected': false,
             })
         });
-        console.log(state.players[0].hand)
     },
     removeTileFromHand(state, { userId, tileIndex }) {
         state.players[userId].hand.splice(tileIndex, 1);
-        console.log("hand:", state.players[userId].hand)
     },
     updateBoard: (state, board) => (state.board = board),
     updateTilesAmount: (state, amount) => (state.deck.remaining = amount),
@@ -200,7 +194,6 @@ const mutations = {
         }
     },
     updatePlayerScore: (state, {userId, amount}) => {
-        // console.log(` userId: ${userId} with amount: ${amount}`);
         state.players[userId].score += amount;
     }};
 

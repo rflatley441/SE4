@@ -8,8 +8,4 @@ const store = createStore({
     }
 });
 
-window.addEventListener('beforeunload', () => {
-    store.dispatch('game/saveGameState'); // Dispatch the saveGameState action from the game module
-  });
-
 export default store 

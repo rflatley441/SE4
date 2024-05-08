@@ -23,13 +23,8 @@ const firebaseConfig = {
   const app = createApp(App);
 
   const auth = getAuth();
-  auth.setPersistence(browserSessionPersistence) .then(() => {
-    // Session persistence successfully set
-    console.log("yay")
-  })
-  .catch((error) => {
-    console.error('Error setting session persistence:', error);
-  });
+  auth.setPersistence(browserSessionPersistence)
+  
   // Use plugins
   app.use(socket);
   app.use(router);

@@ -60,7 +60,6 @@ export default {
     },
     methods: {
         async join() {
-            console.log("game code", this.gameCode)
             const db = getFirestore();
             const gamesCollectionRef = collection(db, 'games');
             const gamesQuerySnapshot = await getDocs(gamesCollectionRef);
@@ -78,10 +77,7 @@ export default {
                         players: [... gameData.players, this.userId]
                     });
                     }
-                    console.log(this.userId, "huh?")
-                    console.log("username", this.username)
                     socket.emit('join', { username: this.username, room: this.gameCode});
-                    console.log("Player added to game: ", this.userId); 
                 } else {
                     this.message = "Game is full";
                 }
@@ -97,7 +93,6 @@ export default {
     mounted() {
         socket.on('navigateToGame', (room) => {
             socket.emit('start-game', { room: this.gameCode });
-            console.log("Navigating to game room", room);
             router.push(`/game/${room}`);
         });
     }
