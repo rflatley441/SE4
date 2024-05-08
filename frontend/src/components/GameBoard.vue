@@ -34,6 +34,9 @@
 import socket from "@/socket"
 import BoardTile from "./BoardTile.vue"
 import { mapActions, mapGetters } from "vuex"
+// import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, updateDoc, increment, getDoc } from 'firebase/firestore';
+
 
 export default {
     name: "GameBoard",
@@ -82,9 +85,12 @@ export default {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard', 'fetchUsers', 'gameStart', 'updatePlayerScore', 'updateTilesPlayed']),
         
         calculateScore(userId) {
-        let baseScore = 0;
-        let bonusScore = 0;
+            let baseScore = 0;
+            let bonusScore = 0;
 
+            this.tilesThisTurn.forEach((position) => {
+                let verticalScore = 1;
+                let horizontalScore = 1;
             this.tilesThisTurn.forEach((position) => {
                 let verticalScore = 1;
                 let horizontalScore = 1;
@@ -119,7 +125,20 @@ export default {
                 if (horizontalScore === 6) {
                     bonusScore += 6;
                 }
+                if (verticalScore === 6) {
+                    bonusScore += 6;
+                }
+                if (horizontalScore === 6) {
+                    bonusScore += 6;
+                }
 
+                if (verticalScore > 1) {
+                    baseScore += verticalScore - 1;
+                }
+                if (horizontalScore > 1) {
+                    baseScore += horizontalScore - 1;
+                }
+            });
                 if (verticalScore > 1) {
                     baseScore += verticalScore - 1;
                 }
@@ -129,33 +148,79 @@ export default {
             });
 
             baseScore += this.tilesThisTurn.size;
+            baseScore += this.tilesThisTurn.size;
 
-            let totalScore = baseScore + bonusScore;
-            this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
-        },  
+                    let totalScore = baseScore + bonusScore;
+                    this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
+                },  
         /**
          * Determines the winner of the game
          */
-        determineWinner() {
-            let highestScore = -1;
-            let winner = ""
-            console.log("winner function")
+           async determineWinner() {
+                let highestScore = -1;
+                let winner = ""
+                let winningPlayer;
 
-            // sets player with the highest score as the winner
+                // sets player with the highest score as the winner
             if (this.deck.remaining == 0) {
-                this.players.forEach((player, index) => {
-                    if (player.score > highestScore) {
-                        highestScore = player.score;
-                        winner = `Player ${index + 1} Wins!`;
-                    }
-                });
-                //return winner
-                this.$store.dispatch('setGameOver', { winner: winner});
-                // user leaves room
+                    await this.players.forEach((player, index) => {
+                            if (player.score > highestScore) {
+                                highestScore = player.score;
+                        winningPlayer = player;
+                                winner = `Player ${index + 1} Wins!`;
+                            }
+                        });
+                let losingPlayer;
+                if (winningPlayer != this.players[0]){
+                    losingPlayer = this.players[0];
+                } else {
+                    losingPlayer = this.players[1]
+                }
+                const currentIndex = this.userId
+                const currentPlayer = this.players[currentIndex];
+                if (losingPlayer.score == winningPlayer.score){
+                    this.updatePlayerStats(highestScore, [0, 0, 1], currentPlayer.id);
+                } else if (currentPlayer == winningPlayer){
+                    this.updatePlayerStats(highestScore, [1, 0, 0], winningPlayer.id); 
+                } else {
+                    this.updatePlayerStats(losingPlayer.score, [0, 1, 0], losingPlayer.id);
+                }
+                        //return winner
+                        this.$store.dispatch('setGameOver', { winner: winner});
+                   // user leaves room
                 socket.emit('leave', { username: this.username, room: this.gameId })
+                }
+              },
+        async updatePlayerStats(score, record, playerId){
+            // const auth = getAuth();
+            // const user = playerId;
+            const db = getFirestore();
+            const docRef = doc(db, 'users', playerId);
+            const docSnap = await getDoc(docRef);
+            await updateDoc(docRef,{
+                wins: increment(record[0]),
+                losses: increment(record[1]),
+                draws: increment(record[2]),
+                total_points: increment(score)
+            })
+
+            console.log("hello", docSnap);
+            let top_score = 999999;
+            if(docSnap.exists()) {
+                const data = docSnap.data()
+                console.log("Document data:", data);
+                top_score = data.high_score;
             }
-        },
-        /**
+            if (top_score < score){
+                await updateDoc(docRef,{
+                    wins: increment(record[0]),
+                    losses: increment(record[1]),
+                    draws: increment(record[2]),
+                    total_points: increment(score),
+                    high_score: top_score
+                })
+            }
+        },        /**
          * Places a tile on the board
          * @param {Object} payload - the payload object
          */
@@ -421,15 +486,10 @@ export default {
             await this.updateTilesPlayed(this.tilesPlayed);
             await this.fetchHand(nextPlayer.id);
             await this.incrementRound(nextPlayerIndex);
+            this.determineWinner();
 
-            // Check for game ending conditions
-            if (this.deck.remaining === 0 && this.players.some(player => player.hand.length === 0)) {
-                this.determineWinner();
-            }
-            console.log("Tiles remaining", this.deck.remaining);
             socket.emit('end-turn', { gameState: this.$store.state, room_id: this.gameId });
-
-        },
+        }, 
 
     },
 }
