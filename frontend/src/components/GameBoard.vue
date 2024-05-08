@@ -61,21 +61,22 @@ export default {
     
 },
     setup() {
-        var tilesPlayed = new Set()
+        //var tilesPlayed = new Set()
         var tilesThisTurn = new Set()
 
         return {
-           tilesPlayed,
+          // tilesPlayed,
            tilesThisTurn,
         };
     }, 
     computed: {
-        ...mapGetters(['players', 'deck', 'winner', 'gameOver', 'board']),
+        ...mapGetters(['players', 'deck', 'winner', 'gameOver', 'board', 'tilesPlayed']),
+        
     },
     expose: ['updateHighlightedBoardTiles'], // used by GamePlayView
     
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard', 'fetchUsers', 'gameStart', 'updatePlayerScore']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard', 'fetchUsers', 'gameStart', 'updatePlayerScore', 'updateTilesPlayed']),
         
         calculateScore(userId) {
         let baseScore = 0;
@@ -86,25 +87,25 @@ export default {
         let horizontalScore = 1;
 
         let up = position - 12;
-        while (this.tilesPlayed.has(up)) {
+        while (this.tilesPlayed.includes(up)) {
             verticalScore++;
             up -= 12;
         }
 
         let down = position + 12;
-        while (this.tilesPlayed.has(down)) {
+        while (this.tilesPlayed.includes(down)) {
             verticalScore++;
             down += 12;
         }
 
         let left = position - 1;
-        while (position % 12 !== 0 && this.tilesPlayed.has(left)) {
+        while (position % 12 !== 0 && this.tilesPlayed.includes(left)) {
             horizontalScore++;
             left--;
         }
 
         let right = position + 1;
-        while (position % 12 !== 11 && this.tilesPlayed.has(right)) {
+        while (position % 12 !== 11 && this.tilesPlayed.includes(right)) {
             horizontalScore++;
             right++;
         }
@@ -161,7 +162,7 @@ export default {
                 this.board[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
 
                 this.board[payload.position].hidden = false;
-                this.tilesPlayed.add(payload.position);
+                this.tilesPlayed.push(payload.position);
                 this.tilesThisTurn.add(payload.position);
                 // tileList.value[payload.position].highlighted = true;
                 console.log("identifierr", this.userId);
@@ -170,6 +171,7 @@ export default {
                     tileIndex: tileSelected
                 });
                 this.updateBoard(this.board);
+                
                 this.updateHighlightedBoardTiles();
             }
         },
@@ -206,7 +208,7 @@ export default {
                 return false;
             }
 
-            if (this.tilesPlayed.size == 0){
+            if (this.tilesPlayed.length == 0){
                 switch(payload.position){
                     case 65:
                         return true;
@@ -231,7 +233,7 @@ export default {
             }
 
             // checking tile is selected and position is not already taken
-            if (tileSelected !== null && !this.tilesPlayed.has(payload.position)) {
+            if (tileSelected !== null && !this.tilesPlayed.includes(payload.position)) {
                 let tileColor = this.playerHand(this.userId)[tileSelected].color;
                 let tileShape = this.playerHand(this.userId)[tileSelected].shape;
                 let rowStart = payload.position - (payload.position % 12);
@@ -402,6 +404,7 @@ export default {
             // Using current player ID for clarity and correctness
             await this.updateHand(currentPlayer.id);
             console.log("Next Player ID", nextPlayer.id);
+            await this.updateTilesPlayed(this.tilesPlayed);
             await this.fetchHand(nextPlayer.id);
             await this.incrementRound(nextPlayerIndex);
 
@@ -411,8 +414,8 @@ export default {
             }
             console.log("Tiles remaining", this.deck.remaining);
             socket.emit('end-turn', this.$store.state); 
-
-        },
+            console.log(this.tilesPlayed);
+        }, 
 
     },
 }
