@@ -3,21 +3,20 @@
         <div class="modal-wrapper">
             <div class="modal-container">
                 <span class="close" @click="handleClose">&times;</span>
-                <h1 style="font-size: 60px;">Join game</h1>
+                <h1 style="font-size: 100px;">Join game</h1>
                     <div class="inputHolder">
                         <input type="gameCode" class="inputBox" v-model="gameCode" placeholder="Game code" />
                     </div>
-                    <button @click="this.join">Join Game</button>
+                    <span style="font-size: 30px">{{ this.message }}</span>
+                    <button class="join-button" @click="this.join">Join Game</button>
              </div>
         </div>
     </div>
 </template>
 
 <script>
-// import socket from '@/socket';
 
-import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDocs, collection, getDoc, updateDoc } from 'firebase/firestore';
+import { getFirestore, getDocs, collection, updateDoc } from 'firebase/firestore';
 import { ref } from 'vue';
 import socket from '@/socket';
 import { useRouter } from 'vue-router';
@@ -31,6 +30,10 @@ export default {
             default: false,
         },
         userId: {
+            type: String,
+            required: true,
+        }, 
+        username: {
             type: String,
             required: true,
         }
@@ -50,49 +53,52 @@ export default {
     },
     data() {
         return {
-            username: null,
-            disabled: true,
+            message: "",
         };
     },
     methods: {
+        /**
+         * Allows user to join a game
+         */
         async join() {
-            console.log("game code", this.gameCode)
             const db = getFirestore();
             const gamesCollectionRef = collection(db, 'games');
             const gamesQuerySnapshot = await getDocs(gamesCollectionRef);
 
+            let gameExists = false;
+            
+            // Checks if the game exists and if the user can join
             gamesQuerySnapshot.forEach(async (doc) => {
             const gameData = doc.data();
+
             if (gameData.gameCode === this.gameCode) {
-                console.log('game code found', doc.id)
-                this.disabled = false;
-
-                if(!gameData.players.includes(this.userId)) {
-                    await updateDoc(doc.ref, {
-                    players: [... gameData.players, this.userId]
-                });
+                gameExists = true;
+                // Checks if the game is full
+                if(gameData.players.length < 2) {
+                    // if the user is not already in the game, adds the user to the game
+                    if(!gameData.players.includes(this.userId) && gameData.players.length < 2) {
+                        await updateDoc(doc.ref, {
+                        players: [... gameData.players, this.userId]
+                    });
+                    }
+                    socket.emit('join', { username: this.username, room: this.gameCode});
+                } else {
+                    this.message = "Game is full";
                 }
-
-                socket.emit('join', { username: this.username, room: this.gameCode})
-                router.push('/game')
-                console.log("Player added to game: ", this.userId);
             }
+
         });
+        // If the game code does not exist, displays an error message
+        if(!gameExists) {
+            this.message = "Invalid game code";
+        }
         }
     },
-    async created() {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        const db = getFirestore();
-        const docRef = doc(db, 'users', user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if(docSnap.exists()) {
-            const data = docSnap.data()
-
-            this.username = data.username;
-        }
-        this.disabled = true;
+    mounted() {
+        socket.on('navigateToGame', (room) => {
+            socket.emit('start-game', { room: this.gameCode });
+            router.push(`/game/${room}`);
+        });
     }
 }
 
@@ -120,30 +126,44 @@ export default {
   align-items: center; 
   width: 100%;
   height: 100%;
-  margin: auto;
 }
 
 .modal-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    padding: 10px 30px;
+    padding: 10px 30px 30px;
     background-color: #e6e6ff;
     border-radius: 10px;
     margin: auto;
     box-shadow: 0 2px 8px #ccccff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.join-button {
+    border-color: transparent;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    background-color: #FFB766;
+    width: 600px;
+    height: 70px;
+    cursor: pointer;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 50px;
+    font-family: 'Quicksand', sans-serif;
 }
 
 .close {
-    position: absolute;
     color: #aaa;
     top: 10px;
     right: 30px; 
     font-size: 50px;
     font-weight: bold;
+    align-self: flex-end;
 }
 
 .close:hover,
@@ -164,8 +184,8 @@ export default {
     border: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     border-radius: 10px;
-    font-size: 30px;
-    height: 60px;
+    font-size: 50px;
+    height: 80px;
     margin-top: 5px;
     padding-left: 10px;
 }

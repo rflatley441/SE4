@@ -5,12 +5,10 @@
             <div class="contents-container">
                 <h1 style="font-size:80px"> Welcome, {{ this.username }}!</h1>
                 <div id="inputsContainer">
-                    <!-- <button class="btn success" @click="join()">Test</button> -->
                     <button class="btn success" @click="openStartGameModal">Start Game</button><br> 
-                    <StartGameModal :isOpen="isStartGameModalOpen" @modal-close="closeStartGameModal"/>
+                    <StartGameModal :isOpen="isStartGameModalOpen" :userId="this.userId" :username="this.username" @modal-close="closeStartGameModal"/>
                     <button class="btn success" style="margin-top: 30px;" @click="openJoinGameModal">Join Game</button><br>
-                    <JoinGameModal :isOpen="isJoinGameModal" :userId="this.userId" @modal-close="closeJoinGameModal"/>
-                    <!-- <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">Play Game</router-link></button> -->
+                    <JoinGameModal :isOpen="isJoinGameModal" :userId="this.userId" :username="this.username" @modal-close="closeJoinGameModal"/>
                     <button class="btn success" style="margin-top: 30px;" @click="openStatsModal" >View Player Statistics</button>
                     <StatsModal :isOpen="isStatsModalOpen" @modal-close="closeStatsModal"/>
                     <br>
@@ -39,6 +37,7 @@ import { ref } from 'vue';
         JoinGameModal
     },
     setup() {
+        // modals setup
         const isStatsModalOpen = ref(false);
         const isStartGameModalOpen = ref(false);
         const isJoinGameModal = ref(false);
@@ -81,7 +80,7 @@ import { ref } from 'vue';
             userId: null,
         };
     },
-    async created() {
+    async mounted() {
         const auth = getAuth();
         const user = auth.currentUser;
         const db = getFirestore();
@@ -89,9 +88,9 @@ import { ref } from 'vue';
         this.userId = user.uid;
         const docSnap = await getDoc(docRef);
 
+        // sets username to the username of the user
         if(docSnap.exists()) {
             const data = docSnap.data()
-            console.log("Document data:", data);
 
             this.username = data.username;
         }

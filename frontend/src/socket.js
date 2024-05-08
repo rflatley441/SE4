@@ -1,5 +1,6 @@
 import { reactive } from "vue";
 import { io } from "socket.io-client";
+import store from "./store";
 
 export const state = reactive({
   connected: false,
@@ -10,8 +11,20 @@ const URL = process.env.NODE_ENV === "production" ? undefined : "http://127.0.0.
 
 const socket = io(URL);
 
-socket.on('join')
+socket.on('message', function(message) {
+  console.log('Received message:', message);
+});
 
-socket.on('leave')
+socket.on('connect', function() {
+  state.connected = true;
+});
+
+socket.on('disconnect', function() {  
+  state.connected = false;
+});
+
+socket.on('game-started', function(roomId) {
+  store.dispatch('gameStart', roomId);
+});
 
 export default socket;

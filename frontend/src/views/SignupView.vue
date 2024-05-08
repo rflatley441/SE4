@@ -1,70 +1,73 @@
 <template>
-    <div id="app">
-      <!-- Content goes here -->
-    </div>
-        <div class="content">
-            <div class="contents-container">
-                <div id = signuptitle>Sign Up</div>
-                <div id="inputsContainer">
+  <div id="app">
+      <div class="content">
+          <div class="contents-container">
+              <div id = signuptitle>Sign Up</div>
+              <div id="inputsContainer">
 
-                    <div class="inputLabel">
-                        Username
-                    </div>
-                <div class="inputHolder">
-                    <input type="text" class="inputBox" v-model="username" placeholder="Username" />
-                </div>
+                  <div class="inputLabel">
+                      Username
+                  </div>
+              <div class="inputHolder">
+                  <input type="text" class="inputBox" v-model="username" placeholder="Username" />
+              </div>
 
-                <div class="inputLabel" style = "padding-top: 10px;">
-                        Email
-                    </div>
-                <div class="inputHolder" style="padding-bottom: 10px;">
-                    <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
-                </div>
+              <div class="inputLabel" style = "padding-top: 10px;">
+                      Email
+                  </div>
+              <div class="inputHolder" style="padding-bottom: 10px;">
+                  <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
+              </div>
 
-            <div class="inputLabel" style = "padding-top: 10px;">
-                    Password
-                </div>
-            <div class="inputHolder" style="padding-bottom: 20px;">
-                <input type="password" class="inputBox" v-model="password" placeholder="Password" />
-            </div>
+              <div class="inputLabel" style = "padding-top: 10px;">
+                      Password
+                  </div>
+              <div class="inputHolder" style="padding-bottom: 20px;">
+                  <input type="password" class="inputBox" v-model="password" placeholder="Password" />
+              </div>
 
-                <button class="create-account-button" @click.prevent="signUp">
-                CREATE ACCOUNT
-                </button>
-            </div>
-            <div id="footer">
-                <router-link to="/" class="footText">Return to Login</router-link>
-            </div>
-            <DiamondTile id="diamondTile" fillColor="green" />
-            <CircleTile id="circleTile" fillColor="red" />
-            <CloverTile id="cloverTile" fillColor="orange" />
-        </div>
-    </div>
+                  <button class="create-account-button" @click.prevent="signUp">
+                  Create Account
+                  </button>
+              </div>
+              <div id="footer">
+                  <router-link to="/" class="footText">Return to Login</router-link>
+              </div>
+          </div>
+      </div>
+  </div>
 </template>
+
 
 <style scoped>
 #app {
     display: flex;
-    justify-content: center;
+    position: relative;
+    min-height: calc(100vh - 16px); 
+    background-image: url("@/assets/background.svg");
+    background-size: cover;
+}
+
+.content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-top: 80px;
+    font-weight: bold;
     align-items: center;
-    width: 100vw;
+    justify-content: center;
 }
 
-#diamondTile {
-    position: absolute;
-    left: -40px;
-    top: 750px;
-}
-#circleTile {
-    position: absolute;
-    right: -60px;
-    top: 700px;
-}
-
-#cloverTile {
-    position: absolute;
-    right: -70px;
-    top: 200px;
+.contents-container {
+    width: fit-content;
+    padding: 40px;
+    border-radius: 20px;
+    background-color: rgba(238, 221, 221, 0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    margin: auto;
 }
 
 #signuptitle {
@@ -74,9 +77,8 @@
     padding-bottom: 10px;
     padding-top: 10px;
     font-size: 100px;
-    font-weight: 80;
+    font-weight: 500;
     color: black;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 #inputsContainer {
@@ -86,12 +88,13 @@
     padding-right: 60px;
     padding-top: 40px;
     padding-bottom: 40px;
+    border-radius: 20px;
 }
 
 .inputHolder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .inputBox {
     width: 900px;
@@ -100,32 +103,31 @@
     height: 60px;
     margin-top: 5px;
     padding-left: 10px;
+    border-radius: 10px;
 }
 
 .inputLabel {
     font-size: 35px;
     font-weight: 600;
     color: black;
-    font-family: Arial, Helvetica, sans-serif;
     text-align: left;
 }
 #passwordrequirments {
     font-size: 15px;
     font-weight: 100;
     color: black;
-    font-family: Arial, Helvetica, sans-serif;
     text-align: right;
 }
 
 #footer {
-  display: flex;
-  justify-content: space-evenly;
-  padding-top: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 20px;
 }
 
 .footText {
     font-size: 35px;
-    font-weight: 300;
+    font-weight: 500;
     color: #2490F3;
     cursor: pointer;
 }
@@ -146,27 +148,19 @@
 }
 
 .create-account-button:hover {
-  background-color: #0056b3; /* Darker blue on hover, adjust as needed */
-  transform: translateY(
-    2px
-  ); /* Optional: if the button moves slightly on hover */
+  background-color: #0056b3; /* Darker blue on hover, adjust as needed */ 
+  transform: translateY(2px); /* Optional: if the button moves slightly on hover */
 }
 </style>
 
 <script>
 import { ref } from "vue";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore"; 
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { useRouter } from 'vue-router'; 
-import DiamondTile from '@/assets/DiamondTile.vue';
-import CircleTile from '@/assets/CircleTile.vue';
-import CloverTile from '@/assets/CloverTile.vue';
 
 export default {
   name: "LoginView",
-  components: {
-    DiamondTile, CircleTile, CloverTile
-  },
 
   setup() {
     const router = useRouter();

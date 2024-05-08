@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store.js'
 import { initializeApp } from 'firebase/app';
+import { getAuth, browserSessionPersistence } from 'firebase/auth';
 import socket from './socket.js'
 import './fonts.css'
 
@@ -19,8 +20,11 @@ const firebaseConfig = {
 
   initializeApp(firebaseConfig);
 
-
   const app = createApp(App);
+
+  const auth = getAuth();
+  auth.setPersistence(browserSessionPersistence)
+  
   // Use plugins
   app.use(socket);
   app.use(router);

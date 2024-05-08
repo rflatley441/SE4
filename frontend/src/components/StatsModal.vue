@@ -52,11 +52,9 @@ export default {
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
 
-        console.log("hello", docSnap);
-
+        // gets user stats
         if(docSnap.exists()) {
             const data = docSnap.data()
-            console.log("Document data:", data);
 
             this.username = data.username;
             this.highScore = data.high_score;
@@ -82,7 +80,7 @@ export default {
     top: 15%;
     left: 25%;
     width: 50%;
-    height: 50%;
+    height: 60%;
     margin: auto;
     background-color: rgba(0, 0, 0, 0.5);
 }
@@ -92,15 +90,19 @@ export default {
   align-items: center; 
   width: 100%;
   height: 100%;
-  margin: auto;
 }
 
 .modal-container {
-    padding: 10px 30px;
+    padding: 10px 30px 30px;
     background-color: #e6e6ff;
     border-radius: 10px;
     margin: auto;
     box-shadow: 0 2px 8px #ccccff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .close {
@@ -108,6 +110,7 @@ export default {
     float: right;
     font-size: 50px;
     font-weight: bold;
+    align-self: flex-end;
 }
 
 .close:hover,

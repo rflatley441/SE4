@@ -3,17 +3,17 @@
         <div class="modal-wrapper">
             <div class="modal-container">
                 <span class="close" @click="handleClose">&times;</span>
-                <h1 style="font-size: 80px;"> Here's your game code <span style="color: #6666FF">{{ this.username }}</span></h1>
-                <h2 style="font-size:40px">{{ this.gameCode }}</h2>
-                <button @click="this.join" :disabled="this.disabled"><span v-if="this.disabled">Waiting for more players</span><span v-else>Play Game</span></button>
+                <h1 style="font-size: 60px;"> Here's your game code <span style="color: #6666FF">{{ this.username }}</span></h1>
+                <h2 style="font-size:100px">{{ this.gameCode }}</h2>
+                <button v-if="!this.gameStarted" class="start-button" @click="this.startGame">Start New Game</button>
+                <span :style="{ fontSize: '40px', color: '#6666FF' }" v-else>Waiting for more players . . .</span>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDoc, addDoc, getDocs, collection } from 'firebase/firestore';
+import { getFirestore, addDoc, getDocs, collection } from 'firebase/firestore';
 import socket from '@/socket';
 import router from '@/router';
 
@@ -22,6 +22,14 @@ export default {
     props: {
         isOpen: {
             default: false,
+        },
+        userId: {
+            type: String,
+            required: true,
+        },
+        username: {
+            type: String,
+            required: true,
         }
     },
     setup(props, {emit}) {
@@ -36,20 +44,13 @@ export default {
     data() {
         return {
             gameCode: 0,
-            username: null,
-            gameCreated: false,
-            disabled: true,
+            gameStarted: false,
         };
     },
-    mounted() {
-        socket.on('start-game', () => {
-            this.disabled = false;
-        });
-    },
-    beforeUnmount() {
-        socket.off('start-game');
-    },
     methods: {
+        /**
+         * Generates a random 6 character game code
+         */
         generateGameCode() {
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let gameCode = '';
@@ -59,55 +60,46 @@ export default {
             }
             return gameCode;
         },
-        async createGameSession() {
-            const auth = getAuth();
-            const user = auth.currentUser;
+        /**
+         * Creates a new game code for a new session
+         */
+        createGameSession() {
+            this.gameCode = this.generateGameCode();
+        },
+        /**
+         * Starts a new game session
+         */
+        async startGame() {
             const db = getFirestore();
-            const docRef = doc(db, 'users', user.uid);
-            const gamesCollectionRef = collection(db, 'games');
-            const userDocSnap = await getDoc(docRef);
-            const gamesQuerySnapshot = await getDocs(gamesCollectionRef);
-            let inGame = false;
+            const gamesCollectionRef = collection(db, 'games'); 
 
-            gamesQuerySnapshot.forEach((doc) => {
-                const gameData = doc.data();
-                if (gameData.players && gameData.players.includes(user.uid)) {
-                    console.log('User found in game:', doc.id)
-                    inGame = true;
-                    this.gameCode = gameData.gameCode;
-                }
-            });
+            // checks if the game already exists
+            const querySnapshot = await getDocs(gamesCollectionRef);
+            const existingGames = querySnapshot.docs.map(doc => doc.data());
+            const gameExists = existingGames.some(game => game.gameCode === this.gameCode);
 
-            if (!inGame) {
-                this.gameCode = this.generateGameCode();
-
-                const newGameDocRef = await addDoc(gamesCollectionRef, {
-                    players: [user.uid], 
+            // creates a new game in the database if game does not currently exist
+            if (!gameExists) {
+                await addDoc(gamesCollectionRef, {
+                    players: [this.userId], 
                     gameCode: this.gameCode,
                 });
-                console.log("new game", newGameDocRef)
-            } 
-
-            if(userDocSnap.exists()) {
-                const data = userDocSnap.data()
-
-                this.username = data.username;
             }
+
+            this.gameStarted = true;
+
+            // adds the user to the game room
             socket.emit('join', { username: this.username, room: this.gameCode })
         },
-        join() {
-            router.push('/game')
-        }
     },
-    watch: {
-        isOpen(newVal) {
-            if (newVal && !this.gameCreated) {
-                this.createGameSession();
-                this.gameCreated = true;
-            } else if(newVal) {
-                socket.emit('join', { username: this.username, room: this.gameCode });
-            }
-        },
+    mounted() {
+        // creates a new game code only if the game code does not already exist
+        if(this.gameCode == 0) {
+            this.createGameSession();
+        }
+        socket.on('navigateToGame', (room) => {
+            router.push(`/game/${room}`);
+        });
     }
 }
 
@@ -131,19 +123,38 @@ export default {
 }
 
 .modal-wrapper {
-  justify-content: center;
-  align-items: center; 
-  width: 100%;
-  height: 100%;
-  margin: auto;
+    justify-content: center;
+    align-items: center; 
+    width: 100%;
+    height: 100%;
 }
-
 .modal-container {
-    padding: 10px 30px;
+    padding: 10px 30px 30px;
     background-color: #e6e6ff;
     border-radius: 10px;
     margin: auto;
     box-shadow: 0 2px 8px #ccccff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-button {
+    border-color: transparent;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    background-color: #FFB766;
+    width: 600px;
+    height: 70px;
+    cursor: pointer;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 50px;
+    font-family: 'Quicksand', sans-serif;
 }
 
 .close {
@@ -151,6 +162,7 @@ export default {
     float: right;
     font-size: 50px;
     font-weight: bold;
+    align-self: flex-end;
 }
 
 .close:hover,

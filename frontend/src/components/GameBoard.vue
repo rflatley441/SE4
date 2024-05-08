@@ -23,7 +23,6 @@
       <h2 class="winner-announcement">{{winner.winner}}</h2>
       <div class="modal-buttons">
         <router-link to="/home" class="modal-button">Home</router-link>    
-        <router-link to="/game" class="modal-button">Play Again</router-link>
       </div>
     </div>
 
@@ -54,6 +53,10 @@ export default {
             type: Array,
             required: true,
         },
+        gameId: {
+            type: String,
+            required: true,
+        }
     },
     components: {
         BoardTile,
@@ -88,6 +91,9 @@ export default {
             this.tilesThisTurn.forEach((position) => {
                 let verticalScore = 1;
                 let horizontalScore = 1;
+            this.tilesThisTurn.forEach((position) => {
+                let verticalScore = 1;
+                let horizontalScore = 1;
 
         let up = position - 12;
         while (this.tilesPlayed.includes(up)) {
@@ -119,7 +125,20 @@ export default {
                 if (horizontalScore === 6) {
                     bonusScore += 6;
                 }
+                if (verticalScore === 6) {
+                    bonusScore += 6;
+                }
+                if (horizontalScore === 6) {
+                    bonusScore += 6;
+                }
 
+                if (verticalScore > 1) {
+                    baseScore += verticalScore - 1;
+                }
+                if (horizontalScore > 1) {
+                    baseScore += horizontalScore - 1;
+                }
+            });
                 if (verticalScore > 1) {
                     baseScore += verticalScore - 1;
                 }
@@ -129,25 +148,28 @@ export default {
             });
 
             baseScore += this.tilesThisTurn.size;
+            baseScore += this.tilesThisTurn.size;
 
-            let totalScore = baseScore + bonusScore;
-            this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
-        },
+                    let totalScore = baseScore + bonusScore;
+                    this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
+                },  
+        /**
+         * Determines the winner of the game
+         */
+           async determineWinner() {
+                let highestScore = -1;
+                let winner = ""
+                let winningPlayer;
 
-
-        async determineWinner() {
-            let highestScore = -1;
-            let winner = ""
-            let winningPlayer;
-
+                // sets player with the highest score as the winner
             if (this.deck.remaining == 0) {
-                await this.players.forEach((player, index) => {
-                    if (player.score > highestScore) {
-                        highestScore = player.score;
+                    await this.players.forEach((player, index) => {
+                            if (player.score > highestScore) {
+                                highestScore = player.score;
                         winningPlayer = player;
-                        winner = `Player ${index + 1} Wins!`;
-                    }
-                });
+                                winner = `Player ${index + 1} Wins!`;
+                            }
+                        });
                 let losingPlayer;
                 if (winningPlayer != this.players[0]){
                     losingPlayer = this.players[0];
@@ -163,12 +185,12 @@ export default {
                 } else {
                     this.updatePlayerStats(losingPlayer.score, [0, 1, 0], losingPlayer.id);
                 }
-                //return winner
-                this.$store.dispatch('setGameOver', { winner: winner});
-        
-            }
-        
-        },
+                        //return winner
+                        this.$store.dispatch('setGameOver', { winner: winner});
+                   // user leaves room
+                socket.emit('leave', { username: this.username, room: this.gameId })
+                }
+              },
         async updatePlayerStats(score, record, playerId){
             // const auth = getAuth();
             // const user = playerId;
@@ -198,7 +220,10 @@ export default {
                     high_score: top_score
                 })
             }
-        },
+        },        /**
+         * Places a tile on the board
+         * @param {Object} payload - the payload object
+         */
         async placeTile(payload) {
             let tileSelected = null;
 
@@ -206,14 +231,16 @@ export default {
             this.updateHighlightedBoardTiles();
 
             if (tileSelected !== null && this.tilePlacementIsValid(payload)) {
+                // changes the position on the board to the color and shape of the tile to be placed
                 this.board[payload.position].color = this.playerHand(this.userId)[tileSelected].color;
                 this.board[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
 
                 this.board[payload.position].hidden = false;
                 this.tilesPlayed.push(payload.position);
                 this.tilesThisTurn.add(payload.position);
-                // tileList.value[payload.position].highlighted = true;
+
                 console.log("identifierr", this.userId);
+                // removes the placed tile from the player's hand
                 this.$store.commit('removeTileFromHand', {
                     userId: this.userId,
                     tileIndex: tileSelected
@@ -247,6 +274,7 @@ export default {
             }
             return selectedTile;
         },
+
         tilePlacementIsValid(payload){
             let tileSelected = null;
 
@@ -337,6 +365,7 @@ export default {
             }
             return false;
         },
+
         hasAdjacentTiles(payload){
             var adjacentTiles = new Set();
             if (payload.position >= 12){
@@ -358,6 +387,7 @@ export default {
             }
             return false;
         },
+
         isValidInIndividualRun(seenColors, seenShapes, tileColor, tileShape){
             if (seenColors.has(tileColor) && seenShapes.has(tileShape)){
                 return false;
@@ -369,6 +399,7 @@ export default {
             }
             return true;
         },
+        
         isValidInContextOfTurn(payload, tilesThisTurn){
             if (tilesThisTurn.size == 0){
                 return true;
@@ -457,7 +488,7 @@ export default {
             await this.incrementRound(nextPlayerIndex);
             this.determineWinner();
 
-            socket.emit('end-turn', this.$store.state); 
+            socket.emit('end-turn', { gameState: this.$store.state, room_id: this.gameId });
         }, 
 
     },
@@ -465,16 +496,11 @@ export default {
 </script>
 
 <style scoped>
-/* .game-board-container {
-    width: 600px;
-} */
 
 .game-board {
-    /* width: auto; */
     display: grid;
     grid-template-columns: repeat(12, 50px);
     grid-template-rows: repeat(12, 50px);
-    /* position: absolute; */
 }
 
 .end-turn-button {

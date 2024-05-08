@@ -7,6 +7,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 
 const state = {
     game: false,
+    id: 0,
     round: 0,
     turn: null,
     winner: null,
@@ -41,6 +42,7 @@ const getters = {
     gameState: (state) => {
         return {
             gameStatus: state.game,
+            id: state.id,
             turn: state.turn,
             round: state.round,
             finished: state.finished
@@ -61,7 +63,6 @@ const getters = {
 const actions = {
     updateGameState({commit}, gameState) {
         commit('updateGameState', gameState);
-        console.log("game state updated", state)
     },
     async fetchDeck({commit}) {
         try {
@@ -149,7 +150,6 @@ const actions = {
 
     updateBoard({commit}, board) {
         commit('updateBoard', board);
-        console.log("board", state.board)
     },
 
     updateTilesPlayed({commit}, tilesPlayed){
@@ -170,9 +170,10 @@ const actions = {
         // let random = Math.round(Math.random());
         commit('setTurn', 0);
     },
-    async gameStart({commit, dispatch}) {
+    async gameStart({commit, dispatch}, roomId) {
         commit('restartGame');
         commit('initializeBoard');
+        commit('setGameId', roomId);
         
         const player1Id = state.players[0].id; 
         const player2Id = state.players[1].id; 
@@ -216,6 +217,7 @@ const mutations = {
         state.players[1].hand = [];
         state.pile = [{tile: null}, {tile: null}]
     },
+    setGameId: (state, id) => (state.id = id),
     initializeBoard: (state) => {
         state.board = [];
         for (let i = 0; i < 144; i++) {
@@ -256,7 +258,6 @@ const mutations = {
     },
     removeTileFromHand(state, { userId, tileIndex }) {
         state.players[userId].hand.splice(tileIndex, 1);
-        console.log("hand:", state.players[userId].hand)
     },
     updateBoard: (state, board) => (state.board = board),
     updateTilesPlayed: (state, tilesPlayed) => (state.tilesPlayed = tilesPlayed),

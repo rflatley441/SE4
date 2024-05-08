@@ -37,7 +37,7 @@ const router = createRouter({
       component: PasswordPage,
     },
     {
-      path: "/game",
+      path: "/game/:room",
       component: GamePlayView,
     },
     {
