@@ -29,7 +29,7 @@ const state = {
     ],
 
     board: [],
-    tilesPlayed: new Set(),
+    tilesPlayed: [],
 
     deck: {
         deck_id: null,
