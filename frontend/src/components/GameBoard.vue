@@ -23,7 +23,6 @@
       <h2 class="winner-announcement">{{winner.winner}}</h2>
       <div class="modal-buttons">
         <router-link to="/home" class="modal-button">Home</router-link>    
-        <router-link to="/game" class="modal-button">Play Again</router-link>
       </div>
     </div>
 
@@ -140,7 +139,7 @@ export default {
         });
         //return winner
         this.$store.dispatch('setGameOver', { winner: winner});
-     
+        socket.emit('leave', { username: this.username, room: this.gameId })
         }
       
     },
@@ -391,7 +390,6 @@ export default {
             socket.emit('end-turn', { gameState: this.$store.state, room_id: this.gameId }); 
             
         }, 
-
     },
 }
 </script>

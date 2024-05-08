@@ -65,34 +65,41 @@ export default {
             const gamesCollectionRef = collection(db, 'games');
             const gamesQuerySnapshot = await getDocs(gamesCollectionRef);
 
+            let gameExists = false;
             gamesQuerySnapshot.forEach(async (doc) => {
             const gameData = doc.data();
+
             if (gameData.gameCode === this.gameCode) {
-                this.disabled = false;
+                gameExists = true;
 
-                if(!gameData.players.includes(this.userId) && gameData.players.length < 2) {
-                    await updateDoc(doc.ref, {
-                    players: [... gameData.players, this.userId]
-                });
-                }
-                console.log(this.userId, "huh?")
-
-                if(gameData.players.includes(this.userId)) {
+                if(gameData.players.length < 2) {
+                    if(!gameData.players.includes(this.userId) && gameData.players.length < 2) {
+                        await updateDoc(doc.ref, {
+                        players: [... gameData.players, this.userId]
+                    });
+                    }
+                    console.log(this.userId, "huh?")
                     console.log("username", this.username)
                     socket.emit('join', { username: this.username, room: this.gameCode});
-                    router.push('/game')
-                    socket.emit('start-game', { room: this.gameCode });
-                    console.log("Player added to game: ", this.userId);
+                    console.log("Player added to game: ", this.userId); 
                 } else {
                     this.message = "Game is full";
                 }
             }
+
         });
+
+        if(!gameExists) {
+            this.message = "Invalid game code";
+        }
         }
     },
-    async created() {
-        this.disabled = true;
-        console.log("user id pls" , this.userId)
+    mounted() {
+        socket.on('navigateToGame', (room) => {
+            socket.emit('start-game', { room: this.gameCode });
+            console.log("Navigating to game room", room);
+            router.push(`/game/${room}`);
+        });
     }
 }
 

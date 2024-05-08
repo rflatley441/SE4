@@ -7,7 +7,7 @@
                 <div id="inputsContainer">
                     <!-- <button class="btn success" @click="join()">Test</button> -->
                     <button class="btn success" @click="openStartGameModal">Start Game</button><br> 
-                    <StartGameModal :isOpen="isStartGameModalOpen" @modal-close="closeStartGameModal"/>
+                    <StartGameModal :isOpen="isStartGameModalOpen" :userId="this.userId" :username="this.username" @modal-close="closeStartGameModal"/>
                     <button class="btn success" style="margin-top: 30px;" @click="openJoinGameModal">Join Game</button><br>
                     <JoinGameModal :isOpen="isJoinGameModal" :userId="this.userId" :username="this.username" @modal-close="closeJoinGameModal"/>
                     <!-- <button class="btn success" style="margin-top: 0px;"><router-link to="/game" class="footText">Play Game</router-link></button> -->
@@ -81,13 +81,18 @@ import { ref } from 'vue';
             userId: null,
         };
     },
-    async created() {
+    async mounted() {
         const auth = getAuth();
         const user = auth.currentUser;
         const db = getFirestore();
         const docRef = doc(db, 'users', user.uid);
         this.userId = user.uid;
+        console.log("User ID: ", this.userId)
         const docSnap = await getDoc(docRef);
+
+        auth.onAuthStateChanged((user) => {
+            console.log("Auth state changed:", user);
+        });
 
         if(docSnap.exists()) {
             const data = docSnap.data()

@@ -5,7 +5,6 @@
    <div :class="{ 'player-turn': true, 'player-1': this.gameState.turn === 0, 'player-2': this.gameState.turn === 1 }">
             {{ this.gameState.turn === 0 ? 'Player 1\'s Turn' : 'Player 2\'s Turn' }}
         </div>            <div class="game-board"> 
-                <!-- right now i am just setting the user ids to 0 when implementing dual players they will need to be changed based off round -->
                 <GameBoard :playerHand="this.playerHand" :userId="this.gameState.turn" :gameId="this.gameState.id" ref="gameBoard"/>
             </div>
             <div class="player-hand-background">

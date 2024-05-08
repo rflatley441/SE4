@@ -3,17 +3,17 @@
         <div class="modal-wrapper">
             <div class="modal-container">
                 <span class="close" @click="handleClose">&times;</span>
-                <h1 style="font-size: 80px;"> Here's your game code <span style="color: #6666FF">{{ this.username }}</span></h1>
-                <h2 style="font-size:40px">{{ this.gameCode }}</h2>
-                <button @click="this.join" :disabled="this.disabled"><span v-if="this.disabled">Waiting for more players</span><span v-else>Play Game</span></button>
+                <h1 style="font-size: 40px;"> Here's your game code <span style="color: #6666FF">{{ this.username }}</span></h1>
+                <h2 style="font-size:80px">{{ this.gameCode }}</h2>
+                <button v-if="!this.gameStarted" @click="this.startGame">Start New Game</button>
+                <span v-else>Waiting for more players</span>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDoc, addDoc, getDocs, collection } from 'firebase/firestore';
+import { getFirestore, addDoc, getDocs, collection } from 'firebase/firestore';
 import socket from '@/socket';
 import router from '@/router';
 
@@ -22,6 +22,14 @@ export default {
     props: {
         isOpen: {
             default: false,
+        },
+        userId: {
+            type: String,
+            required: true,
+        },
+        username: {
+            type: String,
+            required: true,
         }
     },
     setup(props, {emit}) {
@@ -36,18 +44,8 @@ export default {
     data() {
         return {
             gameCode: 0,
-            username: null,
-            gameCreated: false,
-            disabled: true,
+            gameStarted: false,
         };
-    },
-    mounted() {
-        socket.on('start-game', () => {
-            this.disabled = false;
-        });
-    },
-    beforeUnmount() {
-        socket.off('start-game');
     },
     methods: {
         generateGameCode() {
@@ -59,55 +57,40 @@ export default {
             }
             return gameCode;
         },
-        async createGameSession() {
-            const auth = getAuth();
-            const user = auth.currentUser;
+        createGameSession() {
+            this.gameCode = this.generateGameCode();
+        },
+        async startGame() {
             const db = getFirestore();
-            const docRef = doc(db, 'users', user.uid);
-            const gamesCollectionRef = collection(db, 'games');
-            const userDocSnap = await getDoc(docRef);
-            const gamesQuerySnapshot = await getDocs(gamesCollectionRef);
-            let inGame = false;
+            const gamesCollectionRef = collection(db, 'games'); 
 
-            gamesQuerySnapshot.forEach((doc) => {
-                const gameData = doc.data();
-                if (gameData.players && gameData.players.includes(user.uid)) {
-                    console.log('User found in game:', doc.id)
-                    inGame = true;
-                    this.gameCode = gameData.gameCode;
-                }
-            });
+            // checks if the game already exists
+            const querySnapshot = await getDocs(gamesCollectionRef);
+            const existingGames = querySnapshot.docs.map(doc => doc.data());
+            const gameExists = existingGames.some(game => game.gameCode === this.gameCode);
 
-            if (!inGame) {
-                this.gameCode = this.generateGameCode();
-
-                const newGameDocRef = await addDoc(gamesCollectionRef, {
-                    players: [user.uid], 
+            // creates a new game in the database if game does not currently exist
+            if (!gameExists) {
+                await addDoc(gamesCollectionRef, {
+                    players: [this.userId], 
                     gameCode: this.gameCode,
                 });
-                console.log("new game", newGameDocRef)
-            } 
-
-            if(userDocSnap.exists()) {
-                const data = userDocSnap.data()
-
-                this.username = data.username;
             }
+
+            this.gameStarted = true;
+
+            // adds the user to the game room
             socket.emit('join', { username: this.username, room: this.gameCode })
         },
-        join() {
-            router.push('/game')
-        }
     },
-    watch: {
-        isOpen(newVal) {
-            if (newVal && !this.gameCreated) {
-                this.createGameSession();
-                this.gameCreated = true;
-            } else if(newVal) {
-                socket.emit('join', { username: this.username, room: this.gameCode });
-            }
-        },
+    mounted() {
+        if(this.gameCode == 0) {
+            this.createGameSession();
+        }
+        socket.on('navigateToGame', (room) => {
+            console.log("Navigating to game room", room);
+            router.push(`/game/${room}`);
+        });
     }
 }
 
