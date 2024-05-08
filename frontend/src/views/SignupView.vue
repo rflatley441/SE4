@@ -156,7 +156,7 @@
 <script>
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref as dbRef, set } from "firebase/database"; 
+import { getFirestore, doc, setDoc } from "firebase/firestore"; 
 import { useRouter } from 'vue-router'; 
 
 export default {
@@ -174,15 +174,16 @@ export default {
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email.value, password.value)
         .then((userCredential) => {
-          console.log("Success", userCredential.user);
-          const db = getDatabase(); 
-          return set(dbRef(db, 'users/' + userCredential.user.uid), {
+          console.log("Account creation successful", userCredential.user);
+          const db = getFirestore(); 
+          const userDoc = doc(db, 'users', userCredential.user.uid);
+          return setDoc(userDoc, {
             username: username.value,
             email: email.value,
           });
         })
         .then(() => {
-          console.log("User data stored in Realtime Database");
+          console.log("User data stored in Firestore");
           router.push('/Home');
         })
         .catch((error) => {
