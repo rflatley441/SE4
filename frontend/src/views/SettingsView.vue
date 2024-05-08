@@ -19,7 +19,7 @@
           <div class="innerBox">
             <div class="inputLabel">Username</div>
             <div class="inputHolder">
-              <input type="text" class="inputBox" v-model="username" placeholder="Username" />
+              <input type="text" class="inputBox" v-model="username"  />
             </div>
             <div class="passwordContainer">
               <div class="inputLabel">Password</div>
@@ -31,7 +31,7 @@
 
             <div class="inputLabel" style="padding-top: 10px">Email</div>
             <div class="inputHolder" style="padding-bottom: 10px">
-              <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
+              <input type="text" class="inputBox" v-model="email" />
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@
 <script>
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth, updateProfile } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import NavBar from "@/components/NavBar.vue";
 export default {
@@ -80,13 +80,22 @@ export default {
       photo: null,
       fileName: "No file selected",
       profile_pic:"",
+      username: "", 
+      email:"", 
     };
   },
   async created() {
     const auth = getAuth();
-    const user = auth.currentUser;
+    const user = auth.currentUser;    
+    const db = getFirestore();
+    const docSnap = await getDoc(doc(db, "users", user.uid)); 
     if (!user) return;
     this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
+    if(docSnap.exists()){
+      const data = docSnap.data();  
+      this.username = data.username;
+    } 
+    this.email = user.email;
   },
   methods: {
     openFilePicker() {
