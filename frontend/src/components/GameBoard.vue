@@ -35,7 +35,7 @@
 import socket from "@/socket"
 import BoardTile from "./BoardTile.vue"
 import { mapActions, mapGetters } from "vuex"
-import { getAuth } from 'firebase/auth';
+// import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, updateDoc, increment, getDoc } from 'firebase/firestore';
 
 
@@ -138,27 +138,42 @@ export default {
         async determineWinner() {
             let highestScore = -1;
             let winner = ""
-            console.log("winner function")
+            let winningPlayer;
 
             if (this.deck.remaining == 0) {
                 await this.players.forEach((player, index) => {
                     if (player.score > highestScore) {
                         highestScore = player.score;
+                        winningPlayer = player;
                         winner = `Player ${index + 1} Wins!`;
                     }
-                    this.updatePlayerStats(highestScore, [1, 0, 0]); // needs to be updated once websocket is set up
                 });
+                let losingPlayer;
+                if (winningPlayer != this.players[0]){
+                    losingPlayer = this.players[0];
+                } else {
+                    losingPlayer = this.players[1]
+                }
+                const currentIndex = this.userId
+                const currentPlayer = this.players[currentIndex];
+                if (losingPlayer.score == winningPlayer.score){
+                    this.updatePlayerStats(highestScore, [0, 0, 1], currentPlayer.id);
+                } else if (currentPlayer == winningPlayer){
+                    this.updatePlayerStats(highestScore, [1, 0, 0], winningPlayer.id); 
+                } else {
+                    this.updatePlayerStats(losingPlayer.score, [0, 1, 0], losingPlayer.id);
+                }
                 //return winner
                 this.$store.dispatch('setGameOver', { winner: winner});
         
             }
         
         },
-        async updatePlayerStats(score, record){
-            const auth = getAuth();
-            const user = auth.currentUser;
+        async updatePlayerStats(score, record, playerId){
+            // const auth = getAuth();
+            // const user = playerId;
             const db = getFirestore();
-            const docRef = doc(db, 'users', user.uid);
+            const docRef = doc(db, 'users', playerId);
             const docSnap = await getDoc(docRef);
             await updateDoc(docRef,{
                 wins: increment(record[0]),
@@ -440,14 +455,9 @@ export default {
             await this.updateTilesPlayed(this.tilesPlayed);
             await this.fetchHand(nextPlayer.id);
             await this.incrementRound(nextPlayerIndex);
+            this.determineWinner();
 
-            // Check for game ending conditions
-            if (this.deck.remaining === 0 && this.players.some(player => player.hand.length === 0)) {
-                this.determineWinner();
-            }
-            console.log("Tiles remaining", this.deck.remaining);
             socket.emit('end-turn', this.$store.state); 
-            console.log(this.tilesPlayed);
         }, 
 
     },
