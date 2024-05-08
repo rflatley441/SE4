@@ -47,6 +47,7 @@ export default {
     async created() {
         const auth = getAuth();
         const user = auth.currentUser;
+        console.log("hello", user);
         const db = getFirestore();
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
