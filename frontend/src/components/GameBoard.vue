@@ -43,6 +43,10 @@ export default {
             type: Number,
             required: true,
         },
+        playerId: { // Actual player identifier
+            type: String,
+            required: true
+        },
         playerHand: {
             type: Array,
             required: true,
@@ -51,51 +55,57 @@ export default {
     components: {
         BoardTile,
     },
+    async mounted() {
+        await this.$store.dispatch('fetchUsers');
+        await this.$store.dispatch('gameStart')
+    
+},
     setup() {
-        var tilesPlayed = new Set()
+        //var tilesPlayed = new Set()
         var tilesThisTurn = new Set()
 
         return {
-           tilesPlayed,
+          // tilesPlayed,
            tilesThisTurn,
         };
     }, 
     computed: {
-        ...mapGetters(['players', 'deck', 'winner', 'gameOver', 'board']),
+        ...mapGetters(['players', 'deck', 'winner', 'gameOver', 'board', 'tilesPlayed']),
+        
     },
     expose: ['updateHighlightedBoardTiles'], // used by GamePlayView
     
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard', 'fetchUsers', 'gameStart', 'updatePlayerScore', 'updateTilesPlayed']),
         
         calculateScore(userId) {
-    let baseScore = 0;
-    let bonusScore = 0;
+        let baseScore = 0;
+        let bonusScore = 0;
 
     this.tilesThisTurn.forEach((position) => {
         let verticalScore = 1;
         let horizontalScore = 1;
 
         let up = position - 12;
-        while (this.tilesPlayed.has(up)) {
+        while (this.tilesPlayed.includes(up)) {
             verticalScore++;
             up -= 12;
         }
 
         let down = position + 12;
-        while (this.tilesPlayed.has(down)) {
+        while (this.tilesPlayed.includes(down)) {
             verticalScore++;
             down += 12;
         }
 
         let left = position - 1;
-        while (position % 12 !== 0 && this.tilesPlayed.has(left)) {
+        while (position % 12 !== 0 && this.tilesPlayed.includes(left)) {
             horizontalScore++;
             left--;
         }
 
         let right = position + 1;
-        while (position % 12 !== 11 && this.tilesPlayed.has(right)) {
+        while (position % 12 !== 11 && this.tilesPlayed.includes(right)) {
             horizontalScore++;
             right++;
         }
@@ -152,7 +162,7 @@ export default {
                 this.board[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
 
                 this.board[payload.position].hidden = false;
-                this.tilesPlayed.add(payload.position);
+                this.tilesPlayed.push(payload.position);
                 this.tilesThisTurn.add(payload.position);
                 // tileList.value[payload.position].highlighted = true;
                 console.log("identifierr", this.userId);
@@ -161,6 +171,7 @@ export default {
                     tileIndex: tileSelected
                 });
                 this.updateBoard(this.board);
+                
                 this.updateHighlightedBoardTiles();
             }
         },
@@ -197,7 +208,7 @@ export default {
                 return false;
             }
 
-            if (this.tilesPlayed.size == 0){
+            if (this.tilesPlayed.length == 0){
                 switch(payload.position){
                     case 65:
                         return true;
@@ -222,7 +233,7 @@ export default {
             }
 
             // checking tile is selected and position is not already taken
-            if (tileSelected !== null && !this.tilesPlayed.has(payload.position)) {
+            if (tileSelected !== null && !this.tilesPlayed.includes(payload.position)) {
                 let tileColor = this.playerHand(this.userId)[tileSelected].color;
                 let tileShape = this.playerHand(this.userId)[tileSelected].shape;
                 let rowStart = payload.position - (payload.position % 12);
@@ -374,19 +385,36 @@ export default {
         },
 
         async endTurn() {
-            this.calculateScore(this.userId);
-            const nextPlayerId = (this.userId + 1) % this.players.length;
+
+            const currentIndex = this.userId
+            const currentPlayer = this.players[currentIndex];
+            console.log("current player", currentPlayer)
+            this.calculateScore(currentIndex);
+
+            const nextPlayerIndex = (currentIndex + 1) % this.players.length;
+            const nextPlayer = this.players[nextPlayerIndex];
+            console.log("next player" , nextPlayer)
+            if (!nextPlayer) {
+                console.error("Next player not found at index:", nextPlayerIndex);
+                return;
+            }
+
             this.tilesThisTurn = new Set();
-            await this.updateHand(this.userId);
-            await this.fetchHand();
-            await this.incrementRound(nextPlayerId);
-                if (this.deck.remaining == 0 && (this.players.some(player => player.hand.length === 0))){
-                    this.determineWinner();
-                }
-            console.log("tiles remaining" , this.deck.remaining);
-            console.log("hello", this.$store.state);
+
+            // Using current player ID for clarity and correctness
+            await this.updateHand(currentPlayer.id);
+            console.log("Next Player ID", nextPlayer.id);
+            await this.updateTilesPlayed(this.tilesPlayed);
+            await this.fetchHand(nextPlayer.id);
+            await this.incrementRound(nextPlayerIndex);
+
+            // Check for game ending conditions
+            if (this.deck.remaining === 0 && this.players.some(player => player.hand.length === 0)) {
+                this.determineWinner();
+            }
+            console.log("Tiles remaining", this.deck.remaining);
             socket.emit('end-turn', this.$store.state); 
-            
+            console.log(this.tilesPlayed);
         }, 
 
     },

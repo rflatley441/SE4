@@ -156,7 +156,7 @@
 <script>
 import { ref } from "vue";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref as dbRef, set } from "firebase/database"; 
+import { getFirestore, doc, setDoc } from "firebase/firestore"; 
 import { useRouter } from 'vue-router'; 
 import DiamondTile from '@/assets/DiamondTile.vue';
 import CircleTile from '@/assets/CircleTile.vue';
@@ -179,17 +179,17 @@ export default {
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email.value, password.value)
         .then((userCredential) => {
-          const db = getFirestore();
-          const userDocRef = doc(db, "users", userCredential.user.uid);
-
-          return setDoc(userDocRef, {
+          console.log("Account creation successful", userCredential.user);
+          const db = getFirestore(); 
+          const userDoc = doc(db, 'users', userCredential.user.uid);
+          return setDoc(userDoc, {
             username: username.value,
             email: email.value
           });
         })
         .then(() => {
           console.log("User data stored in Firestore");
-          router.push("/home");
+          router.push('/Home');
         })
         .catch((error) => {
           console.error("Signup failed", error);
