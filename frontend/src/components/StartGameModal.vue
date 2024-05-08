@@ -48,6 +48,9 @@ export default {
         };
     },
     methods: {
+        /**
+         * Generates a random 6 character game code
+         */
         generateGameCode() {
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let gameCode = '';
@@ -57,9 +60,15 @@ export default {
             }
             return gameCode;
         },
+        /**
+         * Creates a new game code for a new session
+         */
         createGameSession() {
             this.gameCode = this.generateGameCode();
         },
+        /**
+         * Starts a new game session
+         */
         async startGame() {
             const db = getFirestore();
             const gamesCollectionRef = collection(db, 'games'); 
@@ -84,6 +93,7 @@ export default {
         },
     },
     mounted() {
+        // creates a new game code only if the game code does not already exist
         if(this.gameCode == 0) {
             this.createGameSession();
         }

@@ -69,6 +69,9 @@ import Star8ptTile from '@/components/Star8ptTile.vue';
         }
     },
     methods: {
+        /**
+         * Returns the tile component based on the shape of the tile
+         */
         getTileComponent() {
             switch(this.shape) {
                 case ("circle"):
@@ -93,7 +96,6 @@ import Star8ptTile from '@/components/Star8ptTile.vue';
 <style scoped>
 .tile {
     position: relative;
-    /* box-sizing: border-box; */
 }
 
 .tile-shown {

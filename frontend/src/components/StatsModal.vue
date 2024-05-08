@@ -51,6 +51,7 @@ export default {
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
 
+        // gets user stats
         if(docSnap.exists()) {
             const data = docSnap.data()
 

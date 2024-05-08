@@ -72,78 +72,83 @@ export default {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard']),
         
         calculateScore(userId) {
-    let baseScore = 0;
-    let bonusScore = 0;
+            let baseScore = 0;
+            let bonusScore = 0;
 
-    this.tilesThisTurn.forEach((position) => {
-        let verticalScore = 1;
-        let horizontalScore = 1;
+            this.tilesThisTurn.forEach((position) => {
+                let verticalScore = 1;
+                let horizontalScore = 1;
 
-        let up = position - 12;
-        while (this.tilesPlayed.has(up)) {
-            verticalScore++;
-            up -= 12;
-        }
+                let up = position - 12;
+                while (this.tilesPlayed.has(up)) {
+                    verticalScore++;
+                    up -= 12;
+                }
 
-        let down = position + 12;
-        while (this.tilesPlayed.has(down)) {
-            verticalScore++;
-            down += 12;
-        }
+                let down = position + 12;
+                while (this.tilesPlayed.has(down)) {
+                    verticalScore++;
+                    down += 12;
+                }
 
-        let left = position - 1;
-        while (position % 12 !== 0 && this.tilesPlayed.has(left)) {
-            horizontalScore++;
-            left--;
-        }
+                let left = position - 1;
+                while (position % 12 !== 0 && this.tilesPlayed.has(left)) {
+                    horizontalScore++;
+                    left--;
+                }
 
-        let right = position + 1;
-        while (position % 12 !== 11 && this.tilesPlayed.has(right)) {
-            horizontalScore++;
-            right++;
-        }
+                let right = position + 1;
+                while (position % 12 !== 11 && this.tilesPlayed.has(right)) {
+                    horizontalScore++;
+                    right++;
+                }
 
-        if (verticalScore === 6) {
-            bonusScore += 6;
-        }
-        if (horizontalScore === 6) {
-            bonusScore += 6;
-        }
+                if (verticalScore === 6) {
+                    bonusScore += 6;
+                }
+                if (horizontalScore === 6) {
+                    bonusScore += 6;
+                }
 
-        if (verticalScore > 1) {
-            baseScore += verticalScore - 1;
-        }
-        if (horizontalScore > 1) {
-            baseScore += horizontalScore - 1;
-        }
-    });
+                if (verticalScore > 1) {
+                    baseScore += verticalScore - 1;
+                }
+                if (horizontalScore > 1) {
+                    baseScore += horizontalScore - 1;
+                }
+            });
 
-    baseScore += this.tilesThisTurn.size;
+            baseScore += this.tilesThisTurn.size;
 
-    let totalScore = baseScore + bonusScore;
-    this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
-},
+            let totalScore = baseScore + bonusScore;
+            this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
+        },  
+        /**
+         * Determines the winner of the game
+         */
+        determineWinner() {
+            let highestScore = -1;
+            let winner = ""
+            console.log("winner function")
 
-
-     determineWinner() {
-        let highestScore = -1;
-        let winner = ""
-        console.log("winner function")
-
-        if (this.deck.remaining == 0) {
-            this.players.forEach((player, index) => {
-            if (player.score > highestScore) {
-                highestScore = player.score;
-                winner = `Player ${index + 1} Wins!`;
+            // sets player with the highest score as the winner
+            if (this.deck.remaining == 0) {
+                this.players.forEach((player, index) => {
+                    if (player.score > highestScore) {
+                        highestScore = player.score;
+                        winner = `Player ${index + 1} Wins!`;
+                    }
+                });
+                //return winner
+                this.$store.dispatch('setGameOver', { winner: winner});
+                // user leaves room
+                socket.emit('leave', { username: this.username, room: this.gameId })
             }
-        });
-        //return winner
-        this.$store.dispatch('setGameOver', { winner: winner});
-        socket.emit('leave', { username: this.username, room: this.gameId })
-        }
-      
-    },
-
+        },
+        /**
+         * Places a tile on the board
+         * @param {Object} payload - the payload object
+         */
         async placeTile(payload) {
             let tileSelected = null;
 
@@ -151,14 +156,16 @@ export default {
             this.updateHighlightedBoardTiles();
 
             if (tileSelected !== null && this.tilePlacementIsValid(payload)) {
+                // changes the position on the board to the color and shape of the tile to be placed
                 this.board[payload.position].color = this.playerHand(this.userId)[tileSelected].color;
                 this.board[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
 
                 this.board[payload.position].hidden = false;
                 this.tilesPlayed.add(payload.position);
                 this.tilesThisTurn.add(payload.position);
-                // tileList.value[payload.position].highlighted = true;
+
                 console.log("identifierr", this.userId);
+                // removes the placed tile from the player's hand
                 this.$store.commit('removeTileFromHand', {
                     userId: this.userId,
                     tileIndex: tileSelected
@@ -191,6 +198,7 @@ export default {
             }
             return selectedTile;
         },
+
         tilePlacementIsValid(payload){
             let tileSelected = null;
 
@@ -281,6 +289,7 @@ export default {
             }
             return false;
         },
+
         hasAdjacentTiles(payload){
             var adjacentTiles = new Set();
             if (payload.position >= 12){
@@ -302,6 +311,7 @@ export default {
             }
             return false;
         },
+
         isValidInIndividualRun(seenColors, seenShapes, tileColor, tileShape){
             if (seenColors.has(tileColor) && seenShapes.has(tileShape)){
                 return false;
@@ -313,6 +323,7 @@ export default {
             }
             return true;
         },
+        
         isValidInContextOfTurn(payload, tilesThisTurn){
             if (tilesThisTurn.size == 0){
                 return true;

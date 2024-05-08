@@ -53,25 +53,29 @@ export default {
     },
     data() {
         return {
-            // username: null,
             message: "",
-            disabled: true,
         };
     },
     methods: {
+        /**
+         * Allows user to join a game
+         */
         async join() {
             const db = getFirestore();
             const gamesCollectionRef = collection(db, 'games');
             const gamesQuerySnapshot = await getDocs(gamesCollectionRef);
 
             let gameExists = false;
+            
+            // Checks if the game exists and if the user can join
             gamesQuerySnapshot.forEach(async (doc) => {
             const gameData = doc.data();
 
             if (gameData.gameCode === this.gameCode) {
                 gameExists = true;
-
+                // Checks if the game is full
                 if(gameData.players.length < 2) {
+                    // if the user is not already in the game, adds the user to the game
                     if(!gameData.players.includes(this.userId) && gameData.players.length < 2) {
                         await updateDoc(doc.ref, {
                         players: [... gameData.players, this.userId]
@@ -84,7 +88,7 @@ export default {
             }
 
         });
-
+        // If the game code does not exist, displays an error message
         if(!gameExists) {
             this.message = "Invalid game code";
         }

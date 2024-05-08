@@ -62,11 +62,16 @@ export default {
         updateHighlightedInGameBoard(){
             this.$refs.gameBoard.updateHighlightedBoardTiles();
         },
+        /**
+         * Updates the game state when the other player makes a move
+         * @param {Object} data - the updated game state
+         */
         handleUpdateGameState(data) {
             this.updateGameState(data);
         },
     },
     async mounted() {
+        // updates the current players game state when the game state is changed by the other player
         socket.on('update-game-state', this.handleUpdateGameState);
     },
 }
@@ -98,41 +103,6 @@ export default {
     top: 10%;
     transform: translateX(-50%); 
 }    
-
-/*  .player-hand-background {
-    background-color: #2490F3;
-    width: 850px;
-    height: 150px;
-    position: absolute;
-    bottom: 0; 
-    right: 0; 
-}
-
-.player-hand {
-    position: absolute;
-    padding: 20px;
-    padding-right: 50px;
-    bottom: 0; 
-    right: 0; 
-} 
-
- .player-2-hand-background {
-    background-color: #f32e24;
-    width: 850px;
-    height: 150px;
-    position: absolute;
-    bottom: 0; 
-    left: 0;
-}
-
-.player-2-hand {
-    position: absolute;
-    padding: 20px;
-    padding-right: 50px;
-    bottom: 0; 
-    left: 0; 
-    
-}  */
 
 .player-turn {
     position: center;

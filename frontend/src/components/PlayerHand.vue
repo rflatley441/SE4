@@ -40,10 +40,15 @@ import { mapGetters } from 'vuex';
             ...mapGetters(['gameState'])
         },
         methods: {
+            /**
+             * Highlights selected tile in the player's hand
+             */
             selectTile(payload) {
+                // deselect all other tiles
                 for (let i = 0; i < this.playerHand(this.userId).length; i++) {
                     this.playerHand(this.userId)[i].selected = false;
-                }
+                } 
+                // select the clicked tile if it's the player's turn
                 if (this.gameState.turn == this.userId) {
                     this.playerHand(this.userId)[payload.position].selected = true;
                 }
