@@ -61,21 +61,21 @@ export default {
     
 },
     setup() {
-        var tilesPlayed = new Set()
+        //var tilesPlayed = new Set()
         var tilesThisTurn = new Set()
 
         return {
-           tilesPlayed,
+          // tilesPlayed,
            tilesThisTurn,
         };
     }, 
     computed: {
-        ...mapGetters(['players', 'deck', 'winner', 'gameOver', 'board']),
+        ...mapGetters(['players', 'deck', 'winner', 'gameOver', 'board', 'tilesPlayed']),
     },
     expose: ['updateHighlightedBoardTiles'], // used by GamePlayView
     
     methods: {
-        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard', 'fetchUsers', 'gameStart', 'updatePlayerScore']),
+        ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard', 'fetchUsers', 'gameStart', 'updatePlayerScore', 'updateTilesPlayed']),
         
         calculateScore(userId) {
         let baseScore = 0;
@@ -170,6 +170,7 @@ export default {
                     tileIndex: tileSelected
                 });
                 this.updateBoard(this.board);
+                
                 this.updateHighlightedBoardTiles();
             }
         },
@@ -402,6 +403,7 @@ export default {
             // Using current player ID for clarity and correctness
             await this.updateHand(currentPlayer.id);
             console.log("Next Player ID", nextPlayer.id);
+            await this.updateTilesPlayed(this.tilesPlayed);
             await this.fetchHand(nextPlayer.id);
             await this.incrementRound(nextPlayerIndex);
 
@@ -411,8 +413,8 @@ export default {
             }
             console.log("Tiles remaining", this.deck.remaining);
             socket.emit('end-turn', this.$store.state); 
-
-        },
+            console.log(this.tilesPlayed);
+        }, 
 
     },
 }
