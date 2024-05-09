@@ -2,7 +2,7 @@
     <div class="player-hand">
         <div class="player-hand-grid">
             <BoardTile 
-            v-for="(tile, index) in playerHand(this.userId)" 
+            v-for="(tile, index) in this.hand" 
             :key="index" 
             :position="index" 
             :color="tile.color" 
@@ -28,7 +28,7 @@ import { mapGetters } from 'vuex';
                 type: Number,
                 required: true,
             },
-            playerHand: {
+            hand: {
                 type: Array,
                 required: true
             }
@@ -37,7 +37,7 @@ import { mapGetters } from 'vuex';
             BoardTile,
         },
         computed: {
-            ...mapGetters(['gameState'])
+            ...mapGetters(['gameState', 'playerHand', 'players'])
         },
         methods: {
             /**
@@ -49,12 +49,17 @@ import { mapGetters } from 'vuex';
                     this.playerHand(this.userId)[i].selected = false;
                 } 
                 // select the clicked tile if it's the player's turn
-                if (this.gameState.turn == this.userId) {
+                if (this.players[this.gameState.turn].id == this.userId) {
                     this.playerHand(this.userId)[payload.position].selected = true;
+                    console.log("SELECTED TILE:", this.playerHand(this.userId))
                 }
                 this.$emit('updateHighlighted');
             }
         },
+        mounted() {
+            console.log("mounted")
+            // console.log(this.playerHand(this.userId));
+        }  ,
     }
 </script>
 

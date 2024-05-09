@@ -89,7 +89,7 @@ export default {
             this.gameStarted = true;
 
             // adds the user to the game room
-            socket.emit('join', { username: this.username, room: this.gameCode })
+            socket.emit('join', { userId: this.userId, username: this.username, room: this.gameCode })
         },
     },
     mounted() {

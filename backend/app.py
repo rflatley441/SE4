@@ -18,7 +18,7 @@ joined_users = {}
 
 def initialize_game(player1_id, player2_id):
     global game_state
-    player1 = Player(player1_id, 0) 
+    player1 = Player(player1_id, 0)
     player2 = Player(player2_id, 0)
     gameboard = GameBoard()
     game_state = Gameplay(player1, player2, gameboard)
@@ -52,7 +52,6 @@ def get_player_hands():
                  {'userId': game_state.player2.userId, 'hand': player2Hand}]
 
     return jsonify(userHands)
-
 
 
 @app.route('/deck', methods=['GET'])
@@ -97,6 +96,7 @@ def web_initialize_game():
     initialize_game(player1_id, player2_id)
     return jsonify({'message': 'Game initialized successfully'})
 
+
 @socketio.on('connect')
 def handle_connect():
     print('Client connected')
@@ -112,13 +112,14 @@ def handle_disconnect():
 @socketio.on('join')
 def on_join(data):
     username = data['username']
+    userId = data['userId']
     room = data['room']
     join_room(room)
     send(username + ' has entered the room' + room, to=room)
 
     if room not in joined_users:
         joined_users[room] = []
-    joined_users[room].append(username)
+    joined_users[room].append({'userId': userId, 'username': username})
 
     if len(joined_users[room]) == 2:
         emit('navigateToGame', room, room=room)
@@ -129,7 +130,11 @@ def on_join(data):
 @socketio.on('start-game')
 def handle_start_game(data):
     room = data['room']
-    emit('game-started', room, room=room)
+    players = joined_users.get(room)
+    print("player ids", players)
+    data = {'players': players, 'room': room}
+    if (players):
+        emit('game-started', data, room=room)
 
 
 @socketio.on('leave')
@@ -142,6 +147,7 @@ def on_leave(data):
 
 @socketio.on('end-turn')
 def on_end_turn(data):
+    # print(data)
     room = data['room_id']
     emit('update-game-state', data['gameState'], room=room)
 

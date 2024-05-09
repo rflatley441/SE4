@@ -61,11 +61,7 @@ export default {
     components: {
         BoardTile,
     },
-    async mounted() {
-        await this.$store.dispatch('fetchUsers');
-        await this.$store.dispatch('gameStart')
-    
-},
+
     setup() {
         //var tilesPlayed = new Set()
         var tilesThisTurn = new Set()
@@ -88,7 +84,7 @@ export default {
             let baseScore = 0;
             let bonusScore = 0;
 
-            this.tilesThisTurn.forEach((position) => {
+            this.tilesThisTurn.forEach(() => {
                 let verticalScore = 1;
                 let horizontalScore = 1;
             this.tilesThisTurn.forEach((position) => {
@@ -227,13 +223,15 @@ export default {
         async placeTile(payload) {
             let tileSelected = null;
 
+            const currentPlayerHand = this.players[this.userId].hand;
+
             tileSelected = this.getSelectedTileInHandIndex();
             this.updateHighlightedBoardTiles();
 
             if (tileSelected !== null && this.tilePlacementIsValid(payload)) {
                 // changes the position on the board to the color and shape of the tile to be placed
-                this.board[payload.position].color = this.playerHand(this.userId)[tileSelected].color;
-                this.board[payload.position].shape = this.playerHand(this.userId)[tileSelected].shape;
+                this.board[payload.position].color = currentPlayerHand[tileSelected].color;
+                this.board[payload.position].shape = currentPlayerHand[tileSelected].shape;
 
                 this.board[payload.position].hidden = false;
                 this.tilesPlayed.push(payload.position);
@@ -255,6 +253,7 @@ export default {
             let dummyPayload = {
                 position: 0,
             };
+            console.log("player hand moment", this.playerHand(this.userId), this.players);
             for (let i = 0; i < this.board.length; i++){
                 dummyPayload.position = i;
                 if (this.tilePlacementIsValid(dummyPayload)){
@@ -267,8 +266,11 @@ export default {
 
         getSelectedTileInHandIndex(){
             let selectedTile = null
-            for (let i = 0; i < this.playerHand(this.userId).length; i++) {
-                if (this.playerHand(this.userId)[i].selected == true){
+
+            const currentPlayerHand = this.players[this.userId].hand;
+            
+            for (let i = 0; i < currentPlayerHand.length; i++) {
+                if (currentPlayerHand[i].selected == true){
                     selectedTile = i;
                 }
             }
@@ -278,6 +280,7 @@ export default {
         tilePlacementIsValid(payload){
             let tileSelected = null;
 
+            const currentPlayerHand = this.players[this.userId].hand;
             tileSelected = this.getSelectedTileInHandIndex();
 
             if (tileSelected == null){
@@ -310,8 +313,8 @@ export default {
 
             // checking tile is selected and position is not already taken
             if (tileSelected !== null && !this.tilesPlayed.includes(payload.position)) {
-                let tileColor = this.playerHand(this.userId)[tileSelected].color;
-                let tileShape = this.playerHand(this.userId)[tileSelected].shape;
+                let tileColor = currentPlayerHand[tileSelected].color;
+                let tileShape = currentPlayerHand[tileSelected].shape;
                 let rowStart = payload.position - (payload.position % 12);
                 let rowEnd = rowStart + 11;
                 let verticalIncrement = 12;
@@ -501,6 +504,10 @@ export default {
     display: grid;
     grid-template-columns: repeat(12, 50px);
     grid-template-rows: repeat(12, 50px);
+}
+
+.game-board > * {
+    border: 1px solid transparent;
 }
 
 .end-turn-button {
