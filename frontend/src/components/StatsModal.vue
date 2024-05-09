@@ -80,7 +80,7 @@ export default {
     top: 15%;
     left: 25%;
     width: 50%;
-    height: 60%;
+    height: 65%;
     margin: auto;
     background-color: rgba(0, 0, 0, 0.5);
 }
@@ -89,7 +89,7 @@ export default {
   justify-content: center;
   align-items: center; 
   width: 100%;
-  height: 100%;
+  height: 125%;
 }
 
 .modal-container {
