@@ -23,8 +23,11 @@ socket.on('disconnect', function() {
   state.connected = false;
 });
 
-socket.on('game-started', function(roomId) {
-  store.dispatch('gameStart', roomId);
+socket.on('game-started', function(data) {
+  console.log("game started", data['players']);
+  store.dispatch('gameStart', data);
+  // console.log("state", store.state.id);
+  socket.emit('end-turn', { room_id: data['room'], gameState: store.state });
 });
 
 export default socket;

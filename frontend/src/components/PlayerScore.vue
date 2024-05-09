@@ -1,11 +1,12 @@
 <template>
     <div>
-        <div v-if="userId === 0" class="player1-score">
-        <h2>Player 1 Score: {{ playerScore(userId) }}</h2>
-    </div>
-    <div v-else class="player2-score">
-        <h2>Player 2 Score: {{ playerScore(userId) }}</h2>
-    </div> 
+      <div class="container">
+        <div class="scoreboard">
+          <span style="font-weight: bold; font-size: 60px; text-decoration: underline;">Scoreboard</span>
+          <span style="font-size: 40px; font-weight: 500;">{{ this.players[0].name }}: {{ this.playerScore(this.players[0].id) }}</span>
+          <span style="font-size: 40px; font-weight: 500;">{{ this.players[1].name }}: {{ this.playerScore(this.players[1].id) }}</span>
+      </div>
+      </div>
     </div>
 
   </template>
@@ -15,37 +16,27 @@
   export default {
     name: 'PlayerScore',
     props: {
-      userId: {
-        type: Number,
-        required: true
-      }
     },
     computed: {
-      ...mapGetters(['playerScore'])
+      ...mapGetters(['playerScore', 'players'])
     },
   }
   </script>
   
   <style scoped>
-  .player1-score {
-    position: absolute;
-    background-color: #d0140b;
-    color: white;
-    padding: 20px;
-    width: 250px;
-    bottom: 150px;
-    text-align: center;
+
+  .container {
+    display: flex;
+    justify-content: center;
+    background-color: #faaaa6;
     border-radius: 10px;
+    width: 20%;
   }
-  .player2-score {
-    position: absolute;
-    background-color: #0b72d0;
-    color: white;
-    padding: 20px;
-    left: 1642px;
-    width: 200px;
-    bottom: 150px;
-    text-align: center;
-    border-radius: 10px;
+
+  .scoreboard {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    font-size: 20px;
   }
   </style>

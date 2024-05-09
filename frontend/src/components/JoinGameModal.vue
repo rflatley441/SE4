@@ -81,7 +81,7 @@ export default {
                         players: [... gameData.players, this.userId]
                     });
                     }
-                    socket.emit('join', { username: this.username, room: this.gameCode});
+                    socket.emit('join', { userId: this.userId, username: this.username, room: this.gameCode});
                 } else {
                     this.message = "Game is full";
                 }

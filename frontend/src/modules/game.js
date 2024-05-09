@@ -1,6 +1,6 @@
 import axios from "axios";
 import { db } from '@/services/firebase.js'; 
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 
 // import { collection, getDocs } from 'firebase/firestore';
 
@@ -19,13 +19,13 @@ const state = {
             name: 'player1',
             score: 0,
             hand: [],
-            id: "",
+            id: "0",
         },
         {
             name: 'player2',
             score: 0,
             hand: [],
-            id: "",
+            id: "1",
         }
     ],
 
@@ -51,8 +51,10 @@ const getters = {
     tilesPlayed: (state) => state.tilesPlayed,
     board: (state) => state.board,
     players: (state) => state.players,
-    playerHand: (state) => (id) => state.players[id].hand,
-    playerScore: (state) => (id) => state.players[id].score,
+    playerHand: (state) => (id) => {
+        return state.players.find(player => player.id === id)?.hand || [];
+    },
+    playerScore: (state) => (id) => state.players.find(player => player.id === id)?.score || 0,
     deck: (state) => state.deck,
     pile: (state) => state.pile,
     gameOver: (state) => state.finished,
@@ -73,24 +75,53 @@ const actions = {
         }
     },
 
-    async fetchUsers({ commit }) {
-        const gameCode = 1; 
+    async fetchUsers({ commit, state }) {
+        const gameCode = state.id; 
         console.log("Fetching users with specific game code:", gameCode);
         try {
-            const usersRef = collection(db, 'users');
-            const queryConstraint = query(usersRef, where('gameCode', '==', gameCode));
-            const snapshot = await getDocs(queryConstraint);
-            const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            console.log("users", users)
-            commit('setUsers', users);
-            console.log("Users with gameCode", gameCode, ":", users);
+            const gamesCollectionRef = collection(db, 'games');
+            const gamesQuerySnapshot = await getDocs(gamesCollectionRef);
+            
+            // Checks if the game exists and if the user can join
+            gamesQuerySnapshot.forEach(async (doc) => {
+            const gameData = doc.data();
+            console.log("gameData", gameData)
+            if (gameData.gameCode === gameCode) {
+                console.log("game found")
+                const players = gameData.players;
+                commit('setUsers', players);
+            }});
+
+
+
+
+            // const gamesRef = collection(db, 'games');
+            // console.log("gamesRef", gamesRef);
+            // const gameQuery = query(gamesRef, where('id', '==', state.id));
+            // const gameSnapshot = await getDocs(gameQuery);
+            // console.log(gameSnapshot)
+            // const game = gameSnapshot.docs[0];
+            // if (game) {
+            //     const players = game.data().players;
+            //     // commit('setUsers', players);
+            //     console.log("Players:", players);
+            // } else {
+            //     console.error("Game not found with id:", state.id);
+            // }
+            // commit('setUsers', users);
+            // console.log("Users with gameCode", gameCode, ":", users);
         } catch (error) {
             console.error("Error fetching users with specific game code:", error);
         }
     },
 
     async fetchHand({ commit, dispatch, state }, playerId) {
-        const user = state.players.find(player => player.id === playerId);
+        let user = null;
+        state.players.forEach((player) => {
+            if (player.id === playerId) {
+                user = player;
+            }
+        });
         if (user) {
             try {
                 const response = await axios.get(`http://127.0.0.1:5000/playerhand`);
@@ -170,13 +201,19 @@ const actions = {
         // let random = Math.round(Math.random());
         commit('setTurn', 0);
     },
-    async gameStart({commit, dispatch}, roomId) {
+    async gameStart({commit, dispatch}, data) {
         commit('restartGame');
         commit('initializeBoard');
-        commit('setGameId', roomId);
-        
-        const player1Id = state.players[0].id; 
-        const player2Id = state.players[1].id; 
+        console.log("gameStart", data['room']);
+        commit('setGameId', data['room']);
+        // dispatch('fetchUsers');
+        commit('setUsers', data['players']);
+
+        const player1Id = data['players'][0]['userId'];
+        const player2Id = data['players'][1]['userId'];
+
+        // console.log("player1Id", player1Id);
+        // console.log("player2Id", player2Id);
 
         try {
             await axios.post("http://127.0.0.1:5000/initialize_game", {
@@ -217,7 +254,7 @@ const mutations = {
         state.players[1].hand = [];
         state.pile = [{tile: null}, {tile: null}]
     },
-    setGameId: (state, id) => (state.id = id),
+    setGameId: (state, id) => {state.id = id; console.log("game id", state.id)},
     initializeBoard: (state) => {
         state.board = [];
         for (let i = 0; i < 144; i++) {
@@ -243,6 +280,7 @@ const mutations = {
         state.deck.remaining = deck.remaining;
     },
     setHand: (state, payload) => {
+        console.log("set hand", payload);
         let userId = payload.playerId;
 
         state.players.find(player => player.id === userId).hand = []
@@ -252,8 +290,9 @@ const mutations = {
                 'shape': tile[0],
                 'color': tile[1],
                 'selected': false,
-            })
+            });
         });
+        console.log("works?", state.players)
         
     },
     removeTileFromHand(state, { userId, tileIndex }) {
@@ -266,22 +305,28 @@ const mutations = {
         for(let key in gameState['game']) {
             state[key] = gameState['game'][key];
         }
+        console.log(state)
     },
     updatePlayerScore: (state, {userId, amount}) => {
         state.players[userId].score += amount;
     },
     setUsers: (state, users) => {
+        console.log("users", users);
         state.users = users;
-    
+        console.log("users", state.users);
         state.players.forEach((player, index) => {
             const user = users[index];
+            console.log("user", user);
             if (user) {
-                player.id = user.id;
+                player.id = user['userId'];
+                player.name = user['username'];
                 console.log("player has been set", player.id)
             } else {
                 console.error("User not found for player at index:", index);
             }
         });
+
+        console.log("test", state.players);
     },
 
 };

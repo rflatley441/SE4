@@ -101,7 +101,7 @@ import Star8ptTile from '@/components/Star8ptTile.vue';
 .tile-shown {
     width: 100%;
     height: 100%;
-    border: solid;
+    border: solid transparent;
 }
 
 .selected {
