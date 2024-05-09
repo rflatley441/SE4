@@ -7,26 +7,36 @@
       </header>
       <div id="topContainer">
         <div id="profile_picContainer">
-          <img :src="this.profile_pic" class="profile-pic"/>
-          </div>
+          <img :src="this.profile_pic" class="profile-pic" />
+        </div>
         <div id="changePhotoBox">
           <button class="change-photo-button" @click="openFilePicker">
             Change Photo
           </button>
-          <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" />
+          <input
+            type="file"
+            ref="fileInput"
+            style="display: none"
+            @change="handleFileChange"
+          />
         </div>
         <div id="inputsContainer">
           <div class="innerBox">
             <div class="inputLabel">Username</div>
             <div class="inputHolder">
-              <input type="text" class="inputBox" v-model="username"  />
+              <input type="text" class="inputBox" v-model="username" />
             </div>
             <div class="passwordContainer">
               <div class="inputLabel">Password</div>
               <div class="forgotPassword">Forgot password?</div>
             </div>
             <div class="inputHolder" style="padding-bottom: 20px">
-              <input type="password" class="inputBox" v-model="password" placeholder="Password" />
+              <input
+                type="password"
+                class="inputBox"
+                v-model="password"
+                placeholder="Password"
+              />
             </div>
 
             <div class="inputLabel" style="padding-top: 10px">Email</div>
@@ -40,7 +50,14 @@
       <div id="volumeContainer">
         <div id="volumeTitle">Volume</div>
         <div class="slidecontainer">
-          <input type="range" min="1" max="100" value="50" class="slider" id="myRange" />
+          <input
+            type="range"
+            min="1"
+            max="100"
+            value="50"
+            class="slider"
+            id="myRange"
+          />
         </div>
       </div>
       <div id="bottomContainer">
@@ -79,28 +96,31 @@ export default {
       photoURL: "",
       photo: null,
       fileName: "No file selected",
-      profile_pic:"",
-      username: "", 
-      email:"", 
+      profile_pic:
+        "https://imageio.forbes.com/specials-images/imageserve/5ed6636cdd5d320006caf841/0x0.jpg?format=jpg&height=900&width=1600&fit=bounds",
+      username: "",
+      email: "",
     };
   },
   async created() {
     const auth = getAuth();
-    const user = auth.currentUser;    
+    const user = auth.currentUser;
     const db = getFirestore();
-    const docSnap = await getDoc(doc(db, "users", user.uid)); 
+    const docSnap = await getDoc(doc(db, "users", user.uid));
     if (!user) return;
-    this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
-    if(docSnap.exists()){
-      const data = docSnap.data();  
+    this.profile_pic = await getDownloadURL(
+      ref(getStorage(), `${user.uid}.png`)
+    );
+    if (docSnap.exists()) {
+      const data = docSnap.data();
       this.username = data.username;
-    } 
+    }
     this.email = user.email;
   },
   methods: {
     openFilePicker() {
-    this.$refs.fileInput.click();
-  },
+      this.$refs.fileInput.click();
+    },
     async handleFileChange(event) {
       if (event.target.files[0]) {
         this.photo = event.target.files[0];
@@ -119,20 +139,22 @@ export default {
         console.log(firebaseApp);
         const storage = getStorage();
         const fileRef = ref(storage, user.uid + ".png");
-        this.loading = true;
-        await uploadBytes(fileRef, file);
-        const photoURL = await getDownloadURL(fileRef);
-        await updateProfile(user, { photoURL });
-        this.profile_pic = photoURL;
+        if (fileRef.exists()) {
+          this.loading = true;
+          await uploadBytes(fileRef, file);
+          const photoURL = await getDownloadURL(fileRef);
+          await updateProfile(user, { photoURL });
+          this.profile_pic = photoURL;
 
-        this.user = { ...this.user, photoURL };
+          this.user = { ...this.user, photoURL };
 
-        // these lines update the user's document in Firestore
-        const db = getFirestore();
-        const userDoc = doc(db, "users", user.uid);
-        await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
-        this.loading = false;
-        alert("Successfully Uploaded Image!");
+          // these lines update the user's document in Firestore
+          const db = getFirestore();
+          const userDoc = doc(db, "users", user.uid);
+          await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
+          this.loading = false;
+          alert("Successfully Uploaded Image!");
+        }
       } catch (err) {
         console.error(err);
         alert(err.message);
@@ -146,8 +168,8 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 .background {
-  background-color: #fdf5e6; 
-  min-height: 100vh; 
+  background-color: #fdf5e6;
+  min-height: 100vh;
 }
 
 .content {
