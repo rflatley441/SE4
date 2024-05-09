@@ -11,7 +11,7 @@ import { getFirestore, doc, onSnapshot } from "firebase/firestore";
 export default {
   data() {
     return {
-      profile_pic: "https://imageio.forbes.com/specials-images/imageserve/5ed6636cdd5d320006caf841/0x0.jpg?format=jpg&height=900&width=1600&fit=bounds",
+      profile_pic: "https://i.stack.imgur.com/l60Hf.png",
     };
   },
   async created() {
@@ -40,7 +40,7 @@ export default {
 }
 
 .profile-picture img {
-  object-fit: fill;
+  object-fit: cover;
   width: 100%;
   height: 100%;
 }

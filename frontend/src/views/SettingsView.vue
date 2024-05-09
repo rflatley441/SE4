@@ -13,12 +13,7 @@
           <button class="change-photo-button" @click="openFilePicker">
             Change Photo
           </button>
-          <input
-            type="file"
-            ref="fileInput"
-            style="display: none"
-            @change="handleFileChange"
-          />
+          <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" />
         </div>
         <div id="inputsContainer">
           <div class="innerBox">
@@ -31,12 +26,7 @@
               <div class="forgotPassword">Forgot password?</div>
             </div>
             <div class="inputHolder" style="padding-bottom: 20px">
-              <input
-                type="password"
-                class="inputBox"
-                v-model="password"
-                placeholder="Password"
-              />
+              <input type="password" class="inputBox" v-model="password" placeholder="Password" />
             </div>
 
             <div class="inputLabel" style="padding-top: 10px">Email</div>
@@ -50,14 +40,7 @@
       <div id="volumeContainer">
         <div id="volumeTitle">Volume</div>
         <div class="slidecontainer">
-          <input
-            type="range"
-            min="1"
-            max="100"
-            value="50"
-            class="slider"
-            id="myRange"
-          />
+          <input type="range" min="1" max="100" value="50" class="slider" id="myRange" />
         </div>
       </div>
       <div id="bottomContainer">
@@ -97,7 +80,7 @@ export default {
       photo: null,
       fileName: "No file selected",
       profile_pic:
-        "https://imageio.forbes.com/specials-images/imageserve/5ed6636cdd5d320006caf841/0x0.jpg?format=jpg&height=900&width=1600&fit=bounds",
+        "https://i.stack.imgur.com/l60Hf.png",
       username: "",
       email: "",
     };
@@ -139,28 +122,28 @@ export default {
         console.log(firebaseApp);
         const storage = getStorage();
         const fileRef = ref(storage, user.uid + ".png");
-        if (fileRef.exists()) {
-          this.loading = true;
-          await uploadBytes(fileRef, file);
-          const photoURL = await getDownloadURL(fileRef);
-          await updateProfile(user, { photoURL });
-          this.profile_pic = photoURL;
+        this.loading = true;
+        await uploadBytes(fileRef, file);
+        const photoURL = await getDownloadURL(fileRef);
+        await updateProfile(user, { photoURL });
+        this.profile_pic = photoURL;
 
-          this.user = { ...this.user, photoURL };
+        this.user = { ...this.user, photoURL };
 
-          // these lines update the user's document in Firestore
-          const db = getFirestore();
-          const userDoc = doc(db, "users", user.uid);
-          await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
-          this.loading = false;
-          alert("Successfully Uploaded Image!");
-        }
-      } catch (err) {
-        console.error(err);
-        alert(err.message);
+        // these lines update the user's document in Firestore
+        const db = getFirestore();
+        const userDoc = doc(db, "users", user.uid);
+        await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
+        this.loading = false;
+        alert("Successfully Uploaded Image!");
       }
-    },
+       catch(err) {
+      console.error(err);
+      alert(err.message);
+    }
   },
+
+},
 };
 </script>
 
