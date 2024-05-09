@@ -54,9 +54,6 @@
             <input type="checkbox" id="colorblindModeToggle" />
           </div>
         </div>
-        <div id="returnToHomeText">
-          <router-link to="/home" class="footText">Return to Home</router-link>
-        </div>
       </div>
     </div>
   </div>
@@ -317,11 +314,6 @@ label[for="changePhotoBox"] {
   text-align: left;
 }
 
-#returnToHomeText {
-  margin-left: 850px;
-  margin-top: -55px;
-}
-
 #volumeTitle {
   position: absolute;
   top: -40px;
@@ -333,7 +325,7 @@ label[for="changePhotoBox"] {
 
 #volumeContainer {
   background: #b3daff;
-  width: 1190px;
+  width: 1260px;
   padding-top: 30px;
   padding-bottom: 30px;
   padding-left: 60px;

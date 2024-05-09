@@ -88,7 +88,7 @@ export default {
             let baseScore = 0;
             let bonusScore = 0;
 
-            this.tilesThisTurn.forEach((position) => {
+            this.tilesThisTurn.forEach(() => {
                 let verticalScore = 1;
                 let horizontalScore = 1;
             this.tilesThisTurn.forEach((position) => {
