@@ -23,7 +23,7 @@
             </div>
             <div class="passwordContainer">
               <div class="inputLabel">Password</div>
-              <div class="forgotPassword">Forgot password?</div>
+              <div class="forgotPassword">Change Password</div>
             </div>
             <div class="inputHolder" style="padding-bottom: 20px">
               <input type="password" class="inputBox" v-model="password" placeholder="Password" />
