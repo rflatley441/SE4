@@ -168,16 +168,16 @@ img {
   background-color: #f6f1f1;
   font-weight: 600;
   font-family: 'Quicksand', sans-serif;
-  padding: 20px 40px;
+  padding: 20px 40px; /* Adjust the padding to match the button's height and width */
   text-align: center;
   display: inline-block;
-  font-size: 30px; 
+  font-size: 30px; /* Adjust the font size as needed */
   margin: 4px 2px;
   cursor: pointer;
 }
 
 .login-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */ 
-  transform: translateY(2px); 
+  background-color: #0056b3; /* Darker blue on hover, adjust as needed */ 
+  transform: translateY(2px); /* Optional: if the button moves slightly on hover */
 }
 </style>

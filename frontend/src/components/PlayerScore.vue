@@ -9,33 +9,34 @@
       </div>
     </div>
 
-</template>
+  </template>
+  
+  <script>
+  import { mapGetters } from 'vuex';
+  export default {
+    name: 'PlayerScore',
+    props: {
+    },
+    computed: {
+      ...mapGetters(['playerScore', 'players'])
+    },
+  }
+  </script>
+  
+  <style scoped>
 
-<script>
-import { mapGetters } from 'vuex';
+  .container {
+    display: flex;
+    justify-content: center;
+    background-color: #faaaa6;
+    border-radius: 10px;
+    width: 20%;
+  }
 
-export default {
-  name: 'PlayerScore',
-  computed: {
-    ...mapGetters(['playerScore', 'players'])
-  },
-}
-</script>
-
-<style scoped>
-
-.container {
-  display: flex;
-  justify-content: center;
-  background-color: #faaaa6;
-  border-radius: 10px;
-  width: 20%;
-}
-
-.scoreboard {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  font-size: 20px;
-}
-</style>
+  .scoreboard {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    font-size: 20px;
+  }
+  </style>

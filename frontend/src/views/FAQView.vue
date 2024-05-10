@@ -115,6 +115,7 @@ export default {
 .question {
   max-width: 900px;
   background: #e5b2e5;
+  /* text-transform: uppercase; */
   cursor: pointer;
   font-weight: 600;
   font-size: 30px;

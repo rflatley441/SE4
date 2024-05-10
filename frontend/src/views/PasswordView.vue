@@ -149,20 +149,20 @@
   background-color: #2490F3;
   border: transparent;
   color: white;
-  padding: 20px 40px;
+  padding: 20px 40px; /* Adjust the padding to match the button's height and width */
   text-align: center;
   display: inline-block;
-  font-size: 40px; 
+  font-size: 40px; /* Adjust the font size as needed */
   margin: 4px 2px;
   cursor: pointer;
-  border-radius: 20px; 
+  border-radius: 20px; /* Optional: if the button has rounded corners */
   font-family: 'Quicksand', sans-serif;
   font-weight: 500;
 }
 
 .create-account-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */ 
-  transform: translateY(2px); 
+  background-color: #0056b3; /* Darker blue on hover, adjust as needed */ 
+  transform: translateY(2px); /* Optional: if the button moves slightly on hover */
 }
 </style>
 
