@@ -50,7 +50,6 @@ const getters = {
     },
     playerScore: (state) => (id) => state.players.find(player => player.id === id)?.score || 0,
     deck: (state) => state.deck,
-    pile: (state) => state.pile,
     gameOver: (state) => state.finished,
     winner: (state) => state.winner,
     users: state => state.users, // accessing users to get their ids
@@ -203,7 +202,6 @@ const mutations = {
         state.winner = "";
         state.players[0].hand = [];
         state.players[1].hand = [];
-        state.pile = [{tile: null}, {tile: null}]
     },
     setGameId: (state, id) => {state.id = id;},
      /**
