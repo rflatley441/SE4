@@ -38,6 +38,48 @@
   </div>
 </template>
 
+<script>
+import { ref } from "vue";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { useRouter } from 'vue-router'; 
+
+export default {
+  name: "LoginView",
+
+  setup() {
+    const router = useRouter();
+    const email = ref("");
+    const username = ref("");
+    const password = ref("");
+    const errorMessage = ref("");
+
+    const signUp = () => {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email.value, password.value)
+        .then((userCredential) => {
+          console.log("Account creation successful", userCredential.user);
+          const db = getFirestore(); 
+          const userDoc = doc(db, 'users', userCredential.user.uid);
+          return setDoc(userDoc, {
+            username: username.value,
+            email: email.value
+          });
+        })
+        .then(() => {
+          console.log("User data stored in Firestore");
+          router.push('/Home');
+        })
+        .catch((error) => {
+          console.error("Signup failed", error);
+          errorMessage.value = error.message;
+        });
+    };
+
+    return { username, email, password, errorMessage, signUp };
+  },
+};
+</script>
 
 <style scoped>
 #app {
@@ -152,46 +194,3 @@
   transform: translateY(2px); /* Optional: if the button moves slightly on hover */
 }
 </style>
-
-<script>
-import { ref } from "vue";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
-import { useRouter } from 'vue-router'; 
-
-export default {
-  name: "LoginView",
-
-  setup() {
-    const router = useRouter();
-    const email = ref("");
-    const username = ref("");
-    const password = ref("");
-    const errorMessage = ref("");
-
-    const signUp = () => {
-      const auth = getAuth();
-      createUserWithEmailAndPassword(auth, email.value, password.value)
-        .then((userCredential) => {
-          console.log("Account creation successful", userCredential.user);
-          const db = getFirestore(); 
-          const userDoc = doc(db, 'users', userCredential.user.uid);
-          return setDoc(userDoc, {
-            username: username.value,
-            email: email.value
-          });
-        })
-        .then(() => {
-          console.log("User data stored in Firestore");
-          router.push('/Home');
-        })
-        .catch((error) => {
-          console.error("Signup failed", error);
-          errorMessage.value = error.message;
-        });
-    };
-
-    return { username, email, password, errorMessage, signUp };
-  },
-};
-</script>
