@@ -30,12 +30,12 @@ def get_player_hands():
     game_state.dealTiles()
 
     player1Hand = []
-
+    # deals tiles to player 1
     for tile in game_state.player1.hand:
         player1Hand.append([str(tile.shape), str(tile.color)])
 
     player2Hand = []
-
+    # deals tiles to player 2
     for tile in game_state.player2.hand:
         player2Hand.append([str(tile.shape), str(tile.color)])
 
@@ -47,7 +47,7 @@ def get_player_hands():
 
 @app.route('/deck', methods=['GET'])
 def get_game_deck():
-    game_deck = [{"deckId": 0}, {
+    game_deck = [{
         "remaining": len(game_state.game_board.tiles)}]
 
     return jsonify(game_deck)
@@ -107,11 +107,12 @@ def on_join(data):
     room = data['room']
     join_room(room)
     send(username + ' has entered the room' + room, to=room)
-
+    # checks if room exists in joined_users
     if room not in joined_users:
         joined_users[room] = []
+    # adds user to room
     joined_users[room].append({'userId': userId, 'username': username})
-
+    # if room has 2 users, navigate to game
     if len(joined_users[room]) == 2:
         emit('navigateToGame', room, room=room)
     else:
@@ -133,7 +134,7 @@ def on_leave(data):
     room = data['room']
     leave_room(room)
     send(username + ' has left the room.', to=room)
-
+    # removes room from joined users
     if room in joined_users:
         del joined_users[room]
 
