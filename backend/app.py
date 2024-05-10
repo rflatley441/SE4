@@ -25,15 +25,6 @@ def initialize_game(player1_id, player2_id):
     game_state.createTiles()
 
 
-# initialize_game()
-
-
-@app.route('/api', methods=['GET', 'POST'])
-def get_data():
-    data = {"message": "Hello from Flask!"}
-    return jsonify(data)
-
-
 @app.route('/playerhand', methods=['GET'])
 def get_player_hands():
     game_state.dealTiles()
@@ -131,7 +122,6 @@ def on_join(data):
 def handle_start_game(data):
     room = data['room']
     players = joined_users.get(room)
-    print("player ids", players)
     data = {'players': players, 'room': room}
     if (players):
         emit('game-started', data, room=room)
@@ -144,10 +134,12 @@ def on_leave(data):
     leave_room(room)
     send(username + ' has left the room.', to=room)
 
+    if room in joined_users:
+        del joined_users[room]
+
 
 @socketio.on('end-turn')
 def on_end_turn(data):
-    # print(data)
     room = data['room_id']
     emit('update-game-state', data['gameState'], room=room)
 
