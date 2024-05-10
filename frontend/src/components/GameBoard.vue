@@ -299,16 +299,13 @@ export default {
                     case 78:
                         return true;
                     default:
-                        console.log("Not valid as first tile placement!");
                         return false;
                 }
             } else if (!this.hasAdjacentTiles(payload)){
-                console.log("No adjacent tiles!")
                 return false;
             }
 
             if (!this.isValidInContextOfTurn(payload, this.tilesThisTurn)){
-                console.log("Not valid in context of turn!");
                 return false;
             }
 
@@ -339,7 +336,6 @@ export default {
                 }
                 // must all be same color XOR same shape
                 if (!this.isValidInIndividualRun(seenColors, seenShapes, tileColor, tileShape)){
-                    console.log("Not valid as vertical run!");
                     return false;
                 }
 
@@ -361,7 +357,6 @@ export default {
 
                 // must all be same color XOR same shape
                 if (!this.isValidInIndividualRun(seenColors, seenShapes, tileColor, tileShape)){
-                    console.log("Not valid as horizontal run!");
                     return false;
                 }
 
@@ -440,8 +435,6 @@ export default {
                         return true;
                     }
                 } while(!(currentIndex > rightBorder || this.board[currentIndex].hidden));
-
-                console.log("horizontal failure!");
             } 
             if ((maxTile - minTile) >= 12 || (tilesThisTurn.size == 1)) {
                 let currentIndex = minTile;
@@ -461,8 +454,6 @@ export default {
                         return true;
                     }
                 } while(!(currentIndex > bottomBorder || this.board[currentIndex].hidden));
-
-                console.log("vertical failure!");
             }
             return false;
         },
