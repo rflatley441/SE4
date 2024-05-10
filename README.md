@@ -15,3 +15,6 @@ On your turn, you can choose to trade in some or all of your tiles instead of ad
 
 ## Ending the Game
 When there are no more tiles left to draw, play continues as before, but players do not replenish their hands at the end of their turn. The first player who uses all of their tiles ends the game and gets a six-point bonus. The player with the highest score wins! 
+
+## Ending the Game
+To first deploy the site, you need to run npm install to all libraries and dependences as well as install vuex for state management. Once everything has been installed, you need to first run the serve, by running python run app.py. After that, open another terminal window and navigate into the frontend folder using cd frontend, then running the command npm run serve. 

@@ -94,6 +94,7 @@ export default {
         }
     },
     mounted() {
+        // starts the game and navigates to the game page
         socket.on('navigateToGame', (room) => {
             socket.emit('start-game', { room: this.gameCode });
             router.push(`/game/${room}`);

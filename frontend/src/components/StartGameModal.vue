@@ -97,6 +97,7 @@ export default {
         if(this.gameCode == 0) {
             this.createGameSession();
         }
+        // on navigate to game pushes the user to the game room
         socket.on('navigateToGame', (room) => {
             router.push(`/game/${room}`);
         });

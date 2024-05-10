@@ -20,47 +20,41 @@
 import BoardTile from './BoardTile.vue';
 import { mapGetters } from 'vuex';
 
-
-    export default {
-        name: "PlayerHand",
-        props: {
-            userId: {
-                type: Number,
-                required: true,
-            },
-            hand: {
-                type: Array,
-                required: true
+export default {
+    name: "PlayerHand",
+    props: {
+        userId: {
+            type: Number,
+            required: true,
+        },
+        hand: {
+            type: Array,
+            required: true
+        }
+    },
+    components: {
+        BoardTile,
+    },
+    computed: {
+        ...mapGetters(['gameState', 'playerHand', 'players'])
+    },
+    methods: {
+        /**
+         * Highlights selected tile in the player's hand
+         */
+        selectTile(payload) {
+            // deselect all other tiles
+            for (let i = 0; i < this.playerHand(this.userId).length; i++) {
+                this.playerHand(this.userId)[i].selected = false;
+            } 
+            // select the clicked tile if it's the player's turn
+            if (this.players[this.gameState.turn].id == this.userId) {
+                this.playerHand(this.userId)[payload.position].selected = true;
             }
-        },
-        components: {
-            BoardTile,
-        },
-        computed: {
-            ...mapGetters(['gameState', 'playerHand', 'players'])
-        },
-        methods: {
-            /**
-             * Highlights selected tile in the player's hand
-             */
-            selectTile(payload) {
-                // deselect all other tiles
-                for (let i = 0; i < this.playerHand(this.userId).length; i++) {
-                    this.playerHand(this.userId)[i].selected = false;
-                } 
-                // select the clicked tile if it's the player's turn
-                if (this.players[this.gameState.turn].id == this.userId) {
-                    this.playerHand(this.userId)[payload.position].selected = true;
-                    console.log("SELECTED TILE:", this.playerHand(this.userId))
-                }
-                this.$emit('updateHighlighted');
-            }
-        },
-        mounted() {
-            console.log("mounted")
-            // console.log(this.playerHand(this.userId));
-        }  ,
-    }
+            this.$emit('updateHighlighted');
+        }
+    },
+}
 </script>
 
 <style scoped>

@@ -4,35 +4,33 @@
           <div class="contents-container">
               <div id = signuptitle>Sign Up</div>
               <div id="inputsContainer">
+                <div class="inputLabel">
+                    Username
+                </div>
+                <div class="inputHolder">
+                    <input type="text" class="inputBox" v-model="username" placeholder="Username" />
+                </div>
 
-                  <div class="inputLabel">
-                      Username
-                  </div>
-              <div class="inputHolder">
-                  <input type="text" class="inputBox" v-model="username" placeholder="Username" />
-              </div>
+                <div class="inputLabel" style = "padding-top: 10px;">
+                    Email
+                </div>
+                <div class="inputHolder" style="padding-bottom: 10px;">
+                    <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
+                </div>
 
-              <div class="inputLabel" style = "padding-top: 10px;">
-                      Email
-                  </div>
-              <div class="inputHolder" style="padding-bottom: 10px;">
-                  <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
-              </div>
-
-              <div class="inputLabel" style = "padding-top: 10px;">
-                      Password
-                  </div>
-              <div class="inputHolder" style="padding-bottom: 20px;">
-                  <input type="password" class="inputBox" v-model="password" placeholder="Password" />
-              </div>
-
-                  <button class="create-account-button" @click.prevent="signUp">
-                  Create Account
-                  </button>
-              </div>
-              <div id="footer">
-                  <router-link to="/" class="footText">Return to Login</router-link>
-              </div>
+                <div class="inputLabel" style = "padding-top: 10px;">
+                    Password
+                </div>
+                <div class="inputHolder" style="padding-bottom: 20px;">
+                    <input type="password" class="inputBox" v-model="password" placeholder="Password" />
+                </div>
+                <button class="create-account-button" @click.prevent="signUp">
+                    Create Account
+                </button>
+                </div>
+                <div id="footer">
+                    <router-link to="/" class="footText">Return to Login</router-link>
+                </div>
           </div>
       </div>
   </div>
