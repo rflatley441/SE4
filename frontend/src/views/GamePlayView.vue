@@ -2,31 +2,21 @@
     <div id="app">
         <NavBar/>
         <div class="content">
+            <!-- Player Turn -->
             <div v-if="players.length > 0 && players[0].id && gameState.turn != null" style="font-size: 40px" :class="{ 'player-turn': true, 'player-1': players[gameState.turn].id === userId, 'player-2': gameState.turn === players[gameState.turn].id !== userId }">
                 {{ players[gameState.turn].id === userId ? 'Your Turn' : `${ otherPlayerUsername }\'s Turn` }}
-            </div>       
-         <div class="game-board"> 
+            </div>   
+            <!-- Gameboard -->
+            <div class="game-board"> 
                 <GameBoard :playerHand="this.playerHand" :userId="this.gameState.turn" :gameId="this.gameState.id" ref="gameBoard"/>
             </div>
+            <!-- Player Hand -->
             <div class="player-hand-background">
                 <div class="player-hand">
                     <PlayerHand :hand="this.playerHand(this.userId)" :userId="this.userId" @update-highlighted="updateHighlightedInGameBoard"/>
                 </div>
             </div>
-
-            <!-- <div class="player-2-hand-background">
-                <div class="player-2-hand">
-                    <PlayerHand :playerHand="this.playerHand" :userId="0" @update-highlighted="updateHighlightedInGameBoard"/>
-                </div>
-            </div> -->
-
-            <!-- <div class="player-score">
-                <PlayerScore :userId="0"/>
-            </div>
-
-            <div class="player-score">
-                <PlayerScore :userId="1"/>
-            </div> -->
+            <!-- Scoreboard -->
             <div class="player-score">
                <PlayerScore/>
             </div>
@@ -38,7 +28,6 @@
 import NavBar from '@/components/NavBar.vue';
 import GameBoard from '@/components/GameBoard.vue';
 import PlayerHand from '@/components/PlayerHand.vue';
-// import PlayerScore from '@/components/PlayerScore.vue';
 import { mapActions, mapGetters } from 'vuex';
 import { ref } from 'vue';
 import socket from '@/socket';
@@ -80,14 +69,7 @@ export default {
          * @param {Object} data - the updated game state
          */
         handleUpdateGameState(data) {
-            console.log("game state updated", data);
             this.updateGameState(data);
-            console.log("game state updated", this.$store.state);
-            const player = this.players.find(player => player.id === this.userId);
-            console.log("Player:", player);
-            console.log("help", this.gameState, this.userId, this.players[0]);
-            console.log(JSON.parse(JSON.stringify(player.hand)))
-            console.log("player hand again", this.playerHand(this.userId), player, player.hand);
             this.otherPlayerUsername = this.players.find(player => player.id !== this.userId).name;
         },
     },
@@ -96,10 +78,8 @@ export default {
         const user = auth.currentUser;
         this.userId = user.uid;
 
-        console.log("game play view mounted")
         // updates the current players game state when the game state is changed by the other player
         socket.on('update-game-state', this.handleUpdateGameState);
-        this.otherPlayerUsername = this.players.find(player => player.id !== this.userId).name;
     },
 }
 
@@ -139,11 +119,11 @@ export default {
 }
 
 .player-1 {
-    color: #f32e24; /* Change this to the desired color for Player 1 */
+    color: #f32e24; 
 }
 
 .player-2 {
-    color: #2490F3; /* Change this to the desired color for Player 2 */
+    color: #2490F3; 
 }
 
 @keyframes turn-text-animation {
@@ -157,7 +137,7 @@ export default {
     }
 }
 
-.player-hand-background, .player-2-hand-background {
+.player-hand-background {
     display: flex;
     align-items: center; 
     justify-content: center; 
@@ -169,7 +149,7 @@ export default {
     border-radius: 10px;
 }
 
-.player-hand, .player-2-hand {
+.player-hand {
     display: flex;
     flex-wrap: nowrap; 
     gap: 20px; 
@@ -179,11 +159,6 @@ export default {
 .player-hand-background {
     right: 0;
     background-color: #2490F3; 
-}
-
-.player-2-hand-background {
-    left: 0;
-    background-color: #f32e24; 
 }
 
 </style>

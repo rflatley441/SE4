@@ -54,11 +54,11 @@ img {
 import ProfilePicture from './ProfilePicture.vue'; 
 
 export default {
-  name: "NavBar",
-  components: {
+    name: "NavBar",
+    components: {
         ProfilePicture
     },
-computed: {
+    computed: {
         showProfilePicture() {
             return this.$route.path !== '/' && this.$route.path !== '/login';
         }

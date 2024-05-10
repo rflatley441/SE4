@@ -5,13 +5,17 @@
             <div class="contents-container">
                 <h1 style="font-size:80px"> Welcome, {{ this.username }}!</h1>
                 <div id="inputsContainer">
+                    <!-- Start Game Modal -->
                     <button class="btn success" @click="openStartGameModal">Start Game</button><br> 
                     <StartGameModal :isOpen="isStartGameModalOpen" :userId="this.userId" :username="this.username" @modal-close="closeStartGameModal"/>
+                    <!-- Join Game Modal -->
                     <button class="btn success" style="margin-top: 30px;" @click="openJoinGameModal">Join Game</button><br>
                     <JoinGameModal :isOpen="isJoinGameModal" :userId="this.userId" :username="this.username" @modal-close="closeJoinGameModal"/>
+                    <!-- View Player Statistics Modal -->
                     <button class="btn success" style="margin-top: 30px;" @click="openStatsModal" >View Player Statistics</button>
                     <StatsModal :isOpen="isStatsModalOpen" @modal-close="closeStatsModal"/>
                     <br>
+                    <!-- View Friends List -->
                     <button class="btn success" style="margin-top: 30px;">View Friends List</button>
                 </div>
             </div>
@@ -91,7 +95,6 @@ import { ref } from 'vue';
         // sets username to the username of the user
         if(docSnap.exists()) {
             const data = docSnap.data()
-
             this.username = data.username;
         }
     },

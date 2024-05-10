@@ -1,9 +1,4 @@
 import axios from "axios";
-import { db } from '@/services/firebase.js'; 
-import { collection, getDocs } from 'firebase/firestore';
-
-// import { collection, getDocs } from 'firebase/firestore';
-
 
 const state = {
     game: false,
@@ -33,7 +28,6 @@ const state = {
     tilesPlayed: [],
 
     deck: {
-        deck_id: null,
         remaining: null,
     },
 };
@@ -66,6 +60,9 @@ const actions = {
     updateGameState({commit}, gameState) {
         commit('updateGameState', gameState);
     },
+    /**
+     * Fetches the deck from the backend
+     */
     async fetchDeck({commit}) {
         try {
             const response = await axios.get("http://127.0.0.1:5000/deck");
@@ -74,27 +71,9 @@ const actions = {
             console.error(error.response.data)
         }
     },
-
-    async fetchUsers({ commit, state }) {
-        const gameCode = state.id; 
-        console.log("Fetching users with specific game code:", gameCode);
-        try {
-            const gamesCollectionRef = collection(db, 'games');
-            const gamesQuerySnapshot = await getDocs(gamesCollectionRef);
-            
-            // Checks if the game exists and if the user can join
-            gamesQuerySnapshot.forEach(async (doc) => {
-            const gameData = doc.data();
-            if (gameData.gameCode === gameCode) {
-                console.log("game found")
-                const players = gameData.players;
-                commit('setUsers', players);
-            }});
-        } catch (error) {
-            console.error("Error fetching users with specific game code:", error);
-        }
-    },
-
+    /**
+     * Fetches a player's hand from the backend
+     */
     async fetchHand({ commit, dispatch, state }, playerId) {
         let user = null;
         state.players.forEach((player) => {
@@ -124,6 +103,9 @@ const actions = {
         }
     },
 
+    /**
+     * Updates the hand of a player in the backend
+     */
     async updateHand({ commit, state }, userId) {
         const player = state.players.find(player => player.id === userId);
     
@@ -161,7 +143,6 @@ const actions = {
 
     updateTilesPlayed({commit}, tilesPlayed){
         commit('updateTilesPlayed', tilesPlayed);
-        console.log("tiles played", state.tilesPlayed)
     },
     
     updateTilesAmount({commit}, amount) {
@@ -173,23 +154,20 @@ const actions = {
         commit('setTurn', userId);
     },
 
-    randomStart({commit}) {
-        // let random = Math.round(Math.random());
+    turnStart({commit}) {
         commit('setTurn', 0);
     },
+    /**
+     * Initializes the game
+     */
     async gameStart({commit, dispatch}, data) {
         commit('restartGame');
         commit('initializeBoard');
-        console.log("gameStart", data['room']);
         commit('setGameId', data['room']);
-        // dispatch('fetchUsers');
         commit('setUsers', data['players']);
 
         const player1Id = data['players'][0]['userId'];
         const player2Id = data['players'][1]['userId'];
-
-        // console.log("player1Id", player1Id);
-        // console.log("player2Id", player2Id);
 
         try {
             await axios.post("http://127.0.0.1:5000/initialize_game", {
@@ -202,22 +180,19 @@ const actions = {
                 dispatch('fetchHand', player1Id),
                 dispatch('fetchHand', player2Id)
             ]);
-            dispatch('randomStart'); 
+            dispatch('turnStart'); 
             commit('setGameStart', true);
         } catch (error) {
             console.error("Error starting game:", error.response ? error.response.data : error);
         }
     },
     
-    
-
     setGameOver({commit}, winner) {
         commit('gameOver', winner);
     }, 
 
     updatePlayerScore({commit}, {userId, amount}) {
         commit('updatePlayerScore', { userId: userId, amount: amount });
-
     }, 
 };
 
@@ -231,6 +206,9 @@ const mutations = {
         state.pile = [{tile: null}, {tile: null}]
     },
     setGameId: (state, id) => {state.id = id;},
+     /**
+     * Creates a blank board with 144 tiles
+     */
     initializeBoard: (state) => {
         state.board = [];
         for (let i = 0; i < 144; i++) {
@@ -278,7 +256,6 @@ const mutations = {
         for(let key in gameState['game']) {
             state[key] = gameState['game'][key];
         }
-        console.log(state)
     },
     updatePlayerScore: (state, {userId, amount}) => {
         state.players[userId].score += amount;
