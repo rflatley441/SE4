@@ -83,13 +83,10 @@ export default {
     };
   },
   async created() {
-    console.log("created")
     const auth = getAuth();
     const user = auth.currentUser;
     const db = getFirestore();
     const docSnap = await getDoc(doc(db, "users", user.uid));
-
-    console.log("test", user, " ", docSnap.data());
     
     if(docSnap.exists()) {
       const data = docSnap.data();
@@ -123,7 +120,6 @@ export default {
     async uploadProfilePic(file, user) {
       try {
         const firebaseApp = getApp();
-        console.log(firebaseApp);
         const storage = getStorage();
         const fileRef = ref(storage, user.uid + ".png");
         this.loading = true;
