@@ -24,9 +24,8 @@ socket.on('disconnect', function() {
 });
 
 socket.on('game-started', function(data) {
-  console.log("game started", data['players']);
+  // dispatches the gameStart action in the store
   store.dispatch('gameStart', data);
-  // console.log("state", store.state.id);
   socket.emit('end-turn', { room_id: data['room'], gameState: store.state });
 });
 

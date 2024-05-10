@@ -34,7 +34,6 @@
 import socket from "@/socket"
 import BoardTile from "./BoardTile.vue"
 import { mapActions, mapGetters } from "vuex"
-// import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, updateDoc, increment, getDoc } from 'firebase/firestore';
 
 
@@ -63,11 +62,9 @@ export default {
     },
 
     setup() {
-        //var tilesPlayed = new Set()
         var tilesThisTurn = new Set()
 
         return {
-          // tilesPlayed,
            tilesThisTurn,
         };
     }, 
@@ -87,54 +84,55 @@ export default {
             this.tilesThisTurn.forEach(() => {
                 let verticalScore = 1;
                 let horizontalScore = 1;
-            this.tilesThisTurn.forEach((position) => {
-                let verticalScore = 1;
-                let horizontalScore = 1;
 
-        let up = position - 12;
-        while (this.tilesPlayed.includes(up)) {
-            verticalScore++;
-            up -= 12;
-        }
+                this.tilesThisTurn.forEach((position) => {
+                    let verticalScore = 1;
+                    let horizontalScore = 1;
 
-        let down = position + 12;
-        while (this.tilesPlayed.includes(down)) {
-            verticalScore++;
-            down += 12;
-        }
+                    let up = position - 12;
+                    while (this.tilesPlayed.includes(up)) {
+                        verticalScore++;
+                        up -= 12;
+                    }
 
-        let left = position - 1;
-        while (position % 12 !== 0 && this.tilesPlayed.includes(left)) {
-            horizontalScore++;
-            left--;
-        }
+                    let down = position + 12;
+                    while (this.tilesPlayed.includes(down)) {
+                        verticalScore++;
+                        down += 12;
+                    }
 
-        let right = position + 1;
-        while (position % 12 !== 11 && this.tilesPlayed.includes(right)) {
-            horizontalScore++;
-            right++;
-        }
+                    let left = position - 1;
+                    while (position % 12 !== 0 && this.tilesPlayed.includes(left)) {
+                        horizontalScore++;
+                        left--;
+                    }
 
-                if (verticalScore === 6) {
-                    bonusScore += 6;
-                }
-                if (horizontalScore === 6) {
-                    bonusScore += 6;
-                }
-                if (verticalScore === 6) {
-                    bonusScore += 6;
-                }
-                if (horizontalScore === 6) {
-                    bonusScore += 6;
-                }
+                    let right = position + 1;
+                    while (position % 12 !== 11 && this.tilesPlayed.includes(right)) {
+                        horizontalScore++;
+                        right++;
+                    }
 
-                if (verticalScore > 1) {
-                    baseScore += verticalScore - 1;
-                }
-                if (horizontalScore > 1) {
-                    baseScore += horizontalScore - 1;
-                }
-            });
+                    if (verticalScore === 6) {
+                        bonusScore += 6;
+                    }
+                    if (horizontalScore === 6) {
+                        bonusScore += 6;
+                    }
+                    if (verticalScore === 6) {
+                        bonusScore += 6;
+                    }
+                    if (horizontalScore === 6) {
+                        bonusScore += 6;
+                    }
+
+                    if (verticalScore > 1) {
+                        baseScore += verticalScore - 1;
+                    }
+                    if (horizontalScore > 1) {
+                        baseScore += horizontalScore - 1;
+                    }
+                });
                 if (verticalScore > 1) {
                     baseScore += verticalScore - 1;
                 }
@@ -146,34 +144,37 @@ export default {
             baseScore += this.tilesThisTurn.size;
             baseScore += this.tilesThisTurn.size;
 
-                    let totalScore = baseScore + bonusScore;
-                    this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
-                },  
+            let totalScore = baseScore + bonusScore;
+            this.$store.dispatch('updatePlayerScore', { userId: userId, amount: totalScore });
+        },  
         /**
          * Determines the winner of the game
          */
-           async determineWinner() {
-                let highestScore = -1;
-                let winner = ""
-                let winningPlayer;
+        async determineWinner() {
+            let highestScore = -1;
+            let winner = ""
+            let winningPlayer;
 
-                // sets player with the highest score as the winner
+            // sets player with the highest score as the winner
             if (this.deck.remaining == 0) {
-                    await this.players.forEach((player, index) => {
-                            if (player.score > highestScore) {
-                                highestScore = player.score;
+                await this.players.forEach((player, index) => {
+                    if (player.score > highestScore) {
+                        highestScore = player.score;
                         winningPlayer = player;
-                                winner = `Player ${index + 1} Wins!`;
-                            }
-                        });
+                        winner = `Player ${index + 1} Wins!`;
+                    }
+                });
                 let losingPlayer;
-                if (winningPlayer != this.players[0]){
+
+                if (winningPlayer != this.players[0]) {
                     losingPlayer = this.players[0];
                 } else {
                     losingPlayer = this.players[1]
                 }
+
                 const currentIndex = this.userId
                 const currentPlayer = this.players[currentIndex];
+
                 if (losingPlayer.score == winningPlayer.score){
                     this.updatePlayerStats(highestScore, [0, 0, 1], currentPlayer.id);
                 } else if (currentPlayer == winningPlayer){
@@ -181,30 +182,26 @@ export default {
                 } else {
                     this.updatePlayerStats(losingPlayer.score, [0, 1, 0], losingPlayer.id);
                 }
-                        //return winner
-                        this.$store.dispatch('setGameOver', { winner: winner});
-                   // user leaves room
+                //return winner
+                this.$store.dispatch('setGameOver', { winner: winner});
+                // user leaves room
                 socket.emit('leave', { username: this.username, room: this.gameId })
-                }
-              },
+            }
+        },
         async updatePlayerStats(score, record, playerId){
-            // const auth = getAuth();
-            // const user = playerId;
             const db = getFirestore();
             const docRef = doc(db, 'users', playerId);
             const docSnap = await getDoc(docRef);
-            await updateDoc(docRef,{
+            await updateDoc(docRef, {
                 wins: increment(record[0]),
                 losses: increment(record[1]),
                 draws: increment(record[2]),
                 total_points: increment(score)
             })
 
-            console.log("hello", docSnap);
             let top_score = 999999;
             if(docSnap.exists()) {
                 const data = docSnap.data()
-                console.log("Document data:", data);
                 top_score = data.high_score;
             }
             if (top_score < score){
@@ -216,7 +213,8 @@ export default {
                     high_score: top_score
                 })
             }
-        },        /**
+        },        
+        /**
          * Places a tile on the board
          * @param {Object} payload - the payload object
          */
@@ -237,7 +235,6 @@ export default {
                 this.tilesPlayed.push(payload.position);
                 this.tilesThisTurn.add(payload.position);
 
-                console.log("identifierr", this.userId);
                 // removes the placed tile from the player's hand
                 this.$store.commit('removeTileFromHand', {
                     userId: this.userId,
@@ -249,11 +246,11 @@ export default {
             }
         },
 
-        updateHighlightedBoardTiles(){
+        updateHighlightedBoardTiles() {
             let dummyPayload = {
                 position: 0,
             };
-            console.log("player hand moment", this.playerHand(this.userId), this.players);
+
             for (let i = 0; i < this.board.length; i++){
                 dummyPayload.position = i;
                 if (this.tilePlacementIsValid(dummyPayload)){
@@ -467,15 +464,12 @@ export default {
         },
 
         async endTurn() {
-
             const currentIndex = this.userId
             const currentPlayer = this.players[currentIndex];
-            console.log("current player", currentPlayer)
             this.calculateScore(currentIndex);
 
             const nextPlayerIndex = (currentIndex + 1) % this.players.length;
             const nextPlayer = this.players[nextPlayerIndex];
-            console.log("next player" , nextPlayer)
             if (!nextPlayer) {
                 console.error("Next player not found at index:", nextPlayerIndex);
                 return;
@@ -485,12 +479,11 @@ export default {
 
             // Using current player ID for clarity and correctness
             await this.updateHand(currentPlayer.id);
-            console.log("Next Player ID", nextPlayer.id);
             await this.updateTilesPlayed(this.tilesPlayed);
             await this.fetchHand(nextPlayer.id);
             await this.incrementRound(nextPlayerIndex);
             this.determineWinner();
-
+            // sends the updated game state to the socket
             socket.emit('end-turn', { gameState: this.$store.state, room_id: this.gameId });
         }, 
 

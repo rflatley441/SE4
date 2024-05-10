@@ -2,37 +2,38 @@
   <div id="app">
       <div class="content">
           <div class="contents-container">
-              <div id = signuptitle>Sign Up</div>
-              <div id="inputsContainer">
+            <div id = signuptitle>Sign Up</div>
+            <div id="inputsContainer">
 
-                  <div class="inputLabel">
-                      Username
-                  </div>
-              <div class="inputHolder">
-                  <input type="text" class="inputBox" v-model="username" placeholder="Username" />
-              </div>
+            <div class="inputLabel">
+                Username
+            </div>
+            <div class="inputHolder">
+                <input type="text" class="inputBox" v-model="username" placeholder="Username" />
+            </div>
 
-              <div class="inputLabel" style = "padding-top: 10px;">
-                      Email
-                  </div>
-              <div class="inputHolder" style="padding-bottom: 10px;">
-                  <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
-              </div>
+            <div class="inputLabel" style = "padding-top: 10px;">
+                    Email
+                </div>
+            <div class="inputHolder" style="padding-bottom: 10px;">
+                <input type="text" class="inputBox" v-model="email" placeholder="Email Address" />
+            </div>
 
-              <div class="inputLabel" style = "padding-top: 10px;">
-                      Password
-                  </div>
-              <div class="inputHolder" style="padding-bottom: 20px;">
-                  <input type="password" class="inputBox" v-model="password" placeholder="Password" />
-              </div>
+            <div class="inputLabel" style = "padding-top: 10px;">
+                    Password
+                </div>
+            <div class="inputHolder" style="padding-bottom: 20px;">
+                <input type="password" class="inputBox" v-model="password" placeholder="Password" />
+            </div>
 
-                  <button class="create-account-button" @click.prevent="signUp">
-                  Create Account
-                  </button>
-              </div>
-              <div id="footer">
-                  <router-link to="/" class="footText">Return to Login</router-link>
-              </div>
+            <button class="create-account-button" @click.prevent="signUp">
+            Create Account
+            </button>
+
+            </div>
+            <div id="footer">
+                <router-link to="/" class="footText">Return to Login</router-link>
+            </div>
           </div>
       </div>
   </div>
@@ -136,20 +137,20 @@
   background-color: #f6f1f1;
   border: transparent;
   background-color: #f6f1f1;
-  padding: 20px 40px; /* Adjust the padding to match the button's height and width */
+  padding: 20px 40px; 
   text-align: center;
   display: inline-block;
-  font-size: 40px; /* Adjust the font size as needed */
+  font-size: 40px; 
   margin: 4px 2px;
   cursor: pointer;
-  border-radius: 10px; /* Optional: if the button has rounded corners */
+  border-radius: 10px; 
   font-family: 'Quicksand', sans-serif;
   font-weight: 500;
 }
 
 .create-account-button:hover {
-  background-color: #0056b3; /* Darker blue on hover, adjust as needed */ 
-  transform: translateY(2px); /* Optional: if the button moves slightly on hover */
+  background-color: #0056b3; /* Darker blue on hover */ 
+  transform: translateY(2px); 
 }
 </style>
 
