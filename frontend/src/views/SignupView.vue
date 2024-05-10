@@ -56,7 +56,6 @@ export default {
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email.value, password.value)
         .then((userCredential) => {
-          console.log("Account creation successful", userCredential.user);
           const db = getFirestore(); 
           const userDoc = doc(db, 'users', userCredential.user.uid);
           return setDoc(userDoc, {
@@ -65,7 +64,6 @@ export default {
           });
         })
         .then(() => {
-          console.log("User data stored in Firestore");
           router.push('/Home');
         })
         .catch((error) => {

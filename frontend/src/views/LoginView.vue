@@ -56,7 +56,6 @@ export default {
                     try {
                         const docSnap = await getDoc(userDoc);
                         if (docSnap.exists()) {
-                            console.log("Document data:", docSnap.data()); 
                             router.push('/home');
                         } else {
                             console.log("No such document!");
