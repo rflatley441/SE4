@@ -117,7 +117,7 @@ export default {
     top: 15%;
     left: 25%;
     width: 50%;
-    height: 50%;
+    height: 70%;
     margin: auto;
     background-color: rgba(0, 0, 0, 0.5);
 }

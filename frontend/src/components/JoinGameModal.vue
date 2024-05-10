@@ -4,16 +4,15 @@
             <div class="modal-container">
                 <span class="close" @click="handleClose">&times;</span>
                 <h1 style="font-size: 100px;">Join game</h1>
-                    <div class="inputHolder">
-                        <input type="gameCode" class="inputBox" v-model="gameCode" placeholder="Game code" />
-                    </div>
-                    <span style="font-size: 30px">{{ this.message }}</span>
-                    <button class="join-button" @click="this.join">Join Game</button>
-             </div>
+                <div class="inputHolder" style="padding-bottom: 20px;">  <!-- Added padding here -->
+                    <input type="text" class="inputBox" v-model="gameCode" placeholder="Game code"/>
+                </div>
+                <span style="font-size: 30px">{{ this.message }}</span>
+                <button class="join-button" @click="this.join">Join Game</button>
+            </div>
         </div>
     </div>
 </template>
-
 <script>
 
 import { getFirestore, getDocs, collection, updateDoc } from 'firebase/firestore';
