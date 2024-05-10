@@ -85,31 +85,11 @@ const actions = {
             // Checks if the game exists and if the user can join
             gamesQuerySnapshot.forEach(async (doc) => {
             const gameData = doc.data();
-            console.log("gameData", gameData)
             if (gameData.gameCode === gameCode) {
                 console.log("game found")
                 const players = gameData.players;
                 commit('setUsers', players);
             }});
-
-
-
-
-            // const gamesRef = collection(db, 'games');
-            // console.log("gamesRef", gamesRef);
-            // const gameQuery = query(gamesRef, where('id', '==', state.id));
-            // const gameSnapshot = await getDocs(gameQuery);
-            // console.log(gameSnapshot)
-            // const game = gameSnapshot.docs[0];
-            // if (game) {
-            //     const players = game.data().players;
-            //     // commit('setUsers', players);
-            //     console.log("Players:", players);
-            // } else {
-            //     console.error("Game not found with id:", state.id);
-            // }
-            // commit('setUsers', users);
-            // console.log("Users with gameCode", gameCode, ":", users);
         } catch (error) {
             console.error("Error fetching users with specific game code:", error);
         }
@@ -130,8 +110,6 @@ const actions = {
                 for (const playerData of playersData) {
                     const playerId = playerData.userId; 
                     const hand = playerData.hand;
-                    console.log("playerId in loop",playerId)
-                    console.log("player hand in loop", hand)
                     commit('setHand', {
                         'playerId': playerId,
                         'hand': hand
@@ -163,8 +141,6 @@ const actions = {
                             playerId: item.userId,
                             hand: item.hand
                         });
-                        console.log("Updated item:", item.userId);
-                        console.log("Updated hand:", item.hand);
                     } else {
                         // Log when the data is undefined and therefore not committed
                         console.log("Skipped updating due to undefined item or hand for userId:", item.userId);
@@ -254,7 +230,7 @@ const mutations = {
         state.players[1].hand = [];
         state.pile = [{tile: null}, {tile: null}]
     },
-    setGameId: (state, id) => {state.id = id; console.log("game id", state.id)},
+    setGameId: (state, id) => {state.id = id;},
     initializeBoard: (state) => {
         state.board = [];
         for (let i = 0; i < 144; i++) {
@@ -280,7 +256,6 @@ const mutations = {
         state.deck.remaining = deck.remaining;
     },
     setHand: (state, payload) => {
-        console.log("set hand", payload);
         let userId = payload.playerId;
 
         state.players.find(player => player.id === userId).hand = []
@@ -291,9 +266,7 @@ const mutations = {
                 'color': tile[1],
                 'selected': false,
             });
-        });
-        console.log("works?", state.players)
-        
+        });        
     },
     removeTileFromHand(state, { userId, tileIndex }) {
         state.players[userId].hand.splice(tileIndex, 1);
@@ -311,22 +284,16 @@ const mutations = {
         state.players[userId].score += amount;
     },
     setUsers: (state, users) => {
-        console.log("users", users);
         state.users = users;
-        console.log("users", state.users);
         state.players.forEach((player, index) => {
             const user = users[index];
-            console.log("user", user);
             if (user) {
                 player.id = user['userId'];
                 player.name = user['username'];
-                console.log("player has been set", player.id)
             } else {
                 console.error("User not found for player at index:", index);
             }
         });
-
-        console.log("test", state.players);
     },
 
 };

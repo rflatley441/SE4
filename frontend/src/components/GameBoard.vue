@@ -80,6 +80,9 @@ export default {
     methods: {
         ...mapActions(['updateHand', 'fetchHand', 'incrementRound', 'setGameOver', 'updateBoard', 'fetchUsers', 'gameStart', 'updatePlayerScore', 'updateTilesPlayed']),
         
+        /**
+         * Calculates score for the current player using qwirkle rules
+         */
         calculateScore(userId) {
             let baseScore = 0;
             let bonusScore = 0;
@@ -188,8 +191,7 @@ export default {
                 }
               },
         async updatePlayerStats(score, record, playerId){
-            // const auth = getAuth();
-            // const user = playerId;
+
             const db = getFirestore();
             const docRef = doc(db, 'users', playerId);
             const docSnap = await getDoc(docRef);
@@ -216,7 +218,8 @@ export default {
                     high_score: top_score
                 })
             }
-        },        /**
+        },        
+        /**
          * Places a tile on the board
          * @param {Object} payload - the payload object
          */
@@ -466,26 +469,23 @@ export default {
             return false;
         },
 
+        /**
+         * Ends the turn upon users click end turn button
+         * Calculates score, adds new tiles to the players hand, switches the turn to the other player, and check for any winner
+         */
         async endTurn() {
 
             const currentIndex = this.userId
             const currentPlayer = this.players[currentIndex];
-            console.log("current player", currentPlayer)
             this.calculateScore(currentIndex);
 
             const nextPlayerIndex = (currentIndex + 1) % this.players.length;
             const nextPlayer = this.players[nextPlayerIndex];
-            console.log("next player" , nextPlayer)
-            if (!nextPlayer) {
-                console.error("Next player not found at index:", nextPlayerIndex);
-                return;
-            }
 
             this.tilesThisTurn = new Set();
 
             // Using current player ID for clarity and correctness
             await this.updateHand(currentPlayer.id);
-            console.log("Next Player ID", nextPlayer.id);
             await this.updateTilesPlayed(this.tilesPlayed);
             await this.fetchHand(nextPlayer.id);
             await this.incrementRound(nextPlayerIndex);
