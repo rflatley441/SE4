@@ -7,8 +7,8 @@
       </header>
       <div id="topContainer">
         <div id="profile_picContainer">
-          <img :src="this.profile_pic" class="profile-pic"/>
-          </div>
+          <img :src="this.profile_pic" class="profile-pic" />
+        </div>
         <div id="changePhotoBox">
           <button class="change-photo-button" @click="openFilePicker">
             Change Photo
@@ -19,11 +19,11 @@
           <div class="innerBox">
             <div class="inputLabel">Username</div>
             <div class="inputHolder">
-              <input type="text" class="inputBox" v-model="username"  />
+              <input type="text" class="inputBox" v-model="username" />
             </div>
             <div class="passwordContainer">
               <div class="inputLabel">Password</div>
-              <div class="forgotPassword">Forgot password?</div>
+              <div class="forgotPassword">Change Password</div>
             </div>
             <div class="inputHolder" style="padding-bottom: 20px">
               <input type="password" class="inputBox" v-model="password" placeholder="Password" />
@@ -54,9 +54,6 @@
             <input type="checkbox" id="colorblindModeToggle" />
           </div>
         </div>
-        <div id="returnToHomeText">
-          <router-link to="/home" class="footText">Return to Home</router-link>
-        </div>
       </div>
     </div>
   </div>
@@ -79,28 +76,38 @@ export default {
       photoURL: "",
       photo: null,
       fileName: "No file selected",
-      profile_pic:"",
-      username: "", 
-      email:"", 
+      profile_pic:
+        "https://i.stack.imgur.com/l60Hf.png",
+      username: "",
+      email: "",
     };
   },
   async created() {
+    console.log("created")
     const auth = getAuth();
-    const user = auth.currentUser;    
+    const user = auth.currentUser;
     const db = getFirestore();
-    const docSnap = await getDoc(doc(db, "users", user.uid)); 
-    if (!user) return;
-    this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
-    if(docSnap.exists()){
-      const data = docSnap.data();  
+    const docSnap = await getDoc(doc(db, "users", user.uid));
+
+    console.log("test", user, " ", docSnap.data());
+    
+    if(docSnap.exists()) {
+      const data = docSnap.data();
       this.username = data.username;
-    } 
-    this.email = user.email;
+
+      if (user) {
+        this.email = user.email;
+
+        if (data.profile_pic) {
+          this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
+        }
+      }
+    }
   },
   methods: {
     openFilePicker() {
-    this.$refs.fileInput.click();
-  },
+      this.$refs.fileInput.click();
+    },
     async handleFileChange(event) {
       if (event.target.files[0]) {
         this.photo = event.target.files[0];
@@ -133,12 +140,14 @@ export default {
         await setDoc(userDoc, { profile_pic: photoURL }, { merge: true });
         this.loading = false;
         alert("Successfully Uploaded Image!");
-      } catch (err) {
-        console.error(err);
-        alert(err.message);
       }
-    },
+       catch(err) {
+      console.error(err);
+      alert(err.message);
+    }
   },
+
+},
 };
 </script>
 
@@ -146,8 +155,8 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 .background {
-  background-color: #fdf5e6; 
-  min-height: 100vh; 
+  background-color: #fdf5e6;
+  min-height: 100vh;
 }
 
 .content {
@@ -312,11 +321,6 @@ label[for="changePhotoBox"] {
   text-align: left;
 }
 
-#returnToHomeText {
-  margin-left: 850px;
-  margin-top: -55px;
-}
-
 #volumeTitle {
   position: absolute;
   top: -40px;
@@ -328,7 +332,7 @@ label[for="changePhotoBox"] {
 
 #volumeContainer {
   background: #b3daff;
-  width: 1190px;
+  width: 1260px;
   padding-top: 30px;
   padding-bottom: 30px;
   padding-left: 60px;
