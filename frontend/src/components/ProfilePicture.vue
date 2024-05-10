@@ -1,6 +1,6 @@
 <template>
   <div class="profile-picture">
-    <img :src="this.profile_pic" alt="Profile Picture" class="profile-picture-img" />
+    <img :src="profile_pic" alt="Profile Picture" class="profile-picture-img" />
   </div>
 </template>
 
@@ -8,6 +8,7 @@
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+
 export default {
   data() {
     return {
@@ -18,13 +19,18 @@ export default {
     const auth = getAuth();
     const user = auth.currentUser;
     const db = getFirestore();
-    if (!user) return;    
-    onSnapshot(doc(db, "users", user.uid), async (docSnap) => {
-    if (docSnap.exists()) {
-      this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
-    }
-  });
-},
+    const docRef = doc(db, "users", user.uid);
+
+    onSnapshot(docRef, async (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+
+        if (data.profile_pic) {
+          this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
+        }
+      }
+    });
+  },
 };
 </script>
 
