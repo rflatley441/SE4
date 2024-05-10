@@ -75,11 +75,13 @@ const actions = {
      */
     async fetchHand({ commit, dispatch, state }, playerId) {
         let user = null;
+        // Find the user with the given playerId
         state.players.forEach((player) => {
             if (player.id === playerId) {
                 user = player;
             }
         });
+        // if the user exists, fetches the user's hand from the backend
         if (user) {
             try {
                 const response = await axios.get(`http://127.0.0.1:5000/playerhand`);
@@ -107,7 +109,7 @@ const actions = {
      */
     async updateHand({ commit, state }, userId) {
         const player = state.players.find(player => player.id === userId);
-    
+        // if the player exists, updates the player's hand in the backend
         if (player) {
             try {
                 const response = await axios.post("http://127.0.0.1:5000/playerhand", {
@@ -165,9 +167,10 @@ const actions = {
         commit('setGameId', data['room']);
         commit('setUsers', data['players']);
 
+        // extract player ids from the data
         const player1Id = data['players'][0]['userId'];
         const player2Id = data['players'][1]['userId'];
-
+        // initialize the game on the backend
         try {
             await axios.post("http://127.0.0.1:5000/initialize_game", {
                 player1_id: player1Id,
@@ -235,7 +238,7 @@ const mutations = {
         let userId = payload.playerId;
 
         state.players.find(player => player.id === userId).hand = []
-
+        // updates the player's hand with the new hand
         payload.hand.forEach((tile) => {
             state.players.find(player => player.id === userId).hand.push({
                 'shape': tile[0],
