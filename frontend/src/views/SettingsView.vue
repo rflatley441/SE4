@@ -100,26 +100,12 @@ export default {
 
       if (user) {
         this.email = user.email;
-        
+
         if (data.profile_pic) {
           this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
         }
       }
     }
-    // if(user && user.photoURL) {
-    //   // this.profile_pic = await getDownloadURL(
-    //   // ref(getStorage(), `${user.uid}.png`)
-    //   // );
-    // }
-    // // if (!user) return;
-    // // this.profile_pic = await getDownloadURL(
-    // //   ref(getStorage(), `${user.uid}.png`)
-    // // );
-    // if (docSnap.exists()) {
-    //   const data = docSnap.data();
-    //   this.username = data.username;
-    // }
-    // this.email = user.email;
   },
   methods: {
     openFilePicker() {
