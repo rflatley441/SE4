@@ -16,6 +16,7 @@
           <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" />
         </div>
         <div id="inputsContainer">
+          <!-- the box on the right side with the username, password, and email inputs -->
           <div class="innerBox">
             <div class="inputLabel">Username</div>
             <div class="inputHolder">
@@ -63,7 +64,6 @@
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth, updateProfile } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
-import { getApp } from "firebase/app";
 import NavBar from "@/components/NavBar.vue";
 export default {
   components: {
@@ -82,19 +82,23 @@ export default {
       email: "",
     };
   },
+  // lifestyle hook that is called after the instance has been created 
   async created() {
     const auth = getAuth();
     const user = auth.currentUser;
     const db = getFirestore();
     const docSnap = await getDoc(doc(db, "users", user.uid));
     
+    // if the document exists, set the data to the user's data
     if(docSnap.exists()) {
       const data = docSnap.data();
       this.username = data.username;
 
+      // if the user object exists 
       if (user) {
         this.email = user.email;
 
+        // checking if the profile picture property exists in the document data   
         if (data.profile_pic) {
           this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
         }
@@ -119,7 +123,6 @@ export default {
 
     async uploadProfilePic(file, user) {
       try {
-        const firebaseApp = getApp();
         const storage = getStorage();
         const fileRef = ref(storage, user.uid + ".png");
         this.loading = true;
@@ -137,9 +140,9 @@ export default {
         this.loading = false;
         alert("Successfully Uploaded Image!");
       }
-       catch(err) {
-      console.error(err);
-      alert(err.message);
+      catch(err) {
+        console.error(err);
+        alert(err.message);
     }
   },
 
@@ -427,10 +430,4 @@ label[for="colorblindModeToggle"] {
   align-items: center;
 }
 
-.footText {
-  font-size: 35px;
-  font-weight: 300;
-  color: #2490f3;
-  cursor: pointer;
-}
 </style>
