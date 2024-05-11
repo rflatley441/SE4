@@ -12,19 +12,25 @@ import { getFirestore, doc, onSnapshot } from "firebase/firestore";
 export default {
   data() {
     return {
+      // default pfp image url 
       profile_pic: "https://i.stack.imgur.com/l60Hf.png",
     };
   },
   async created() {
+    // auth instance
     const auth = getAuth();
+    // get current user
     const user = auth.currentUser;
+    // firestore instance
     const db = getFirestore();
+    // reference to the user document
     const docRef = doc(db, "users", user.uid);
 
+    // Setting up a real-time listener on the document 
     onSnapshot(docRef, async (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-
+        
         if (data.profile_pic) {
           this.profile_pic = await getDownloadURL(ref(getStorage(), `${user.uid}.png`));
         }
